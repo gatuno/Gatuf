@@ -1,0 +1,187 @@
+<?php
+/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+# ***** BEGIN LICENSE BLOCK *****
+# This file is part of Plume Framework, a simple PHP Application Framework.
+# Copyright (C) 2001-2007 Loic d'Anterroches and contributors.
+#
+# Plume Framework is free software; you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation; either version 2.1 of the License, or
+# (at your option) any later version.
+#
+# Plume Framework is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# ***** END LICENSE BLOCK ***** */
+
+/**
+ * MySQL connection class
+ */
+class Gatuf_DB_MySQL {
+	public $con_id;
+	public $pfx = '';
+	private $debug = false;
+	/** The last query, set with debug(). Used when an error is returned. */
+	public $lastquery = '';
+	public $engine = 'MySQL';
+	public $type_cast = array ();
+    public $dbname = '';
+    
+	function __construct($user, $pwd, $server, $dbname, $pfx='', $debug=false) {
+		Gatuf::loadFunction('Gatuf_DB_defaultTypecast');
+		$this->type_cast = Gatuf_DB_defaultTypecast();
+		$this->debug ('* MYSQL CONNECT');
+		$this->con_id = mysql_connect ($server, $user, $pwd);
+		$this->debug = $debug;
+		$this->pfx = $pfx;
+		if (!$this->con_id) {
+			throw new Exception ($this->getError());
+		}
+		$this->database ($dbname);
+		$this->execute ('SET NAMES \'utf8\'');
+	}
+
+	function database($dbname) {
+	    $this->dbname = $dbname;
+		$db = mysql_select_db ($dbname, $this->con_id);
+		$this->debug ('* USE DATABASE '.$dbname);
+		if (!$db) {
+			throw new Exception ($this->getError());
+		}
+		return true;
+	}
+
+	/**
+	 * Get the version of the MySQL server.
+	 *
+	 * @return string Version string
+	 */
+	function getServerInfo()
+	{
+		return mysql_get_server_info($this->con_id);
+	}
+
+	/**
+	 * Log the queries. Keep track of the last query and if in debug mode
+	 * keep track of all the queries in 
+	 * $GLOBALS['_PX_debug_data']['sql_queries']
+	 *
+	 * @param string Query to keep track
+	 * @return bool true
+	 */
+	function debug($query) {
+		$this->lastquery = $query;
+		if (!$this->debug) return true;
+		if (!isset($GLOBALS['_GATUF_debug_data']['sql_queries'])) 
+			$GLOBALS['_GATUF_debug_data']['sql_queries'] = array();
+		$GLOBALS['_GATUF_debug_data']['sql_queries'][] = $query;
+		return true;
+	}
+
+	function close() {
+		if ($this->con_id) {
+			mysql_close ($this->con_id);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function select($query) {
+		$this->debug ($query);
+		$cur = mysql_query ($query, $this->con_id);
+		if ($cur) {
+			$res = array();
+			while ($row = mysql_fetch_assoc ($cur)) {
+				$res[] = $row;
+			}
+			mysql_free_result ($cur);
+			return $res;
+		} else {
+			throw new Exception ($this->getError ());
+		}
+	}
+
+	function execute ($query) {
+		$this->debug ($query);
+		$cur = mysql_query ($query, $this->con_id);
+		if (!$cur) {
+			throw new Exception ($this->getError ());
+		} else {
+			return true;
+		}
+	}
+
+	function getLastID () {
+		$this->debug ('* GET LAST ID');
+		return (int) mysql_insert_id ($this->con_id);
+	}
+
+	/**
+	 * Returns a string ready to be used in the exception.
+	 *
+	 * @return string Error string
+	 */
+	function getError() {
+		if ($this->con_id) {
+			return mysql_errno ($this->con_id).' - '
+				.mysql_error ($this->con_id).' - '.$this->lastquery;
+		} else {
+			return mysql_errno ().' - '
+				.mysql_error ().' - '.$this->lastquery;
+		}
+	}
+
+	function esc ($str) {
+		return '\''.mysql_real_escape_string ($str, $this->con_id).'\'';
+	}
+
+	/**
+	 * Quote the column name.
+	 *
+	 * @param string Name of the column
+	 * @return string Escaped name
+	 */
+	function qn ($col) {
+		return '`'.$col.'`';
+	}
+
+	/**
+	 * Start a transaction.
+	 */
+	function begin () {
+		if (Gatuf::config ('db_mysql_transaction', false)) {
+			$this->execute ('BEGIN');
+		}
+	}
+
+	/**
+	 * Commit a transaction.
+	 */
+	function commit() {
+		if (Gatuf::config ('db_mysql_transaction', false)) {
+			$this->execute ('COMMIT');
+		}
+	}
+
+	/**
+	 * Rollback a transaction.
+	 */
+	function rollback() {
+		if (Gatuf::config ('db_mysql_transaction', false)) {
+			$this->execute ('ROLLBACK');
+		}
+	}
+
+	function __toString() {
+		return '<Gatuf_DB_MySQL('.$this->con_id.')>';
+	}
+}
+

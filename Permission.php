@@ -1,0 +1,84 @@
+<?php
+
+class Gatuf_Permission extends Gatuf_Model {
+	public $_model = 'Gatuf_Permission';
+	
+	function init () {
+		$this->_a['table'] = 'permissions';
+		$this->_a['model'] = 'Gatuf_Permission';
+		$this->primary_key = 'id';
+		
+		$this->_a['cols'] = array (
+			'id' =>
+			array (
+			       'type' => 'Gatuf_DB_Field_Sequence',
+			       'blank' => true,
+			),
+			'name' =>
+			array (
+			       'type' => 'Gatuf_DB_Field_Varchar',
+			       'blank' => false,
+			       'size' => 50,
+			),
+			'code_name' =>
+			array (
+			       'type' => 'Gatuf_DB_Field_Varchar',
+			       'blank' => false,
+			       'size' => 100,
+			),
+			'description' =>
+			array (
+			       'type' => 'Gatuf_DB_Field_Varchar',
+			       'blank' => false,
+			       'size' => 250,
+			),
+			'application' =>
+			array (
+			       'type' => 'Gatuf_DB_Field_Varchar',
+			       'size' => 150,
+			       'blank' => false,
+			),
+		);
+		
+		$this->_a['idx'] = array (
+			'code_name_idx' =>
+			array (
+			       'type' => 'normal',
+			       'col' => 'code_name',
+			),
+			'application_idx' =>
+			array (
+			       'type' => 'normal',
+			       'col' => 'application',
+			),
+		);
+		$hay = array (strtolower (Gatuf::config('gatuf_custom_group', 'Gatuf_Group')), strtolower($this->_a['model']));
+		sort ($hay);
+		$t_asso = $this->_con->dbname.'.'.$this->_con->pfx.$hay[0].'_'.$hay[1].'_assoc';
+		$t_perm = $this->getSqlTable ();
+		$this->_a['views'] = array (
+			'join_group' =>
+			array (
+			       'join' => 'LEFT JOIN '.$t_asso
+			                 .' ON '.$t_perm.'.id=gatuf_permission_id',
+			),
+		);
+	}
+	
+	function __toString () {
+		return $this->name.' ('.$this->application.'.'.$this->code_name.')';
+	}
+	
+	public static function getFromString ($perm) {
+		list($app, $code) = explode ('.', trim ($perm));
+		$sql = new Gatuf_SQL ('code_name=%s AND application=%s', array ($code, $app));
+		
+		$perms = Gatuf::factory ('Gatuf_Permission')->getList (array ('filter' => $sql->gen ()));
+		
+		if ($perms->count () != 1) {
+			return false;
+		}
+		
+		return $perms[0];
+	}
+}
