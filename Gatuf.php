@@ -1,7 +1,6 @@
 <?php
 
 class Gatuf {
-	
 	static function start($config) {
 		$GLOBALS['_GATUF_starttime'] = microtime(true);
 		$GLOBALS['_GATUF_uniqid'] = uniqid($GLOBALS['_GATUF_starttime'], true);

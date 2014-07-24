@@ -47,7 +47,15 @@ class Gatuf_DB_MySQL {
 		$this->database ($dbname);
 		$this->execute ('SET NAMES \'utf8\'');
 	}
-
+    
+    function createDB ($dbname) {
+        // CREATE DATABASE `siiau_2008B` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+        $sql = sprintf ('CREATE DATABASE %s DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci', $this->qn ($dbname));
+        $this->execute ($sql);
+        
+        $this->dbname = $dbname;
+    }
+    
 	function database($dbname) {
 	    $this->dbname = $dbname;
 		$db = mysql_select_db ($dbname, $this->con_id);

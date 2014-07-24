@@ -274,7 +274,7 @@ class Gatuf_DB_Schema_MySQL {
 			$constraints[] = $alter_tbl.' ADD CONSTRAINT '.$this->getShortenedFKeyName($table.'_fkey2').'
 			    FOREIGN KEY ('.strtolower($omodel->_a['model']).'_'.$omodel->primary_key.')
 			    REFERENCES '.$omodel->_con->dbname.'.'.$omodel->_con->pfx.$omodel->_a['table'].' ('.$omodel->primary_key.')
-			    ON DELETE NO ACTION ON UPDATE NO ACTION';
+			    ON DELETE CASCADE ON UPDATE CASCADE';
 		}
 		return $constraints;
 	}
