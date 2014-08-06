@@ -136,6 +136,7 @@ class Gatuf_Template_Compiler {
                                     'aperm' => 'Gatuf_Template_Tag_APerm',
                                     'getmsgs' => 'Gatuf_Template_Tag_Messages',
                                     'mailhide' => 'Gatuf_Template_Tag_MailHide',
+                                    'regroup' => 'Gatuf_Template_Tag_Regroup',
                                     );
     /**
      * During compilation, all the tags are created once so to query

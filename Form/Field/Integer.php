@@ -64,10 +64,10 @@ class Gatuf_Form_Field_Integer extends Gatuf_Form_Field {
 
     protected function checkMinMax($value) {
         if ($this->max !== null and $value > $this->max) {
-            throw new Gatuf_Form_Invalid(sprintf('Asegure que el valor no es más grande que %1$d.', $this->max));
+            throw new Gatuf_Form_Invalid(sprintf('El valor no puede ser mayor que %1$d.', $this->max));
         }
         if ($this->min !== null and $value < $this->min) {
-            throw new Gatuf_Form_Invalid(sprintf('Asegure que el valor no es menor que %1$d.', $this->min));
+            throw new Gatuf_Form_Invalid(sprintf('El valor no puede ser menor que %1$d.', $this->min));
         }
     }
 }
