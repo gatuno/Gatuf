@@ -22,32 +22,30 @@
 # ***** END LICENSE BLOCK ***** */
 
 class Gatuf_Form_Field_Time extends Gatuf_Form_Field {
-    public $widget = 'Gatuf_Form_Widget_TextInput';
+	public $widget = 'Gatuf_Form_Widget_TextInput';
 
-    public function clean($value) {
+	public function clean($value) {
 		parent::clean($value);
 		if (in_array($value, $this->empty_values)) {
 			return '';
 		}
 		/* Validaciones extras para evitar errores */
 		if (false === ($split = strpos ($value, ':'))) {
-			if (strlen ($value) != 4 and strlen ($value) != 3) {
-				throw new Gatuf_Form_Invalid ('Las horas en formato Siiau deben ser de 3 o 4 dígitos');
-			}
-			$hora = (int) substr ($value, 0, -2);
-			$minuto = (int) substr ($value, -2);
-		} else {
-			if (false === ($date = strptime($value, '%H:%M'))) {
-			    throw new Gatuf_Form_Invalid ('La hora ingresada no es válida');
-			}
-		    $hora = (int) substr ($value, 0, $split);
-		    $minuto = (int) substr ($value, $split + 1);
+			throw new Gatuf_Form_Invalid ('Formato de hora incorrecto');
 		}
+		
+		if (false === ($date = strptime($value, '%H:%M'))) {
+			throw new Gatuf_Form_Invalid ('La hora ingresada no es válida');
+		}
+		
+		$hora = (int) substr ($value, 0, $split);
+		$minuto = (int) substr ($value, $split + 1);
+		
 		if ($hora < 0 || $hora > 23 || $minuto < 0 || $minuto > 59) {
 			throw new Gatuf_Form_Invalid ('La hora ingresada no es válida');
 		}
 		
-        return str_pad ($hora, 2, '0', STR_PAD_LEFT).':'.
-               str_pad ($minuto, 2, '0', STR_PAD_LEFT);
-    }
+		return str_pad ($hora, 2, '0', STR_PAD_LEFT).':'.
+		       str_pad ($minuto, 2, '0', STR_PAD_LEFT);
+	}
 }
