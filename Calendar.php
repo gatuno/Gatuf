@@ -222,7 +222,7 @@ class Gatuf_Calendar {
                     }
                 }
             }
-            if (strlen($event['color']) > 0) {
+            if (isset ($event['color']) && strlen($event['color']) > 0) {
                 $extra .= ' style="background-color: '.$event['color'].';"';
             }
             if (strlen($event['content']) > 0) {
