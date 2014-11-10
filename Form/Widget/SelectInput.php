@@ -26,9 +26,13 @@
  */
 class Gatuf_Form_Widget_SelectInput extends Gatuf_Form_Widget {
     public $choices = array();
-
+	public $invalid = array ();
     public function __construct($attrs=array()) {
         $this->choices = $attrs['choices'];
+        if (isset ($attrs['invalid'])) {
+        	$this->invalid = $attrs['invalid'];
+        	unset ($attrs['invalid']);
+        }
         unset($attrs['choices']);
         parent::__construct($attrs);
     }
@@ -71,5 +75,14 @@ class Gatuf_Form_Widget_SelectInput extends Gatuf_Form_Widget {
         }
         $output[] = '</select>';
         return new Gatuf_Template_SafeString(implode("\n", $output), true);
+    }
+    
+    public function valueFromFormData($name, $data) {
+		if (isset($data[$name])) {
+			if (in_array ($data[$name], $this->invalid)) return null;
+			return $data[$name];
+		}
+		
+		return null;
     }
 }
