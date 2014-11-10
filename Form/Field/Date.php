@@ -24,7 +24,7 @@
 class Gatuf_Form_Field_Date extends Gatuf_Form_Field {
     public $widget = 'Gatuf_Form_Widget_TextInput';
     public $input_formats = array(
-       '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', // 2006-10-25, 10/25/2006, 10/25/06
+       '%d-%m-%Y', '%d/%m/%Y', '%d/%m/%y', // 25-10-2006, 25/10/2006, 25/10/06
        '%b %d %Y', '%b %d, %Y',      // 'Oct 25 2006', 'Oct 25, 2006'
        '%d %b %Y', '%d %b, %Y',      // '25 Oct 2006', '25 Oct, 2006'
        '%B %d %Y', '%B %d, %Y',      // 'October 25 2006', 'October 25, 2006'
@@ -42,9 +42,9 @@ class Gatuf_Form_Field_Date extends Gatuf_Form_Field {
                 $month = $date['tm_mon'] + 1;
                 $year  = $date['tm_year'] + 1900;
                 if (checkdate($month, $day, $year)) {
-                    return str_pad($year,  4, '0', STR_PAD_LEFT).'-'.
-                           str_pad($month, 2, '0', STR_PAD_LEFT).'-'.
-                           str_pad($day,   2, '0', STR_PAD_LEFT);
+                    return str_pad($day,  2, '0', STR_PAD_LEFT).'/'.
+                           str_pad($month, 2, '0', STR_PAD_LEFT).'/'.
+                           str_pad($year,   4, '0', STR_PAD_LEFT);
                 }
             }
         }
