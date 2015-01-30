@@ -4,8 +4,10 @@ class Gatuf_Form_Widget_DobleInput extends Gatuf_Form_Widget {
 	public $choices = array();
 
 	public function __construct($attrs=array()) {
-		$this->choices = $attrs['choices'];
-		unset($attrs['choices']);
+		if (isset ($attrs['choices'])) {
+			$this->choices = $attrs['choices'];
+			unset($attrs['choices']);
+		}
 		parent::__construct($attrs);
 	}
 	

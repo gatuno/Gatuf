@@ -46,9 +46,9 @@ class Gatuf_Form_Field_Varchar extends Gatuf_Form_Field
             if ($this->min_length !== null and $value_length < $this->min_length) {
                 throw new Gatuf_Form_Invalid(sprintf('Ensure this value has at least %1$d characters (it has %2$d).', $this->min_length, $value_length));
             }
-            if (isset ($this->widget->choices)) {
+            if ($this->choices !== null && $this->choices_other == false) {
                 $found = false;
-                foreach ($this->widget->choices as $val) {
+                foreach ($this->choices as $val) {
                     if (is_array ($val)) {
                         foreach ($val as $subval) {
                             if ($value == $subval) {
@@ -71,15 +71,26 @@ class Gatuf_Form_Field_Varchar extends Gatuf_Form_Field
         return $value;
     }
 
-    public function widgetAttrs($widget)
-    {
+    public function widgetAttrs($widget) {
+    	$attrs = array ();
         if ($this->max_length !== null and 
             in_array(get_class($widget), 
                      array('Gatuf_Form_Widget_TextInput', 
                            'Gatuf_Form_Widget_PasswordInput'))) {
-            return array('maxlength'=>$this->max_length);
+            $attrs['maxlength'] = $this->max_length;
         }
-        return array();
+        
+        if ($this->choices !== null and in_array (get_class ($widget), array ('Gatuf_Form_Widget_SelectInput', 'Gatuf_Form_Widget_RadioInput'))) {
+        	$widget->choices = $this->choices;
+        	$widget->can_other = $this->choices_other;
+        	$widget->other_text = $this->choices_other_text;
+        }
+        
+        if ($this->choices !== null and in_array (get_class ($widget), array ('Gatuf_Form_Widget_DobleInput', 'Gatuf_Form_Widget_SelectMultipleInput'))) {
+        	$widget->choices = $this->choices;
+        }
+        
+        return $attrs;
     }
 }
 

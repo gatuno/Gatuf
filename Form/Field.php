@@ -44,7 +44,9 @@ class Gatuf_Form_Field {
     public $help_text = ''; /**< Help text for the field. */
     public $initial = ''; /**< Default value when empty. */
     public $choices = null; /**< Predefined choices for the field. */
-
+	public $choices_other = false; /* Si puede elegir otras opciones */
+	public $choices_other_text = ''; /* El texto de la opción para elegir otros */
+	
     /*
      * Following member variables are more for internal cooking.
      */
