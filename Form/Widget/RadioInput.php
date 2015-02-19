@@ -37,7 +37,7 @@ class Gatuf_Form_Widget_RadioInput extends Gatuf_Form_Widget {
      */
     
     public function __construct ($attrs=array()) {
-        if (isset ($attrs['choices']) {
+        if (isset ($attrs['choices'])) {
 		    $this->choices = $attrs['choices'];
 		    unset ($attrs['choices']);
 		}

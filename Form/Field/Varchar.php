@@ -81,7 +81,7 @@ class Gatuf_Form_Field_Varchar extends Gatuf_Form_Field
         }
         
         if ($this->choices !== null and in_array (get_class ($widget), array ('Gatuf_Form_Widget_SelectInput', 'Gatuf_Form_Widget_RadioInput'))) {
-        	$widget->choices = $this->choices;
+        	$widget->choices = $this->choices + $widget->choices;
         	$widget->can_other = $this->choices_other;
         	$widget->other_text = $this->choices_other_text;
         }

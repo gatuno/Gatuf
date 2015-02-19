@@ -29,7 +29,7 @@ function Gatuf_DB_defaultTypecast() {
 	             'Gatuf_DB_Field_Boolean' =>
 	                 array('Gatuf_DB_BooleanFromDb', 'Gatuf_DB_BooleanToDb'),
 	             'Gatuf_DB_Field_Date' =>
-	                 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
+	                 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_DateToDb'),
 	             'Gatuf_DB_Field_Datetime' =>
 	                 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
 	             'Gatuf_DB_Field_Email' =>
@@ -77,6 +77,13 @@ function Gatuf_DB_IdentityToDb($val, $db) {
 		return 'NULL';
 	}
 	return $db->esc($val);
+}
+
+function Gatuf_DB_DateToDb ($val, $db) {
+	if (false === strpos ($val, '/')) {
+		return $db->esc ($val);
+	}
+	return $db->esc (implode('-', array_reverse(explode('/', $val))));
 }
 
 function Gatuf_DB_SerializedFromDb($val) {

@@ -39,7 +39,7 @@ class Gatuf_Form_Field_Integer extends Gatuf_Form_Field {
             $this->checkMinMax($value);
             if ($this->choices !== null && $this->choices_other == false) {
                 $found = false;
-                foreach ($this->widget->choices as $val) {
+                foreach ($this->choices as $val) {
                     if (is_array ($val)) {
                         foreach ($val as $subval) {
                             if ($value == $subval) {
@@ -64,7 +64,7 @@ class Gatuf_Form_Field_Integer extends Gatuf_Form_Field {
 	public function widgetAttrs($widget) {
         $attrs = array ();
         if ($this->choices !== null and in_array (get_class ($widget), array ('Gatuf_Form_Widget_SelectInput', 'Gatuf_Form_Widget_RadioInput'))) {
-        	$widget->choices = $this->choices;
+        	$widget->choices = $this->choices + $widget->choices;
         	$widget->can_other = $this->choices_other;
         	$widget->other_text = $this->choices_other_text;
         }
