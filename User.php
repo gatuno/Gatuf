@@ -239,4 +239,27 @@ class Gatuf_User extends Gatuf_Model {
 		
 		return $messages;
 	}
+	
+	/**
+     * Get profile.
+     *
+     * Retrieve the profile of the current user. If not profile in the
+     * database a Pluf_Exception_DoesNotExist exception is thrown,
+     * just catch it and create a profile.
+     *
+     * @return Pluf_Model User profile
+     */
+	function getProfile() {
+		$pclass = Gatuf::config('user_profile_class', false);
+		if (false == $pclass) {
+			throw new Gatuf_Exception_SettingError ('"user_profile_class" setting not defined.');
+		}
+		$db = $this->_getConnection();
+		$sql = new Gatuf_SQL(sprintf('%s=%%s', $db->qn('user')), array($this->id));
+		$users = Gatuf::factory($pclass)->getList(array('filter' => $sql->gen()));
+		if ($users->count() != 1) {
+			throw new Gatuf_Exception_DoesNotExist(sprintf('No profiles available for user: %s', (string) $this));
+		}
+		return $users[0];
+	}
 }
