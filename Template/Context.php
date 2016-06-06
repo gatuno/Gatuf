@@ -41,4 +41,8 @@ class Gatuf_Template_Context {
     function set($var, $value) {
         $this->_vars[$var] = $value;
     }
+    
+    function setByRef ($var, &$value) {
+    	$this->_vars[$var] = $value;
+    }
 }

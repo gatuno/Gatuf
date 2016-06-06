@@ -516,7 +516,7 @@ class Gatuf_Model {
 			} else {
 				$p['filter'] = '';
 			}
-			$p['filter'] .= $this->_con->qn($foreignkey).'='.$this->_toDb($this->_data[$this->primary_key], $this->primary_key);
+			$p['filter'] .= $m->getSqlTable().'.'.$this->_con->qn($foreignkey).'='.$this->_toDb($this->_data[$this->primary_key], $this->primary_key);
 		} else {
 			// Many to many: We generate a special view that is making
 			// the join
