@@ -288,7 +288,7 @@ class Gatuf_DB_Schema_MySQL {
 	function getSqlDelete($model) {
 		$cols = $model->_a['cols'];
 		$manytomany = array();
-		$sql = 'DROP TABLE IF EXISTS `'.$this->con->dbname.'.'.$this->con->pfx.$model->_a['table'].'`';
+		$sql = 'DROP TABLE IF EXISTS '.$this->con->dbname.'.`'.$this->con->pfx.$model->_a['table'].'`';
 
 		foreach ($cols as $col => $val) {
 			$field = new $val['type']();
