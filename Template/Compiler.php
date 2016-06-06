@@ -105,6 +105,7 @@ class Gatuf_Template_Compiler {
                                  'unsafe' => 'Gatuf_Template_unsafe',
                                  'safe' => 'Gatuf_Template_unsafe',
                                  'date' => 'Gatuf_Template_dateFormat',
+                                 'dateSimple' => 'Gatuf_Template_dateSimpleFormat',
                                  'time' => 'Gatuf_Template_timeFormat',
                                  'dateago' => 'Gatuf_Template_dateAgo',
                                  'timeago' => 'Gatuf_Template_timeAgo',

@@ -306,7 +306,8 @@ function Gatuf_HTTP_Response_ServerErrorDebug_Pretty($e)
     } 
     $out .= '
     <h3>Request <span>(parsed)</span></h3>';
-    $superglobals = array('$_GET','$_POST','$_COOKIE','$_SERVER','$_ENV');
+    if (!isset ($GLOBALS['_GATUF_debug_data']['sql_queries'])) $GLOBALS['_GATUF_debug_data']['sql_queries'] = array ();
+    $superglobals = array('$_GET','$_POST','$_COOKIE','$_SERVER','$_ENV', '$GLOBALS["_GATUF_debug_data"]["sql_queries"]');
     foreach ( $superglobals as $sglobal ) {
         $sfn = create_function('','return '.$sglobal.';');
         $out .= '<h4>'.$sglobal.'</h4>';

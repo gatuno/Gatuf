@@ -196,6 +196,27 @@ function Gatuf_Template_dateFormat($date, $format='%b %e, %Y')
 }
 
 /**
+ * Modifier plugin: Convert format a date.
+ *
+ * This is used for dates not IN GMT.
+ *
+ * @param string $date input date string
+ * @param string $format strftime format for output ('%b %e, %Y')
+ * @return string date
+ */
+function Gatuf_Template_dateSimpleFormat($date, $format='%b %e, %Y') 
+{
+    if (substr(PHP_OS,0,3) == 'WIN') {
+        $_win_from = array ('%e',  '%T',	   '%D');
+        $_win_to   = array ('%#d', '%H:%M:%S', '%m/%d/%y');
+        $format	= str_replace($_win_from, $_win_to, $format);
+    }
+    $date = date('Y-m-d H:i:s', strtotime($date));
+    return strftime($format, strtotime($date));
+}
+
+
+/**
  * Modifier plugin: Format a unix time.
  *
  * Warning: date format is directly to be used, not consideration of
