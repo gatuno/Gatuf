@@ -57,7 +57,7 @@ function Gatuf_DB_defaultTypecast() {
 	             'Gatuf_DB_Field_Char' =>
 	                 array('Gatuf_DB_IdentityFromDB', 'Gatuf_DB_IdentityToDb'),
 	             'Gatuf_DB_Field_Time' =>
-	                 array('Gatuf_DB_IdentityFromDB', 'Gatuf_DB_IdentityToDb'),
+	                 array('Gatuf_DB_TimeFromDb', 'Gatuf_DB_TimeToDb'),
 	);
 }
 
@@ -84,6 +84,14 @@ function Gatuf_DB_DateToDb ($val, $db) {
 		return $db->esc ($val);
 	}
 	return $db->esc (implode('-', array_reverse(explode('/', $val))));
+}
+
+function Gatuf_DB_TimeToDb ($val, $db) {
+	return $db->esc ($val->format ('H:i:s'));
+}
+
+function Gatuf_DB_TimeFromDb ($val) {
+	return date_create_from_format ('H:i:s', $val);
 }
 
 function Gatuf_DB_SerializedFromDb($val) {

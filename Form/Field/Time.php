@@ -29,23 +29,25 @@ class Gatuf_Form_Field_Time extends Gatuf_Form_Field {
 		if (in_array($value, $this->empty_values)) {
 			return '';
 		}
-		/* Validaciones extras para evitar errores */
-		if (false === ($split = strpos ($value, ':'))) {
-			throw new Gatuf_Form_Invalid ('Formato de hora incorrecto');
+		if (preg_match("/^(2[0-3]|[01][0-9]|[0-9]):([0-5][0-9])(:[0-5][0-9])?\s*([ap]m)?$/i", $match)) {
+			/* Valido */
+			$hora = $match[1];
+			$minuto = $match[2];
+			
+			if (isset ($match[4])) {
+				if ($hora > 12) {
+					throw new Gatuf_Form_Invalid ('Formato de hora incorrecto');
+				}
+				if ($hora != 12 && $match[4] == 'pm') {
+					$hora += 12;
+				}
+			}
+			$seg = 0;
+			if (isset ($match[3])) {
+				$seg = substr ($match[3], 1);
+			}
 		}
 		
-		if (false === ($date = strptime($value, '%H:%M'))) {
-			throw new Gatuf_Form_Invalid ('La hora ingresada no es válida');
-		}
-		
-		$hora = (int) substr ($value, 0, $split);
-		$minuto = (int) substr ($value, $split + 1);
-		
-		if ($hora < 0 || $hora > 23 || $minuto < 0 || $minuto > 59) {
-			throw new Gatuf_Form_Invalid ('La hora ingresada no es válida');
-		}
-		
-		return str_pad ($hora, 2, '0', STR_PAD_LEFT).':'.
-		       str_pad ($minuto, 2, '0', STR_PAD_LEFT);
+		return date_create_from_format ('H:i:s', $hora.':'.$minuto.':'.$seg);
 	}
 }
