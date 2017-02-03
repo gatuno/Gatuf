@@ -24,11 +24,11 @@
 class Gatuf_Form_Field_Date extends Gatuf_Form_Field {
     public $widget = 'Gatuf_Form_Widget_TextInput';
     public $input_formats = array(
-       '%d-%m-%y', '%d-%m-%Y', '%d/%m/%Y', '%d/%m/%y', // 25-10-06, 25-10-2006, 25/10/2006, 25/10/06
-       '%b %d %Y', '%b %d, %Y',      // 'Oct 25 2006', 'Oct 25, 2006'
-       '%d %b %Y', '%d %b, %Y',      // '25 Oct 2006', '25 Oct, 2006'
-       '%B %d %Y', '%B %d, %Y',      // 'October 25 2006', 'October 25, 2006'
-       '%d %B %Y', '%d %B, %Y',      // '25 October 2006', '25 October, 2006'
+       'd-m-y', 'd-m-Y', 'd/m/y', 'd/m/Y', // 25-10-06, 25-10-2006, 25/10/06, 25/10/2006
+       'M d Y', 'M d, Y',      // 'Oct 25 2006', 'Oct 25, 2006'
+       'd M Y', 'd M, Y',      // '25 Oct 2006', '25 Oct, 2006'
+       'F d Y', 'F d, Y',      // 'October 25 2006', 'October 25, 2006'
+       'd F Y', 'd F, Y',      // '25 October 2006', '25 October, 2006'
                                   );
 
     public function clean($value) {
@@ -36,16 +36,11 @@ class Gatuf_Form_Field_Date extends Gatuf_Form_Field {
         if (in_array($value, $this->empty_values)) {
             return '';
         }
+        
         foreach ($this->input_formats as $format) {
-            if (false !== ($date = strptime($value, $format))) {
-                $day   = $date['tm_mday'];
-                $month = $date['tm_mon'] + 1;
-                $year  = $date['tm_year'] + 1900;
-                if (checkdate($month, $day, $year)) {
-                    return str_pad($day,  2, '0', STR_PAD_LEFT).'/'.
-                           str_pad($month, 2, '0', STR_PAD_LEFT).'/'.
-                           str_pad($year,   4, '0', STR_PAD_LEFT);
-                }
+            $date = date_create_from_format ($format, $value);
+            if (false !== $date && $date->format ($format) == $value) {
+                return $date->format ('d/m/Y');
             }
         }
         throw new Gatuf_Form_Invalid('Enter a valid date.');

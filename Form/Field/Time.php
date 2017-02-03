@@ -29,7 +29,8 @@ class Gatuf_Form_Field_Time extends Gatuf_Form_Field {
 		if (in_array($value, $this->empty_values)) {
 			return '';
 		}
-		if (preg_match("/^(2[0-3]|[01][0-9]|[0-9]):([0-5][0-9])(:[0-5][0-9])?\s*([ap]m)?$/i", $match)) {
+		$match = array ();
+		if (preg_match("/^(2[0-3]|[01][0-9]|[0-9]):([0-5][0-9])(:[0-5][0-9])?\s*([ap]m)?$/i", $value, $match)) {
 			/* Valido */
 			$hora = $match[1];
 			$minuto = $match[2];
@@ -46,8 +47,11 @@ class Gatuf_Form_Field_Time extends Gatuf_Form_Field {
 			if (isset ($match[3])) {
 				$seg = substr ($match[3], 1);
 			}
+			
+		} else {
+		    throw new Gatuf_Form_Invalid ('Formato de hora incorrecto');
 		}
-		
-		return date_create_from_format ('H:i:s', $hora.':'.$minuto.':'.$seg);
+		$full = sprintf ('%02s:%02s:%02s', $hora, $minuto, $seg);
+		return date_create_from_format ('H:i:s', $full);
 	}
 }

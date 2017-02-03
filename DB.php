@@ -87,7 +87,13 @@ function Gatuf_DB_DateToDb ($val, $db) {
 }
 
 function Gatuf_DB_TimeToDb ($val, $db) {
-	return $db->esc ($val->format ('H:i:s'));
+	if (null === $val) {
+		return 'NULL';
+	}
+	if ($val instanceof DateTime) {
+		return $db->esc ($val->format ('H:i:s'));
+	}
+	return $db->esc ($val);
 }
 
 function Gatuf_DB_TimeFromDb ($val) {
