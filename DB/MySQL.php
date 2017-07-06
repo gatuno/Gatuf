@@ -38,13 +38,12 @@ class Gatuf_DB_MySQL {
 		Gatuf::loadFunction('Gatuf_DB_defaultTypecast');
 		$this->type_cast = Gatuf_DB_defaultTypecast();
 		$this->debug ('* MYSQL CONNECT');
-		$this->con_id = mysql_connect ($server, $user, $pwd);
+		$this->con_id = mysqli_connect ($server, $user, $pwd, $dbname);
 		$this->debug = $debug;
 		$this->pfx = $pfx;
 		if (!$this->con_id) {
 			throw new Exception ($this->getError());
 		}
-		$this->database ($dbname);
 		$this->execute ('SET NAMES \'utf8\'');
 	}
     
@@ -58,7 +57,7 @@ class Gatuf_DB_MySQL {
     
 	function database($dbname) {
 	    $this->dbname = $dbname;
-		$db = mysql_select_db ($dbname, $this->con_id);
+		$db = mysqli_select_db ($this->con_id, $dbname);
 		$this->debug ('* USE DATABASE '.$dbname);
 		if (!$db) {
 			throw new Exception ($this->getError());
@@ -73,7 +72,7 @@ class Gatuf_DB_MySQL {
 	 */
 	function getServerInfo()
 	{
-		return mysql_get_server_info($this->con_id);
+		return mysqli_get_host_info($this->con_id);
 	}
 
 	/**
@@ -95,7 +94,7 @@ class Gatuf_DB_MySQL {
 
 	function close() {
 		if ($this->con_id) {
-			mysql_close ($this->con_id);
+			mysqli_close ($this->con_id);
 			return true;
 		} else {
 			return false;
@@ -104,13 +103,14 @@ class Gatuf_DB_MySQL {
 
 	function select($query) {
 		$this->debug ($query);
-		$cur = mysql_query ($query, $this->con_id);
-		if ($cur) {
+		$ok = mysqli_real_query ($this->con_id, $query);
+		if ($ok) {
+			$cur = mysqli_use_result ($this->con_id);
 			$res = array();
-			while ($row = mysql_fetch_assoc ($cur)) {
+			while ($row = $cur->fetch_assoc ()) {
 				$res[] = $row;
 			}
-			mysql_free_result ($cur);
+			mysqli_free_result ($cur);
 			return $res;
 		} else {
 			throw new Exception ($this->getError ());
@@ -119,7 +119,7 @@ class Gatuf_DB_MySQL {
 
 	function execute ($query) {
 		$this->debug ($query);
-		$cur = mysql_query ($query, $this->con_id);
+		$cur = mysqli_real_query ($this->con_id, $query);
 		if (!$cur) {
 			throw new Exception ($this->getError ());
 		} else {
@@ -129,7 +129,7 @@ class Gatuf_DB_MySQL {
 
 	function getLastID () {
 		$this->debug ('* GET LAST ID');
-		return (int) mysql_insert_id ($this->con_id);
+		return (int) mysqli_insert_id ($this->con_id);
 	}
 
 	/**
@@ -139,16 +139,16 @@ class Gatuf_DB_MySQL {
 	 */
 	function getError() {
 		if ($this->con_id) {
-			return mysql_errno ($this->con_id).' - '
-				.mysql_error ($this->con_id).' - '.$this->lastquery;
+			return $this->con_id->connect_errno.' - '
+				.$this->con_id->connect_error.' - '.$this->lastquery;
 		} else {
-			return mysql_errno ().' - '
-				.mysql_error ().' - '.$this->lastquery;
+			return mysqli_connect_errno ().' - '
+				.mysqli_connect_error ().' - '.$this->lastquery;
 		}
 	}
 
 	function esc ($str) {
-		return '\''.mysql_real_escape_string ($str, $this->con_id).'\'';
+		return '\''.mysqli_real_escape_string ($this->con_id, $str).'\'';
 	}
 
 	/**

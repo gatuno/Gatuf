@@ -126,9 +126,9 @@ class Gatuf_Despachador {
         }
 		
 		if (!isset ($ctl['params'])) {
-			return $m->$ctl['method']($req, $match);
+			return $m->{$ctl['method']}($req, $match);
 		} else {
-			return $m->$ctl['method']($req, $match, $ctl['params']);
+			return $m->{$ctl['method']}($req, $match, $ctl['params']);
 		}
 	}
 	

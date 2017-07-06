@@ -44,7 +44,7 @@ class Gatuf_Template_Compiler {
     /** 
      * Variables. 
      */
-    protected $_vartype = array(T_CHARACTER, T_CONSTANT_ENCAPSED_STRING, 
+    protected $_vartype = array(T_CONSTANT_ENCAPSED_STRING, 
                                 T_DNUMBER, T_ENCAPSED_AND_WHITESPACE, 
                                 T_LNUMBER, T_OBJECT_OPERATOR, T_STRING, 
                                 T_WHITESPACE, T_ARRAY, T_CLASS, T_PRIVATE, T_LIST);
