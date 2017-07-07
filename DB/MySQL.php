@@ -39,6 +39,7 @@ class Gatuf_DB_MySQL {
 		$this->type_cast = Gatuf_DB_defaultTypecast();
 		$this->debug ('* MYSQL CONNECT');
 		$this->con_id = mysqli_connect ($server, $user, $pwd, $dbname);
+		$this->dbname = $dbname;
 		$this->debug = $debug;
 		$this->pfx = $pfx;
 		if (!$this->con_id) {

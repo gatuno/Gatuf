@@ -28,7 +28,7 @@ class Gatuf_Template_Tag_Messages extends Gatuf_Template_Tag
 {
     function start($user)
     {
-        if (is_object($user) && !$user->isAnonymous()) {
+        if (is_object($user) && !$user->isAnonymous() && get_class ($user) == Gatuf::config('gatuf_custom_user','Gatuf_User')) {
             $messages = $user->getAndDeleteMessages();
             if (count($messages) > 0) {
                 echo '<div class="user-messages">'."\n";
