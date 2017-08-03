@@ -177,20 +177,14 @@ class Gatuf_Mail {
     /**
      * Effectively sends the email.
      */
-    function sendMail() {
+    function sendMail($params) {
         $body = $this->message->get();
         $hdrs = $this->message->headers($this->headers);
 
-        $params = Gatuf::prefixconfig('mail_', true); // strip the prefix 'mail_'
         unset($params['backend']);
         $gmail = new Mail();
         $mail = $gmail->factory(Gatuf::config('mail_backend', 'mail'),
                                 $params);
-        if (Gatuf::config('send_emails', true)) {
-            $mail->send($this->to_address, $hdrs, $body);
-        }
-        if (defined('IN_UNIT_TESTS')) {
-            $GLOBALS['_PX_UNIT_TESTS']['emails'][] = array($this->to_address, $hdrs, $body);
-        }
+        return $mail->send($this->to_address, $hdrs, $body);
     }
 }
