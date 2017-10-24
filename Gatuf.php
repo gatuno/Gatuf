@@ -165,6 +165,46 @@ class Gatuf {
     }
 }
 
+/**
+ * Translate a string.
+ *
+ * @param string String to be translated.
+ * @return string Translated string.
+ */
+function __($str) {
+	$locale = (isset($GLOBALS['_GX_current_locale'])) ? $GLOBALS['_GX_current_locale'] : 'en';
+	if (!empty($GLOBALS['_GX_locale'][$locale][$str][0])) {
+		return $GLOBALS['_GX_locale'][$locale][$str][0];
+	}
+	return $str;
+}
+
+/**
+ * Translate the plural form of a string.
+ *
+ * @param string Singular form of the string.
+ * @param string Plural form of the string.
+ * @param int Number of elements.
+ * @return string Translated string.
+ */
+function _n($sing, $plur, $n) {
+	$locale = (isset($GLOBALS['_GX_current_locale'])) ? $GLOBALS['_GX_current_locale'] : 'en';
+	if (isset($GLOBALS['_GX_current_locale_plural_form'])) {
+		$pform = $GLOBALS['_GX_current_locale_plural_form'];
+	} else {
+		$pform = Gatuf_Translation::getPluralForm($locale);
+	}
+	$index = Gatuf_Translation::$pform($n);
+	if (!empty($GLOBALS['_GX_locale'][$locale][$sing.'#'.$plur][$index])) {
+		return $GLOBALS['_GX_locale'][$locale][$sing.'#'.$plur][$index];
+	}
+	// We have no translations or default English
+	if ($n == 1) {
+		return $sing;
+	}
+	return $plur;
+}
+
 function __autoload($class_name) {
 	/*try {*/
 		Gatuf::loadClass($class_name);

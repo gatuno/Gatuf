@@ -7,6 +7,7 @@ class Gatuf_User extends Gatuf_Model {
 	public $_cache_perms = null;
 	
 	function init () {
+		$langs = Gatuf::config('languages', array('en'));
 		$this->_a['verbose'] = 'user';
 		$this->_a['table'] = 'users';
 		$this->_a['model'] = __CLASS__;
@@ -77,6 +78,15 @@ class Gatuf_User extends Gatuf_Model {
 			       'type' => 'Gatuf_DB_Field_Boolean',
 			       'default' => true,
 			       'blank' => true,
+			),
+			'language' => 
+			array (
+			       'type' => 'Gatuf_DB_Field_Char',
+			       'blank' => true,
+			       'default' => $langs[0],
+			       'size' => 5,
+			       /*'verbose' => __('language'),
+			       'help_text' => __('Prefered language of the user for the interface. Use the 2 or 5 letter code like "fr", "en", "fr_QC" or "en_US".')*/
 			),
 			'last_login' =>
 			array (

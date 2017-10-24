@@ -473,7 +473,7 @@ class Gatuf_Template_Compiler {
             break;
         case 'trans':
             $argfct = $this->_parseFinal($args, $this->_allowedAssign); 
-            $res = 'echo('.$argfct.');';
+            $res = 'echo(__('.$argfct.'));';
             break;
         case 'blocktrans':
             array_push($this->_blockStack, 'blocktrans');
@@ -507,7 +507,7 @@ class Gatuf_Template_Compiler {
             } else {
                 $res .= '$_b_t_s=ob_get_contents(); ob_end_clean(); ';
                 if (count($this->_transStack) == 0) {
-                    $res .= 'echo($_b_t_s); ';
+                    $res .= 'echo(__($_b_t_s)); ';
                 } else {
                     $res .= 'echo(Gatuf_Translation::sprintf($_b_t_s, array(';
                     $_tmp = array();
