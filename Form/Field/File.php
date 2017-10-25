@@ -122,7 +122,11 @@ function Gatuf_Form_Field_File_moveToUploadFolder($value, $params=array())
     $name = Gatuf_Utils::cleanFileName($value['name']);
     $upload_path = Gatuf::config('upload_path', '/tmp');
     if (isset($params['file_name'])) {
-        if (false !== strpos($params['file_name'], '%s')) {
+    	if (false !== strpos($params['file_name'], '%e')) {
+    		$ext_pos = strpos ($params['file_name'], '%e');
+    		$ext = substr($value['name'], strrpos($value['name'], '.') + 1);
+    		$name = sprintf (substr_replace ($params['file_name'], '%s', $ext_pos, 2), $ext);
+        } else if (false !== strpos($params['file_name'], '%s')) {
             $name = sprintf($params['file_name'], $name);
         } else {
             $name = $params['file_name'];

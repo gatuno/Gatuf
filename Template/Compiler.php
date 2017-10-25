@@ -509,7 +509,7 @@ class Gatuf_Template_Compiler {
                 if (count($this->_transStack) == 0) {
                     $res .= 'echo(__($_b_t_s)); ';
                 } else {
-                    $res .= 'echo(Gatuf_Translation::sprintf($_b_t_s, array(';
+                    $res .= 'echo(Gatuf_Translation::sprintf(__($_b_t_s), array(';
                     $_tmp = array();
                     foreach ($this->_transStack as $key=>$_trans) {
                         $_tmp[] = '\''.addslashes($key).'\' => Gatuf_Template_safeEcho('.$_trans.', false)';
