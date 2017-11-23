@@ -106,7 +106,7 @@ class Gatuf_Translation {
 		$acceptedlist = explode(',', $accepted);
 		foreach ($acceptedlist as $lang) {
 			$lang = explode(';', $lang);
-			$lang = trim($lang[0]);
+			$lang = str_replace ('-', '_', trim($lang[0]));
 			if (in_array($lang, $available)) {
 				return $lang;
 			}
