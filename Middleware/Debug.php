@@ -97,7 +97,7 @@ class Gatuf_Middleware_Debug
   </script>';
         $text = '<pre style="text-align: left;">';
         $text .= 'Peak mem: '.(int)(memory_get_peak_usage()/1024).'kB'."\n";
-        $text .= 'Exec time: '.sprintf('%.5f', (microtime(true) - $GLOBALS['_PX_starttime'])).'s'."\n";
+        $text .= 'Exec time: '.sprintf('%.5f', (microtime(true) - $GLOBALS['_GATUF_starttime'])).'s'."\n";
         $included_files = get_included_files();
         sort($included_files);
         $text .= '<a href=\'#\' onclick="return pxDebugToggle(\'debug-included-files\')">';
@@ -108,14 +108,14 @@ class Gatuf_Middleware_Debug
             $text .= htmlspecialchars($filename)."\n";
         }
         $text .= '</pre></div>';
-        if (isset($GLOBALS['_PX_debug_data']['sql_queries'])) {
+        if (isset($GLOBALS['_GATUF_debug_data']['sql_queries'])) {
             $text .= '<pre style="text-align: left;">';            
             $text .= '<a href=\'#\' onclick="return pxDebugToggle(\'debug-queries\')">';
-            $text .= 'DB query #: '.count($GLOBALS['_PX_debug_data']['sql_queries']);
+            $text .= 'DB query #: '.count($GLOBALS['_GATUF_debug_data']['sql_queries']);
             $text .= '</a>'."\n\n";
             $text .= '</pre>';
             $text .= '<div id="debug-queries" class="debug-queries"><pre style="text-align: left;">';
-            foreach ($GLOBALS['_PX_debug_data']['sql_queries'] as $q) {
+            foreach ($GLOBALS['_GATUF_debug_data']['sql_queries'] as $q) {
                 $text .= htmlspecialchars($q)."\n";
             }
             $text .= '</pre></div>';
