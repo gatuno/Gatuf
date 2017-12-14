@@ -34,7 +34,7 @@ class Gatuf_Middleware_Csrf
 {
     public static function makeToken($session_key)
     {
-        return md5(Gatuf::f('secret_key').$session_key);
+        return md5(Gatuf::config('secret_key').$session_key);
     }
 
     /**
