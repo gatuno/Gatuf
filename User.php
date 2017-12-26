@@ -243,7 +243,7 @@ class Gatuf_User extends Gatuf_Model {
 		$messages = new ArrayObject ();
 		$ms = $this->get_gatuf_message_list();
 		foreach ($ms as $m) {
-			$messages[] = array ('message' => $m->message, 'type' => $m->type);
+			$messages[] = array ('message' => $m->message, 'type' => $m->type, 'id' => $m->id);
 			$m->delete ();
 		}
 		
