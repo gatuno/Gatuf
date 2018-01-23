@@ -56,12 +56,9 @@ class Gatuf_DB_Schema_MySQL {
 	                         'varchar' => "''",
 	                         'sequence' => null,
 	                         'boolean' => 1,
-	                         'date' => 0,
-	                         'datetime' => 0,
 	                         'file' => "''",
 	                         'manytomany' => null,
 	                         'foreignkey' => 0,
-	                         'text' => "''",
 	                         'html' => "''",
 	                         'time' => 0,
 	                         'integer' => 0,
@@ -111,7 +108,7 @@ class Gatuf_DB_Schema_MySQL {
 				if (array_key_exists('default', $val) && !$fk) {
 					$sql .= ' default ';
 					$sql .= $model->_toDb($val['default'], $col);
-				} elseif ($field->type != 'sequence' && !$fk) {
+				} elseif ($field->type != 'sequence' && !$fk && isset ($this->defaults[$field->type])) {
 					$sql .= ' default '.$this->defaults[$field->type];
 				}
 				$sql .= ',';
