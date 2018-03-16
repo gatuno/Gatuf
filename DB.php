@@ -148,6 +148,9 @@ function Gatuf_DB_IntegerToDb($val, $db) {
 }
 
 function Gatuf_DB_PasswordToDb($val, $db) {
+	if ($val === null) {
+		return 'NULL';
+	}
 	$exp = explode(':', $val);
 	if (in_array($exp[0], array('sha1', 'md5', 'crc32'))) {
 		return $db->esc($val);
