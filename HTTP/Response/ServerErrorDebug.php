@@ -41,21 +41,29 @@ class Gatuf_HTTP_Response_ServerErrorDebug extends Gatuf_HTTP_Response
  */
 function Gatuf_HTTP_Response_ServerErrorDebug_Pretty($e) 
 {
-    $o = create_function('$in','return htmlspecialchars($in);');
-    $sub = create_function('$f','$loc="";if(isset($f["class"])){
+    $o = function ($in) {
+    	return htmlspecialchars($in);
+    };
+    $sub = function ($f) {
+    	$loc="";if(isset($f["class"])){
         $loc.=$f["class"].$f["type"];}
         if(isset($f["function"])){$loc.=$f["function"];}
         if(!empty($loc)){$loc=htmlspecialchars($loc);
-        $loc="<strong>$loc</strong>";}return $loc;');
-    $parms = create_function('$f','$params=array();if(isset($f["function"])){
+        $loc="<strong>$loc</strong>";}return $loc;
+    };
+    $parms = function ($f) {
+    	$params=array();if(isset($f["function"])){
         try{if(isset($f["class"])){
         $r=new ReflectionMethod($f["class"]."::".$f["function"]);}
         else{$r=new ReflectionFunction($f["function"]);}
         return $r->getParameters();}catch(Exception $e){}}
-        return $params;');
-    $src2lines = create_function('$file','$src=nl2br(highlight_file($file,TRUE));
-        return explode("<br />",$src);');
-    $clean = create_function('$line','return trim(strip_tags($line));');
+        return $params;
+    };
+    $src2lines = function ($file) {
+    	$src=nl2br(highlight_file($file,TRUE));
+        return explode("<br />",$src);
+    };
+    $clean = function ($line) {return trim(strip_tags($line));};
     $desc = get_class($e)." making ".$_SERVER['REQUEST_METHOD']." request to ".
         $_SERVER['REQUEST_URI'];
     $out = '
@@ -307,11 +315,33 @@ function Gatuf_HTTP_Response_ServerErrorDebug_Pretty($e)
     $out .= '
     <h3>Request <span>(parsed)</span></h3>';
     if (!isset ($GLOBALS['_GATUF_debug_data']['sql_queries'])) $GLOBALS['_GATUF_debug_data']['sql_queries'] = array ();
-    $superglobals = array('$_GET','$_POST','$_COOKIE','$_SERVER','$_ENV', '$GLOBALS["_GATUF_debug_data"]["sql_queries"]');
+    $superglobals = array('$_GET','$_POST','$_COOKIE','$_SERVER','$_ENV', '$SQL_QUERIES');
     foreach ( $superglobals as $sglobal ) {
-        $sfn = create_function('','return '.$sglobal.';');
+    	//$sfn = create_function('','return '.$sglobal.';');
+        $sfn = function & ($sglobal) {
+        	switch ($sglobal) {
+        		case '$_GET':
+        			return $_GET;
+        			break;
+        		case '$_POST':
+        			return $_POST;
+        			break;
+        		case '$_COOKIE':
+        			return $_COOKIE;
+        			break;
+        		case '$_SERVER':
+        			return $_SERVER;
+        			break;
+        		case '$_ENV':
+        			return $_ENV;
+        			break;
+        		case '$SQL_QUERIES':
+        			return $GLOBALS["_GATUF_debug_data"]["sql_queries"];
+        			break;
+        	}
+        };
         $out .= '<h4>'.$sglobal.'</h4>';
-        if ( count($sfn()) > 0 ) {
+        if ( count($sfn($sglobal)) > 0 ) {
             $out .= '
       <table class="req">
         <thead>
@@ -321,7 +351,7 @@ function Gatuf_HTTP_Response_ServerErrorDebug_Pretty($e)
           </tr>
         </thead>
         <tbody>';
-            foreach ( $sfn() as $k => $v ) {
+            foreach ( $sfn($sglobal) as $k => $v ) {
                 $out .= '<tr>
               <td>'.$o($k).'</td>
               <td class="code">

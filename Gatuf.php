@@ -205,14 +205,14 @@ function _n($sing, $plur, $n) {
 	return $plur;
 }
 
-function __autoload($class_name) {
+spl_autoload_register (function ($class_name) {
 	/*try {*/
 		Gatuf::loadClass($class_name);
 	/*} catch (Exception $e) {
 		print $e->getMessage();
 		die ();
 	}*/
-}
+});
 
 class GatufErrorHandlerException extends Exception {
 	public function setLine ($line) {
