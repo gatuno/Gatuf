@@ -102,7 +102,7 @@ class Gatuf_DB_Schema_MySQL {
 				}
 				$_tmp = $this->process_mapping ($field->type, $val);
 				$sql .= $_tmp;
-				if (empty($val['is_null'])) {
+				if ($field->type != 'sequence' && empty($val['is_null'])) {
 					$sql .= ' NOT NULL';
 				}
 				if (array_key_exists('default', $val) && !$fk) {
