@@ -93,7 +93,7 @@ class Gatuf_Middleware_Session {
             if (isset ($data[$user->session_key])) unset ($data[$user->session_key]);
         }
         
-        if (isset($data[$user->session_key])) {
+        if (isset($data[$user->session_key]) && isset($data[$user->session_key]['model'])) {
             // We can get the corresponding user
             // La sesión contiene el id a recuperar y el tipo de usuario
             $user_model = $data[$user->session_key]['model'];
