@@ -351,3 +351,7 @@ function Gatuf_Template_last($array)
 
     return $result;
 }
+
+function Gatuf_Template_json ($data, $options = 0) {
+    return Gatuf_Template::markSafe (json_encode ($data, $options));
+}

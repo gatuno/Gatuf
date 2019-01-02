@@ -113,6 +113,7 @@ class Gatuf_Template_Compiler {
                                  'first' => 'Gatuf_Template_first',
                                  'last' => 'Gatuf_Template_last',
                                  'float' => 'number_format',
+                                 'json' => 'Gatuf_Template_json',
                                  );
 
     /**
