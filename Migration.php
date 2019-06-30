@@ -197,7 +197,22 @@ class Gatuf_Migration
         }
         return $ret;
     }
-
+    
+    public function runSeeds () {
+        foreach ($this->apps as $app) {
+            $this->app = $app;
+            $seeds = $this->findSeeds();
+            // The run will throw an exception in case of error.
+            foreach ($seeds as $seed) {
+                $func = $this->app.'_Migrations_Seeds_'.$seed.'_run';
+                Gatuf::loadFunction($func);
+                if (!$this->dry_run) {
+                    $func(); // Real seed run
+                }
+            }
+        }
+        return true;
+    }
 
     /**
      * Find the migrations for the current app.
@@ -219,6 +234,23 @@ class Gatuf_Migration
             }
         }
         return $migrations;
+    }
+    
+    public function findSeeds()
+    {
+        $seeds = array();
+        if (false !== ($mdir = Gatuf::fileExists($this->app.'/Migrations/Seeds'))) {
+            $dir = new DirectoryIterator($mdir);
+            foreach($dir as $file) {
+                $matches = array();
+                if (!$file->isDot() && !$file->isDir()
+                    && preg_match('#^(\d+)#', $file->getFilename(), $matches)) {
+                    $info = pathinfo($file->getFilename());
+                    $seeds[(int)$matches[1]] = $info['filename'];
+                }
+            }
+        }
+        return $seeds;
     }
 
     /**

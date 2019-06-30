@@ -38,7 +38,7 @@ $debug = false; // Yes a dirty global variable.
 $search_path = null;
 
 $cg = new Console_Getopt();
-$shortoptions = 'aixubrc:v:d';
+$shortoptions = 'aisxubrc:v:d';
 $longoptions = array('app=', 'version=', 'conf=', 'search-path=', 
                      'include-path=');
 
@@ -71,6 +71,7 @@ function usage()
         .' --include-path: Paths to add to the PHP include path.'."\n"        
         .' d:              Display debug information.'."\n"
         .' i:              Install the application(s).'."\n"
+        .' s:              Run seeder for the application(s).'."\n"
         .' x:              Uninstall the application(s).'."\n"
         .' b:              Backup the application(s).'."\n"
         .' r:              Restore the application(s).'."\n"
@@ -108,6 +109,7 @@ $what = array(
               'install' => false,
               'backup' => false,
               'restore' => false,
+              'seed' => false,
               );
 
 $opts = $ret[0];
@@ -152,6 +154,9 @@ if (sizeof($opts) > 0) {
             break;
         case 'i':
             $what['install'] = true;
+            break;
+        case 's':
+            $what['seed'] = true;
             break;
         }
     }
@@ -225,6 +230,11 @@ $m->dry_run = $what['dry_run'];
 if ($what['install']) {
     debug('Install '.$app_disp);
     $m->install();
+    
+    if ($what['seed']) {
+        debug ('Seeding '.$app_disp);
+        $m->runSeeds ();
+    }
 } elseif ($what['un-install']) {
     debug('Uninstall '.$app_disp);
     $m->unInstall();
@@ -235,6 +245,9 @@ if ($what['install']) {
 } elseif ($what['restore']) {
     debug('Restore '.$app_disp);
     $m->restore($args[0], $args[1]);
+} elseif ($what['seed']) {
+    debug('Seeding '.$app_disp);
+    $m->runSeeds ();
 } else {
     debug('Migrate '.$app.' to version '.$v_disp);
     $m->migrate($what['version']);
