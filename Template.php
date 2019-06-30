@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -226,9 +225,11 @@ function Gatuf_Template_dateSimpleFormat($date, $format='%b %e, %Y')
  * @param string $format strftime format for output ('Y-m-d H:i:s')
  * @return string formated time
  */
-function Gatuf_Template_timeFormat($time, $format='Y-m-d H:i:s') 
-{
-    return date($format, $time);
+function Gatuf_Template_timeFormat($time, $format='H:i:s') {
+	if ($time instanceof DateTime) {
+		return $time->format ($format);
+	}
+	return date($format, $time);
 }
 
 
