@@ -80,6 +80,9 @@ function Gatuf_DB_IdentityToDb($val, $db) {
 }
 
 function Gatuf_DB_DateToDb ($val, $db) {
+	if (null === $val) {
+		return 'NULL';
+	}
 	if (false === strpos ($val, '/')) {
 		return $db->esc ($val);
 	}

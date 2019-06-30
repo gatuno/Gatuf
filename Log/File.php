@@ -51,7 +51,7 @@ class Gatuf_Log_File
         foreach ($stack as $elt) {
             $out[] = date(DATE_ISO8601, (int) $elt[0]).' '.
                 Gatuf_Log::$reverse[$elt[1]].': '.
-                json_encode($elt[2]);
+                (is_string ($elt[2]) ? $elt[2] : json_encode($elt[2]));
         }
         file_put_contents($file, implode(PHP_EOL, $out).PHP_EOL, FILE_APPEND);
     }
