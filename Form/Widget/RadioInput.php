@@ -26,6 +26,7 @@
  */
 class Gatuf_Form_Widget_RadioInput extends Gatuf_Form_Widget {
     public $choices = array ();
+    public $want_choices = true;
     /**
      * Renders the HTML of the input.
      *

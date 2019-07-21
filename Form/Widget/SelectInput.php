@@ -28,6 +28,7 @@ class Gatuf_Form_Widget_SelectInput extends Gatuf_Form_Widget {
     public $choices = array();
 	public $can_other = false;
 	public $other_text = '';
+	public $want_choices = true;
     public function __construct($attrs=array()) {
         if (isset ($attrs['choices'])) {
 		    $this->choices = $attrs['choices'];

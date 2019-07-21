@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -63,14 +62,13 @@ class Gatuf_Form_Field_Integer extends Gatuf_Form_Field {
     }
 	public function widgetAttrs($widget) {
         $attrs = array ();
-        if ($this->choices !== null and in_array (get_class ($widget), array ('Gatuf_Form_Widget_SelectInput', 'Gatuf_Form_Widget_RadioInput'))) {
+        if ($this->choices !== null and property_exists ($widget, 'want_choices') && $widget->want_choices == true) {
         	$widget->choices = $this->choices + $widget->choices;
-        	$widget->can_other = $this->choices_other;
-        	$widget->other_text = $this->choices_other_text;
         }
         
-        if ($this->choices !== null and in_array (get_class ($widget), array ('Gatuf_Form_Widget_DobleInput', 'Gatuf_Form_Widget_SelectMultipleInput'))) {
-        	$widget->choices = $this->choices;
+        if ($this->choices !== null and property_exists ($widget, 'can_other')) {
+        	$widget->can_other = $this->choices_other;
+        	$widget->other_text = $this->choices_other_text;
         }
         
         return $attrs;
