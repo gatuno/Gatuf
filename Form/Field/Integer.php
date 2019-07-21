@@ -35,12 +35,13 @@ class Gatuf_Form_Field_Integer extends Gatuf_Form_Field {
             if (!preg_match('/^[\+\-]?[0-9]+$/', $value)) {
                 throw new Gatuf_Form_Invalid('El valor debe ser un número.');
             }
+            $value = (int) $value;
             $this->checkMinMax($value);
             if ($this->choices !== null && $this->choices_other == false) {
                 $found = false;
-                foreach ($this->choices as $val) {
+                foreach ($this->choices as $val => $desc) {
                     if (is_array ($val)) {
-                        foreach ($val as $subval) {
+                        foreach ($val as $subval => $desc2) {
                             if ($value == $subval) {
                                 $found = true;
                                 break;
