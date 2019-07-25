@@ -48,9 +48,9 @@ class Gatuf_Form_Field_Varchar extends Gatuf_Form_Field
             }
             if ($this->choices !== null && $this->choices_other == false) {
                 $found = false;
-                foreach ($this->choices as $val => $desc) {
+                foreach ($this->choices as $val) {
                     if (is_array ($val)) {
-                        foreach ($val as $subval => $desc2) {
+                        foreach ($val as $subval) {
                             if ($value == $subval) {
                                 $found = true;
                                 break;
