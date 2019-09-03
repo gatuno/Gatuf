@@ -127,6 +127,10 @@ class Gatuf_DB_MySQL {
 			return true;
 		}
 	}
+	
+	function getAffectedRows () {
+	    return (int) mysqli_affected_rows ($this->con_id);
+	}
 
 	function getLastID () {
 		$this->debug ('* GET LAST ID');
