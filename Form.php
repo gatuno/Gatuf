@@ -147,7 +147,15 @@ class Gatuf_Form implements Iterator, ArrayAccess
         $this->is_valid = false;
         return false;
     }
-
+    
+    public function markAsFailed ($errmsg) {
+        if (!isset($this->errors['__all__'])) $this->errors['__all__'] = array();
+        $this->errors['__all__'][] = $errmsg;
+        
+        $this->failed ();
+        $this->cleaned_data = array();
+        $this->is_valid = false;
+    }
     /**
      * Form wide cleaning function. That way you can check that if an
      * input is given, then another one somewhere is also given,
