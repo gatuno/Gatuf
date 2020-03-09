@@ -97,8 +97,9 @@ class Gatuf_Middleware_Session {
             // We can get the corresponding user
             // La sesión contiene el id a recuperar y el tipo de usuario
             $user_model = $data[$user->session_key]['model'];
-            $found_user = new $user_model($data[$user->session_key]['id']);
-            if ($found_user->id == $data[$user->session_key]['id']) {
+            $found_user = new $user_model($data[$user->session_key]['pk']);
+            $pk = $found_user->primary_key;
+            if ($found_user->{$pk} == $data[$user->session_key]['pk']) {
                 // User found!
                 $request->user = $found_user;
                 // If the last login is from 12h or more, set it to
@@ -141,8 +142,9 @@ class Gatuf_Middleware_Session {
             }
             $data = array();
             
-            if ($request->user->id > 0) {
-                $data[$request->user->session_key] = array ('id' => $request->user->id, 'model' => get_class ($request->user));
+            if (!$request->user->isAnonymous ()) {
+                $pk = $request->user->primary_key;
+                $data[$request->user->session_key] = array ('pk' => $request->user->{$pk}, 'model' => get_class ($request->user));
             } else {
                 unset ($data[$request->user->session_key]);
             }
