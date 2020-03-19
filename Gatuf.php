@@ -9,6 +9,16 @@ class Gatuf {
 		date_default_timezone_set(Gatuf::config('time_zone', 'America/Mexico_City'));
 		mb_internal_encoding('UTF-8');
 		mb_regex_encoding('UTF-8');
+		/* Register other autoload before ours */
+		$autoloads = Gatuf::config ('autoload_files', array ());
+		if (count ($autoloads) > 0) {
+			spl_autoload_unregister ('Gatuf_autoload');
+			
+			foreach ($autoloads as $file) {
+				include $file;
+			}
+			spl_autoload_register ('Gatuf_autoload');
+		}
 	}
 	
 	static function loadConfig($config_file) {
@@ -205,14 +215,16 @@ function _n($sing, $plur, $n) {
 	return $plur;
 }
 
-spl_autoload_register (function ($class_name) {
+function Gatuf_autoload ($class_name) {
 	/*try {*/
 		Gatuf::loadClass($class_name);
 	/*} catch (Exception $e) {
 		print $e->getMessage();
 		die ();
 	}*/
-});
+}
+
+spl_autoload_register ('Gatuf_autoload');
 
 class GatufErrorHandlerException extends Exception {
 	public function setLine ($line) {
