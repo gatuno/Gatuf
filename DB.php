@@ -24,6 +24,16 @@ function Gatuf_DB_getConnection() {
 	return $GLOBALS['_GATUF_db'];
 }
 
+function Gatuf_DB_closeConnection () {
+	if (isset($GLOBALS['_GATUF_db']) && 
+		(is_resource($GLOBALS['_GATUF_db']->con_id) or is_object($GLOBALS['_GATUF_db']->con_id))) {
+		$con = $GLOBALS['_GATUF_db'];
+		
+		$con->close ();
+		unset ($GLOBALS['_GATUF_db']);
+	}
+}
+
 function Gatuf_DB_defaultTypecast() {
 	return array(
 	             'Gatuf_DB_Field_Boolean' =>
