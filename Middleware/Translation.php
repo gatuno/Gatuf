@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -81,4 +80,23 @@ class Gatuf_Middleware_Translation {
 		$response->headers['Content-Language'] = $request->language_code;
 		return $response;
 	}
+	
+	public static function processContext ($signal, &$params) {
+		$params['context'] = array_merge ($params['context'],
+			Gatuf_Middleware_Translation_ContextPreProcessor($params['request']));
+    }
 }
+
+/**
+ * Context preprocessor.
+ *
+ * Set the $user key.
+ *
+ * @param Pluf_HTTP_Request Request object
+ * @return array Array to merge with the context
+ */
+function Gatuf_Middleware_Translation_ContextPreProcessor($request) {
+	return array('language_code' => $request->language_code);
+}
+
+Gatuf_Signal::connect('Gatuf_Template_Context_Request::construct', array('Gatuf_Middleware_Translation', 'processContext'));
