@@ -33,7 +33,7 @@ class Gatuf_Form_Field_Email extends Gatuf_Form_Field {
             return $value;
         }
         if (!Gatuf_Utils::isValidEmail($value)) {
-            throw new Gatuf_Form_Invalid('Enter a valid email address.');
+            throw new Gatuf_Form_Invalid(__('Enter a valid email address.'));
         }
         return $value;
     }

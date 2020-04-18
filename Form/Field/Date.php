@@ -43,6 +43,6 @@ class Gatuf_Form_Field_Date extends Gatuf_Form_Field {
                 return $date->format ('d/m/Y');
             }
         }
-        throw new Gatuf_Form_Invalid('Enter a valid date.');
+        throw new Gatuf_Form_Invalid(__('Enter a valid date.'));
     }
 }

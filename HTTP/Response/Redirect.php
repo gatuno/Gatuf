@@ -29,7 +29,7 @@ class Gatuf_HTTP_Response_Redirect extends Gatuf_HTTP_Response {
      * @paran int Redirect code (302) or 301 for permanent
      */
     function __construct($url, $code=302) {
-        $content = sprintf('<a href="%s">Please, click here to be redirected</a>.', $url);
+        $content = sprintf(__('<a href="%s">Please, click here to be redirected</a>.'), $url);
         parent::__construct($content);
         $this->headers['Location'] = $url;
         $this->status_code = $code;

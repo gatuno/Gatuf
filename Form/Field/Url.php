@@ -30,7 +30,7 @@ class Gatuf_Form_Field_Url extends Gatuf_Form_Field {
             return '';
         }
         if (!Gatuf_Utils::isValidUrl($value)) {
-            throw new Gatuf_Form_Invalid('Enter a valid address.');
+            throw new Gatuf_Form_Invalid(__('Enter a valid address.'));
         }
         return $value;
     }

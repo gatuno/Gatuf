@@ -345,7 +345,7 @@ class Gatuf_Model {
 		if ($items->count () == 0) {
 			return null;
 		}
-		throw new Exception ('Error: Más de un item encontrado');
+		throw new Exception (__('Error: More than one matching item found.'));
 	}
 	
 	function getList ($p=array()) {
@@ -358,7 +358,7 @@ class Gatuf_Model {
 						 'count' => false);
 		$p = array_merge ($default, $p);
 		if (!is_null($p['view']) && !isset($this->_a['views'][$p['view']])) {
-			throw new Exception(sprintf('The view "%s" is not defined.', $p['view']));
+			throw new Exception(sprintf(__('The view "%s" is not defined.'), $p['view']));
 		}
 		$query = array(
 					   'select' => $this->getSelect (),
@@ -506,7 +506,7 @@ class Gatuf_Model {
 			and is_array($this->_m['list'][$method])) {
 			$foreignkey = $this->_m['list'][$method][1];
 			if (strlen($foreignkey) == 0) {
-				throw new Exception(sprintf('No matching foreign key found in model: %s for model %s', $model, $this->_a['model']));
+				throw new Exception(sprintf(__('No matching foreign key found in model: %s for model %s'), $model, $this->_a['model']));
 			}
 			if (!is_null($p['filter'])) {
 				if (is_array($p['filter'])) {

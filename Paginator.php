@@ -436,7 +436,7 @@ class Gatuf_Paginator {
         if ($this->current_page != 1) {
             $params['p'] = $this->current_page - 1;
             $url = $this->getUrl($params);
-            $this->symbol_prev = ($this->symbol_prev == null) ? 'Ant' : $this->symbol_prev;
+            $this->symbol_prev = ($this->symbol_prev == null) ? __('Prev') : $this->symbol_prev;
             $out .= '<a href="'.$url.'">'.$this->symbol_prev.'</a> ';
         }
         // Always display the link to Page#1
@@ -477,7 +477,7 @@ class Gatuf_Paginator {
         if ($this->current_page != $this->page_number) {
             $params['p'] = $this->current_page + 1;
             $url = $this->getUrl($params);
-            $this->symbol_next = ($this->symbol_next == null) ? 'Sig' : $this->symbol_next;
+            $this->symbol_next = ($this->symbol_next == null) ? __('Next') : $this->symbol_next;
             $out .= '<a href="'.$url.'">'.$this->symbol_next.'</a> ';
         }
         $out .= '</th></tr></tfoot>'."\n";
@@ -630,7 +630,7 @@ class Gatuf_Paginator {
     function colHeaders() {
         if (empty($this->list_display)) {
             throw new Exception ('Paginador: Oops, no se especificó la lista de campos a desplegar');
-            return '<tr><th>Name</th></tr>'."\n";
+            return '<tr><th>'.__('Name').'</th></tr>'."\n";
         } else {
             $out = '<tr>';
             foreach ($this->list_display as $key=>$col) {
@@ -680,10 +680,10 @@ class Gatuf_Paginator {
         $out = '<span class="px-sort"> %s/%s</span>';
         $params['so'] = 'a';
         $aurl = $this->getUrl($params);
-        $asc = '<a href="'.$aurl.'" >asc</a>';
+        $asc = '<a href="'.$aurl.'" >'.__('asc').'</a>';
         $params['so'] = 'd';
         $durl = $this->getUrl($params);
-        $desc = '<a href="'.$durl.'" >desc</a>';
+        $desc = '<a href="'.$durl.'" >'.__('desc').'</a>';
         if (strlen($title)) {
             if (count($this->sort_order) == 2
                 and $this->sort_order[0] == $field 
@@ -706,10 +706,10 @@ class Gatuf_Paginator {
         return '<tr><th class="px-table-search" colspan="'
             .count($this->list_display).'">'
             .'<form method="get" action="'.$url.'">'
-            .'<label for="px-q">Filtrar esta lista:</label> '
+            .'<label for="px-q">'.__('Filter the list:').'</label> '
             .'<input type="text" name="s" id="px-q" size="30"'
             .' value="'.htmlspecialchars($this->search_string).'" />'
-            .'<input type="submit" name="submit" value="Filtrar" />'
+            .'<input type="submit" name="submit" value="'.__('Filter').'" />'
             .'</form></th></tr>'."\n";
         
     }
@@ -803,5 +803,5 @@ function Gatuf_Paginator_DateAgo($field, $item) {
     Gatuf::loadFunction('Gatuf_Date_Easy');
     Gatuf::loadFunction('Gatuf_Template_dateFormat');
     $date = Gatuf_Template_dateFormat($item->$field, '%d/%m/%Y %H:%M:%S');
-    return Gatuf_Date_Easy($date, null, 2, 'ahora');
+    return Gatuf_Date_Easy($date, null, 2, __('now'));
 }

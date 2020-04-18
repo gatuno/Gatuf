@@ -36,14 +36,14 @@ class Gatuf_Form_Field_Float extends Gatuf_Form_Field {
         if ($value == '') return $value;
         
         if (!is_numeric($value)) {
-            throw new Gatuf_Form_Invalid('Enter a number.');
+            throw new Gatuf_Form_Invalid(__('Enter a number.'));
         }
         $value = (float) $value;
         if ($this->max_value !== null and $this->max_value < $value) {
-            throw new Gatuf_Form_Invalid(sprintf('Ensure this value is less than or equal to %s.', $this->max_value));
+            throw new Gatuf_Form_Invalid(sprintf(__('Ensure this value is less than or equal to %s.'), $this->max_value));
         }
         if ($this->min_value !== null and $this->min_value > $value) {
-            throw new Gatuf_Form_Invalid(sprintf('Ensure this value is greater than or equal to %s.', $this->min_value));
+            throw new Gatuf_Form_Invalid(sprintf(__('Ensure this value is greater than or equal to %s.'), $this->min_value));
         }
         return $value;
     }

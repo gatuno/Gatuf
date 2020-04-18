@@ -100,7 +100,7 @@ class Gatuf_Form_Field_ReCaptcha extends Gatuf_Form_Field {
         $http_request .= $req;
 
         if (false === ($fs=@fsockopen($host, $port, $errno, $errstr, 10))) {
-            throw new Gatuf_Form_Invalid('Cannot connect to the reCaptcha server for validation.');
+            throw new Gatuf_Form_Invalid(__('Cannot connect to the reCaptcha server for validation.'));
         }
         fwrite($fs, $http_request);
         $response = '';
@@ -137,10 +137,10 @@ class Gatuf_Form_Field_ReCaptcha extends Gatuf_Form_Field {
      */
     public static function checkAnswer($privkey, $remoteip, $challenge, $response, $extra_params=array()) {
         if ($privkey == '') {
-            throw new Gatuf_Form_Invalid('To use reCAPTCHA you must set your API key.');
+            throw new Gatuf_Form_Invalid(__('To use reCAPTCHA you must set your API key.'));
         }
         if ($remoteip == '') {
-            throw new Gatuf_Form_Invalid('For security reasons, you must pass the remote ip to reCAPTCHA.');
+            throw new Gatuf_Form_Invalid(__('For security reasons, you must pass the remote ip to reCAPTCHA.'));
         }
         //discard spam submissions
         if (strlen($challenge) == 0 || strlen($response) == 0) {

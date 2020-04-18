@@ -38,7 +38,7 @@ class Gatuf_Form_Field_File extends Gatuf_Form_Field {
         if (is_null($value) and !$this->required) {
             return ''; // no file
         } elseif (is_null($value) and $this->required) {
-            throw new Gatuf_Form_Invalid('No files were uploaded. Please try to send the file again.');
+            throw new Gatuf_Form_Invalid(__('No files were uploaded. Please try to send the file again.'));
         }
         $errors = array();
         $no_files = false;
@@ -46,35 +46,35 @@ class Gatuf_Form_Field_File extends Gatuf_Form_Field {
         case UPLOAD_ERR_OK:
             break;
         case UPLOAD_ERR_INI_SIZE:
-            throw new Gatuf_Form_Invalid(sprintf('The uploaded file is too large. Reduce the size of the file to %s and send it again.',
+            throw new Gatuf_Form_Invalid(sprintf(__('The uploaded file is too large. Reduce the size of the file to %s and send it again.'),
                       Gatuf_Utils::prettySize(ini_get('upload_max_filesize'))));
             break;
         case UPLOAD_ERR_FORM_SIZE:
-            throw new Gatuf_Form_Invalid(sprintf('The uploaded file is too large. Reduce the size of the file to %s and send it again.',
+            throw new Gatuf_Form_Invalid(sprintf(__('The uploaded file is too large. Reduce the size of the file to %s and send it again.'),
                       Gatuf_Utils::prettySize($_REQUEST['MAX_FILE_SIZE'])));
             break;
         case UPLOAD_ERR_PARTIAL:
-            throw new Gatuf_Form_Invalid('The upload did not complete. Please try to send the file again.');
+            throw new Gatuf_Form_Invalid(__('The upload did not complete. Please try to send the file again.'));
             break;
         case UPLOAD_ERR_NO_FILE:
             if ($this->required) {
-                throw new Gatuf_Form_Invalid('No files were uploaded. Please try to send the file again.');
+                throw new Gatuf_Form_Invalid(__('No files were uploaded. Please try to send the file again.'));
             } else {
                 return ''; // no file
             }
             break;
         case UPLOAD_ERR_NO_TMP_DIR:
         case UPLOAD_ERR_CANT_WRITE:
-            throw new Gatuf_Form_Invalid('The server has no temporary folder correctly configured to store the uploaded file.');
+            throw new Gatuf_Form_Invalid(__('The server has no temporary folder correctly configured to store the uploaded file.'));
             break;
         case UPLOAD_ERR_EXTENSION:
-            throw new Gatuf_Form_Invalid('The uploaded file has been stopped by an extension.');
+            throw new Gatuf_Form_Invalid(__('The uploaded file has been stopped by an extension.'));
             break;
         default:
-            throw new Gatuf_Form_Invalid('An error occured when upload the file. Please try to send the file again.');
+            throw new Gatuf_Form_Invalid(__('An error occured when upload the file. Please try to send the file again.'));
         }
         if ($value['size'] > $this->max_size) {
-            throw new Gatuf_Form_Invalid(sprintf('The uploaded file is to big (%1$s). Reduce the size to less than %2$s and try again.', 
+            throw new Gatuf_Form_Invalid(sprintf(__('The uploaded file is to big (%1$s). Reduce the size to less than %2$s and try again.'), 
                                         Gatuf_Utils::prettySize($value['size']),
                                         Gatuf_Utils::prettySize($this->max_size)));
         }
@@ -139,14 +139,14 @@ function Gatuf_Form_Field_File_moveToUploadFolder($value, $params=array())
     if (isset($params['upload_path_create']) 
         and !is_dir(dirname($dest))) {
         if (false == @mkdir(dirname($dest), 0777, true)) {
-            throw new Gatuf_Form_Invalid('An error occured when creating the upload path. Please try to send the file again.');
+            throw new Gatuf_Form_Invalid(__('An error occured when creating the upload path. Please try to send the file again.'));
         }
     }
     if ((!isset($params['upload_overwrite']) or $params['upload_overwrite'] == false) and file_exists($dest)) {
-        throw new Gatuf_Form_Invalid(sprintf('A file with the name "%s" has already been uploaded.', $name));
+        throw new Gatuf_Form_Invalid(sprintf(__('A file with the name "%s" has already been uploaded.'), $name));
     }
     if (@!move_uploaded_file($value['tmp_name'], $dest)) {
-        throw new Gatuf_Form_Invalid('An error occured when uploading the file. Please try to send the file again.');
+        throw new Gatuf_Form_Invalid(__('An error occured when uploading the file. Please try to send the file again.'));
     } 
     @chmod($dest, 0666);
     return $name;

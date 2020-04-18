@@ -51,7 +51,7 @@ class Gatuf_HTTP_Response_RedirectToLogin extends Gatuf_HTTP_Response {
                    array(), 
                    array('_redirect_after' => $request->uri));
         }
-        $content = sprintf('<a href="%s">Please, click here to be redirected</a>.', $encoded);
+        $content = sprintf(__('<a href="%s">Please, click here to be redirected</a>.'), $encoded);
         parent::__construct($content);
         $this->headers['Location'] = $url;
         $this->status_code = 302;

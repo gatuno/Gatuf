@@ -118,10 +118,10 @@ class Gatuf_Form_Field {
     {
         if (!$this->multiple and $this->required 
             and in_array($value, $this->empty_values)) {
-            throw new Gatuf_Form_Invalid('Este campo es requerido.');
+            throw new Gatuf_Form_Invalid(__('This field is required.'));
         }
         if ($this->multiple and $this->required and empty($value)) {
-            throw new Gatuf_Form_Invalid('Este campo es requerido.');
+            throw new Gatuf_Form_Invalid(__('This field is required.'));
         }
         return $value;
     }

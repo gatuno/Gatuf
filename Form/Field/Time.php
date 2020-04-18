@@ -37,7 +37,7 @@ class Gatuf_Form_Field_Time extends Gatuf_Form_Field {
 			
 			if (isset ($match[4])) {
 				if ($hora > 12) {
-					throw new Gatuf_Form_Invalid ('Formato de hora incorrecto');
+					throw new Gatuf_Form_Invalid (__('Enter a valid time.'));
 				}
 				if ($hora != 12 && $match[4] == 'pm') {
 					$hora += 12;
@@ -49,7 +49,7 @@ class Gatuf_Form_Field_Time extends Gatuf_Form_Field {
 			}
 			
 		} else {
-		    throw new Gatuf_Form_Invalid ('Formato de hora incorrecto');
+		    throw new Gatuf_Form_Invalid (__('Enter a valid time.'));
 		}
 		$full = sprintf ('%02s:%02s:%02s', $hora, $minuto, $seg);
 		return date_create_from_format ('H:i:s', $full);
