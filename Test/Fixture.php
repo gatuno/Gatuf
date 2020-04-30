@@ -48,7 +48,8 @@ class Gatuf_Test_Fixture {
 		foreach ($data as $model) {
 			if ((int)$model['pk'] > 0) {
 				$item = new $model['model']($model['pk']);
-				if ($item->id == $model['pk']) {
+				$pk = $item->primary_key;
+				if ($item->$pk == $model['pk']) {
 					throw new Exception(sprintf(__('Cannot load existing model <%1$s(%2$s)>.'), $model['model'], $model['pk']));
 				}
 			}
@@ -77,7 +78,9 @@ class Gatuf_Test_Fixture {
 				array(self::prepare($model));
 		}
 		$out = array();
-		foreach (Gatuf::factory($model)->getList(array('order' =>'id ASC')) as $item) {
+		$obj = Gatuf::factory($model);
+		$order = sprintf ('%s ASC', $obj->primary_key);
+		foreach ($obj->getList(array('order' => $order)) as $item) {
 			$out[] = self::prepare($item);
 		}
 		return ($serialize) ? json_encode($out) : $out;
@@ -87,8 +90,9 @@ class Gatuf_Test_Fixture {
 	 * Return an array, ready to be serialized as json.
 	 */
 	public static function prepare($model) {
+		$pk = $model->primary_key;
 		$out = array('model' =>  $model->_a['model'],
-					 'pk' => $model->id,
+					 'pk' => $model->$pk,
 					 'fields' => array());
 		foreach ($model->_a['cols'] as $col=>$val) {
 			$field = new $val['type']();
@@ -98,6 +102,7 @@ class Gatuf_Test_Fixture {
 				$func = 'get_'.$col.'_list';
 				$out['fields'][$col] = array();
 				foreach ($model->$func() as $item) {
+					$opk = $item->primary_key;
 					$out['fields'][$col][] = $item->id;
 				}
 			}
