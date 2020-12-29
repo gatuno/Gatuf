@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -25,35 +24,34 @@
  * Backend to authenticate against the Pluf_User model.
  */
 class Gatuf_Auth_ModelBackend {
-    /**
-     * Given a user id, retrieve it.
-     *
-     * In the case of the Pluf_User backend, the $user_id is the login.
-     */
-    public static function getUser($user_id) {
-        /* Recuperar el usuario */
-        $user_model = Gatuf::config('gatuf_custom_user','Gatuf_User');
-        $sql = new Gatuf_SQL ('login=%s', array ($user_id));
-        return Gatuf::factory ($user_model)->getOne ($sql->gen());
-    }
+	/**
+	 * Given a user id, retrieve it.
+	 *
+	 * In the case of the Pluf_User backend, the $user_id is the login.
+	 */
+	public static function getUser($user_id) {
+		/* Recuperar el usuario */
+		$user_model = Gatuf::config('gatuf_custom_user', 'Gatuf_User');
+		$sql = new Gatuf_SQL('login=%s', array($user_id));
+		return Gatuf::factory($user_model)->getOne($sql->gen());
+	}
 
-    /**
-     * Given an array with the authentication data, auth the user and return it.
-     */
-    public static function authenticate($auth_data) {
-        if (!isset ($auth_data['password']) || !isset ($auth_data['login'])) {
-            return false;
-        }
-        $password = $auth_data['password'];
-        $login = $auth_data['login'];
-        $user = self::getUser($login);
-        if (!$user) {
-            return false;
-        }
-        if (!$user->active) {
-            return false;
-        }
-        return ($user->checkPassword($password)) ? $user : false;
-    }
+	/**
+	 * Given an array with the authentication data, auth the user and return it.
+	 */
+	public static function authenticate($auth_data) {
+		if (!isset($auth_data['password']) || !isset($auth_data['login'])) {
+			return false;
+		}
+		$password = $auth_data['password'];
+		$login = $auth_data['login'];
+		$user = self::getUser($login);
+		if (!$user) {
+			return false;
+		}
+		if (!$user->active) {
+			return false;
+		}
+		return ($user->checkPassword($password)) ? $user : false;
+	}
 }
-

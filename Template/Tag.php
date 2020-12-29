@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -21,17 +20,15 @@
 #
 # ***** END LICENSE BLOCK ***** */
 
-class Gatuf_Template_Tag
-{
-    protected $context;
-    
-    /**
-     * Constructor.
-     *
-     * @param Context Context object (null)
-     */
-    function __construct($context=null)
-    {
-        $this->context = $context;
-    }
+class Gatuf_Template_Tag {
+	protected $context;
+	
+	/**
+	 * Constructor.
+	 *
+	 * @param Context Context object (null)
+	 */
+	public function __construct($context=null) {
+		$this->context = $context;
+	}
 }

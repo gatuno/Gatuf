@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -31,37 +30,37 @@ class Gatuf_DB_MySQL {
 	/** The last query, set with debug(). Used when an error is returned. */
 	public $lastquery = '';
 	public $engine = 'MySQL';
-	public $type_cast = array ();
-    public $dbname = '';
-    
-	function __construct($user, $pwd, $server, $dbname, $pfx='', $debug=false) {
+	public $type_cast = array();
+	public $dbname = '';
+	
+	public function __construct($user, $pwd, $server, $dbname, $pfx='', $debug=false) {
 		Gatuf::loadFunction('Gatuf_DB_defaultTypecast');
 		$this->type_cast = Gatuf_DB_defaultTypecast();
-		$this->debug ('* MYSQL CONNECT');
-		$this->con_id = mysqli_connect ($server, $user, $pwd, $dbname);
+		$this->debug('* MYSQL CONNECT');
+		$this->con_id = mysqli_connect($server, $user, $pwd, $dbname);
 		$this->dbname = $dbname;
 		$this->debug = $debug;
 		$this->pfx = $pfx;
 		if (!$this->con_id) {
-			throw new Exception ($this->getError());
+			throw new Exception($this->getError());
 		}
-		$this->execute ('SET NAMES \'utf8\'');
+		$this->execute('SET NAMES \'utf8\'');
 	}
-    
-    function createDB ($dbname) {
-        // CREATE DATABASE `siiau_2008B` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-        $sql = sprintf ('CREATE DATABASE %s DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci', $this->qn ($dbname));
-        $this->execute ($sql);
-        
-        $this->dbname = $dbname;
-    }
-    
-	function database($dbname) {
-	    $this->dbname = $dbname;
-		$db = mysqli_select_db ($this->con_id, $dbname);
-		$this->debug ('* USE DATABASE '.$dbname);
+	
+	public function createDB($dbname) {
+		// CREATE DATABASE `siiau_2008B` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+		$sql = sprintf('CREATE DATABASE %s DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci', $this->qn($dbname));
+		$this->execute($sql);
+		
+		$this->dbname = $dbname;
+	}
+	
+	public function database($dbname) {
+		$this->dbname = $dbname;
+		$db = mysqli_select_db($this->con_id, $dbname);
+		$this->debug('* USE DATABASE '.$dbname);
 		if (!$db) {
-			throw new Exception ($this->getError());
+			throw new Exception($this->getError());
 		}
 		return true;
 	}
@@ -71,8 +70,7 @@ class Gatuf_DB_MySQL {
 	 *
 	 * @return string Version string
 	 */
-	function getServerInfo()
-	{
+	public function getServerInfo() {
 		return mysqli_get_host_info($this->con_id);
 	}
 
@@ -84,57 +82,60 @@ class Gatuf_DB_MySQL {
 	 * @param string Query to keep track
 	 * @return bool true
 	 */
-	function debug($query) {
+	public function debug($query) {
 		$this->lastquery = $query;
-		if (!$this->debug) return true;
-		if (!isset($GLOBALS['_GATUF_debug_data']['sql_queries'])) 
+		if (!$this->debug) {
+			return true;
+		}
+		if (!isset($GLOBALS['_GATUF_debug_data']['sql_queries'])) {
 			$GLOBALS['_GATUF_debug_data']['sql_queries'] = array();
+		}
 		$GLOBALS['_GATUF_debug_data']['sql_queries'][] = $query;
 		return true;
 	}
 
-	function close() {
+	public function close() {
 		if ($this->con_id) {
-			mysqli_close ($this->con_id);
+			mysqli_close($this->con_id);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	function select($query) {
-		$this->debug ($query);
-		$ok = mysqli_real_query ($this->con_id, $query);
+	public function select($query) {
+		$this->debug($query);
+		$ok = mysqli_real_query($this->con_id, $query);
 		if ($ok) {
-			$cur = mysqli_use_result ($this->con_id);
+			$cur = mysqli_use_result($this->con_id);
 			$res = array();
-			while ($row = $cur->fetch_assoc ()) {
+			while ($row = $cur->fetch_assoc()) {
 				$res[] = $row;
 			}
-			mysqli_free_result ($cur);
+			mysqli_free_result($cur);
 			return $res;
 		} else {
-			throw new Exception ($this->getError ());
+			throw new Exception($this->getError());
 		}
 	}
 
-	function execute ($query) {
-		$this->debug ($query);
-		$cur = mysqli_real_query ($this->con_id, $query);
+	public function execute($query) {
+		$this->debug($query);
+		$cur = mysqli_real_query($this->con_id, $query);
 		if (!$cur) {
-			throw new Exception ($this->getError ());
+			throw new Exception($this->getError());
 		} else {
 			return true;
 		}
 	}
 	
-	function getAffectedRows () {
-	    return (int) mysqli_affected_rows ($this->con_id);
+	public function getAffectedRows() {
+		return (int) mysqli_affected_rows($this->con_id);
 	}
 
-	function getLastID () {
-		$this->debug ('* GET LAST ID');
-		return (int) mysqli_insert_id ($this->con_id);
+	public function getLastID() {
+		$this->debug('* GET LAST ID');
+		return (int) mysqli_insert_id($this->con_id);
 	}
 
 	/**
@@ -142,18 +143,18 @@ class Gatuf_DB_MySQL {
 	 *
 	 * @return string Error string
 	 */
-	function getError() {
+	public function getError() {
 		if ($this->con_id) {
 			return $this->con_id->connect_errno.' - '
 				.$this->con_id->connect_error.' - '.$this->lastquery;
 		} else {
-			return mysqli_connect_errno ().' - '
-				.mysqli_connect_error ().' - '.$this->lastquery;
+			return mysqli_connect_errno().' - '
+				.mysqli_connect_error().' - '.$this->lastquery;
 		}
 	}
 
-	function esc ($str) {
-		return '\''.mysqli_real_escape_string ($this->con_id, $str).'\'';
+	public function esc($str) {
+		return '\''.mysqli_real_escape_string($this->con_id, $str).'\'';
 	}
 
 	/**
@@ -162,39 +163,38 @@ class Gatuf_DB_MySQL {
 	 * @param string Name of the column
 	 * @return string Escaped name
 	 */
-	function qn ($col) {
+	public function qn($col) {
 		return '`'.$col.'`';
 	}
 
 	/**
 	 * Start a transaction.
 	 */
-	function begin () {
-		if (Gatuf::config ('db_mysql_transaction', false)) {
-			$this->execute ('BEGIN');
+	public function begin() {
+		if (Gatuf::config('db_mysql_transaction', false)) {
+			$this->execute('BEGIN');
 		}
 	}
 
 	/**
 	 * Commit a transaction.
 	 */
-	function commit() {
-		if (Gatuf::config ('db_mysql_transaction', false)) {
-			$this->execute ('COMMIT');
+	public function commit() {
+		if (Gatuf::config('db_mysql_transaction', false)) {
+			$this->execute('COMMIT');
 		}
 	}
 
 	/**
 	 * Rollback a transaction.
 	 */
-	function rollback() {
-		if (Gatuf::config ('db_mysql_transaction', false)) {
-			$this->execute ('ROLLBACK');
+	public function rollback() {
+		if (Gatuf::config('db_mysql_transaction', false)) {
+			$this->execute('ROLLBACK');
 		}
 	}
 
-	function __toString() {
+	public function __toString() {
 		return '<Gatuf_DB_MySQL('.$this->con_id.')>';
 	}
 }
-

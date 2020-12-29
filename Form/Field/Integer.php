@@ -21,66 +21,67 @@
 # ***** END LICENSE BLOCK ***** */
 
 class Gatuf_Form_Field_Integer extends Gatuf_Form_Field {
-    public $widget = 'Gatuf_Form_Widget_TextInput';
-    public $max = null;
-    public $min = null;
+	public $widget = 'Gatuf_Form_Widget_TextInput';
+	public $max = null;
+	public $min = null;
 
-    public function clean($value) {
-        parent::clean($value);
-        $value = $this->setDefaultEmpty($value);
-        if ($this->multiple) {
-            return $this->multiClean($value);
-        } else {
-            if ($value == '') return $value;
-            if (!preg_match('/^[\+\-]?[0-9]+$/', $value)) {
-                throw new Gatuf_Form_Invalid(__('The value must be an integer.'));
-            }
-            $this->checkMinMax($value);
-            if ($this->choices !== null && $this->choices_other == false) {
-                $found = false;
-                foreach ($this->choices as $val) {
-                    if (is_array ($val)) {
-                        foreach ($val as $subval) {
-                            if ($value == $subval) {
-                                $found = true;
-                                break;
-                            }
-                         }
-                    } else {
-                        if ($value == $val) {
-                            $found = true;
-                            break;
-                        }
-                    }
-                }
-                if (!$found) {
-                    throw new Gatuf_Form_Invalid(__('Invalid choice'));
-                }
-            }
-        }
-        return (int) $value;
-    }
+	public function clean($value) {
+		parent::clean($value);
+		$value = $this->setDefaultEmpty($value);
+		if ($this->multiple) {
+			return $this->multiClean($value);
+		} else {
+			if ($value == '') {
+				return $value;
+			}
+			if (!preg_match('/^[\+\-]?[0-9]+$/', $value)) {
+				throw new Gatuf_Form_Invalid(__('The value must be an integer.'));
+			}
+			$this->checkMinMax($value);
+			if ($this->choices !== null && $this->choices_other == false) {
+				$found = false;
+				foreach ($this->choices as $val) {
+					if (is_array($val)) {
+						foreach ($val as $subval) {
+							if ($value == $subval) {
+								$found = true;
+								break;
+							}
+						}
+					} else {
+						if ($value == $val) {
+							$found = true;
+							break;
+						}
+					}
+				}
+				if (!$found) {
+					throw new Gatuf_Form_Invalid(__('Invalid choice'));
+				}
+			}
+		}
+		return (int) $value;
+	}
 	public function widgetAttrs($widget) {
-        $attrs = array ();
-        if ($this->choices !== null and property_exists ($widget, 'want_choices') && $widget->want_choices == true) {
-        	$widget->choices = $this->choices + $widget->choices;
-        }
-        
-        if ($this->choices !== null and property_exists ($widget, 'can_other')) {
-        	$widget->can_other = $this->choices_other;
-        	$widget->other_text = $this->choices_other_text;
-        }
-        
-        return $attrs;
-    }
-    
-    protected function checkMinMax($value) {
-        if ($this->max !== null and $value > $this->max) {
-            throw new Gatuf_Form_Invalid(sprintf(__('Ensure that this value is not greater than %1$d.'), $this->max));
-        }
-        if ($this->min !== null and $value < $this->min) {
-            throw new Gatuf_Form_Invalid(sprintf(__('Ensure that this value is not lower than %1$d.'), $this->min));
-        }
-    }
+		$attrs = array();
+		if ($this->choices !== null and property_exists($widget, 'want_choices') && $widget->want_choices == true) {
+			$widget->choices = $this->choices + $widget->choices;
+		}
+		
+		if ($this->choices !== null and property_exists($widget, 'can_other')) {
+			$widget->can_other = $this->choices_other;
+			$widget->other_text = $this->choices_other_text;
+		}
+		
+		return $attrs;
+	}
+	
+	protected function checkMinMax($value) {
+		if ($this->max !== null and $value > $this->max) {
+			throw new Gatuf_Form_Invalid(sprintf(__('Ensure that this value is not greater than %1$d.'), $this->max));
+		}
+		if ($this->min !== null and $value < $this->min) {
+			throw new Gatuf_Form_Invalid(sprintf(__('Ensure that this value is not lower than %1$d.'), $this->min));
+		}
+	}
 }
-

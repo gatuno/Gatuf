@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -22,13 +21,13 @@
 # ***** END LICENSE BLOCK ***** */
 
 class Gatuf_Form_Field_Boolean extends Gatuf_Form_Field {
-    public $widget = 'Gatuf_Form_Widget_CheckboxInput';
+	public $widget = 'Gatuf_Form_Widget_CheckboxInput';
 
-    public function clean($value) {
-        //parent::clean($value);
-        if (in_array($value, array('on', 'y', '1', 1, true))) {
-            return true;
-        }
-        return false;
-    }
+	public function clean($value) {
+		//parent::clean($value);
+		if (in_array($value, array('on', 'y', '1', 1, true))) {
+			return true;
+		}
+		return false;
+	}
 }

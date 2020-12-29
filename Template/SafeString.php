@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -25,21 +24,21 @@
  * A string already escaped to display in a template.
  */
 class Gatuf_Template_SafeString {
-    public $value = '';
+	public $value = '';
 
-    function __construct($mixed, $safe=false) {
-        if (is_object($mixed) and 'Gatuf_Template_SafeString' == get_class($mixed)) {
-            $this->value = $mixed->value;
-        } else {
-            $this->value = ($safe) ? $mixed : htmlspecialchars($mixed, ENT_COMPAT, 'UTF-8');
-        }
-    }
+	public function __construct($mixed, $safe=false) {
+		if (is_object($mixed) and 'Gatuf_Template_SafeString' == get_class($mixed)) {
+			$this->value = $mixed->value;
+		} else {
+			$this->value = ($safe) ? $mixed : htmlspecialchars($mixed, ENT_COMPAT, 'UTF-8');
+		}
+	}
 
-    function __toString() {
-        return $this->value;
-    }
+	public function __toString() {
+		return $this->value;
+	}
 
-    public static function markSafe($string) {
-        return new Gatuf_Template_SafeString($string, true);
-    }
+	public static function markSafe($string) {
+		return new Gatuf_Template_SafeString($string, true);
+	}
 }

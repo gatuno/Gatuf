@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -27,39 +26,37 @@
  * It creates all the tables for the framework models.
  */
 
-function Gatuf_Migrations_Install_setup($params=null)
-{
-    $models = array('Gatuf_DB_SchemaInfo',
-                    'Gatuf_Session',
-                    Gatuf::config('gatuf_custom_user','Gatuf_User'),
-                    Gatuf::config('gatuf_custom_group','Gatuf_Group'),
-                    'Gatuf_Message',
-                    'Gatuf_Permission',
-                    'Gatuf_GSetting',
-                    );
-    $db = Gatuf::db();
-    $schema = new Gatuf_DB_Schema($db);
-    foreach ($models as $model) {
-        $schema->model = new $model();
-        $schema->createTables();
-    }
+function Gatuf_Migrations_Install_setup($params=null) {
+	$models = array('Gatuf_DB_SchemaInfo',
+		'Gatuf_Session',
+		Gatuf::config('gatuf_custom_user', 'Gatuf_User'),
+		Gatuf::config('gatuf_custom_group', 'Gatuf_Group'),
+		'Gatuf_Message',
+		'Gatuf_Permission',
+		'Gatuf_GSetting',
+	);
+	$db = Gatuf::db();
+	$schema = new Gatuf_DB_Schema($db);
+	foreach ($models as $model) {
+		$schema->model = new $model();
+		$schema->createTables();
+	}
 }
 
-function Gatuf_Migrations_Install_teardown($params=null)
-{
-    $models = array('Gatuf_DB_SchemaInfo',
-                    'Gatuf_Session',
-                    Gatuf::config('gatuf_custom_user','Gatuf_User'),
-                    Gatuf::config('gatuf_custom_group','Gatuf_Group'),
-                    'Gatuf_Message',
-                    'Gatuf_Permission',
-                    'Gatuf_GSetting',
-                    );
-    $models = array_reverse ($models);
-    $db = Gatuf::db();
-    $schema = new Gatuf_DB_Schema($db);
-    foreach ($models as $model) {
-        $schema->model = new $model();
-        $schema->dropTables();
-    }
+function Gatuf_Migrations_Install_teardown($params=null) {
+	$models = array('Gatuf_DB_SchemaInfo',
+		'Gatuf_Session',
+		Gatuf::config('gatuf_custom_user', 'Gatuf_User'),
+		Gatuf::config('gatuf_custom_group', 'Gatuf_Group'),
+		'Gatuf_Message',
+		'Gatuf_Permission',
+		'Gatuf_GSetting',
+	);
+	$models = array_reverse($models);
+	$db = Gatuf::db();
+	$schema = new Gatuf_DB_Schema($db);
+	foreach ($models as $model) {
+		$schema->model = new $model();
+		$schema->dropTables();
+	}
 }

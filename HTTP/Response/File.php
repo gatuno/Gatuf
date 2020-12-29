@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -22,28 +21,28 @@
 # ***** END LICENSE BLOCK ***** */
 
 class Gatuf_HTTP_Response_File extends Gatuf_HTTP_Response {
-    public $delete_file = false;
-    public $nombre_archivo;
-    function __construct($filepath, $nombre_archivo, $mimetype=null, $delete_file=false) {
-        parent::__construct($filepath, $mimetype);
-        $this->nombre_archivo = $nombre_archivo;
-        $this->delete_file = $delete_file;
-    }
+	public $delete_file = false;
+	public $nombre_archivo;
+	public function __construct($filepath, $nombre_archivo, $mimetype=null, $delete_file=false) {
+		parent::__construct($filepath, $mimetype);
+		$this->nombre_archivo = $nombre_archivo;
+		$this->delete_file = $delete_file;
+	}
 
-    /**
-     * Render a response object.
-     */
-    function render($output_body=true) {
-        $this->headers['Content-Length'] = (string)filesize($this->content);
-        $this->headers['Content-Disposition'] = 'attachment; filename='.$this->nombre_archivo.';';
-        $this->outputHeaders();
-        if ($output_body) {
-            $fp = fopen($this->content, 'rb');
-            fpassthru($fp);
-            fclose($fp);
-        }
-        if ($this->delete_file) {
-            @unlink($this->content);
-        }
-    }
+	/**
+	 * Render a response object.
+	 */
+	public function render($output_body=true) {
+		$this->headers['Content-Length'] = (string)filesize($this->content);
+		$this->headers['Content-Disposition'] = 'attachment; filename='.$this->nombre_archivo.';';
+		$this->outputHeaders();
+		if ($output_body) {
+			$fp = fopen($this->content, 'rb');
+			fpassthru($fp);
+			fclose($fp);
+		}
+		if ($this->delete_file) {
+			@unlink($this->content);
+		}
+	}
 }

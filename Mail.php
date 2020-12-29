@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -93,104 +92,106 @@
  * together with fakemail: http://www.lastcraft.com/fakemail.php
  */
 class Gatuf_Mail {
-    public $headers = array();
-    public $message;
-    public $encoding = 'utf-8';
-    public $to_address = '';
+	public $headers = array();
+	public $message;
+	public $encoding = 'utf-8';
+	public $to_address = '';
 
-    /**
-     * Construct the base email.
-     *
-     * @param string The email of the sender.
-     * @param string The destination email.
-     * @param string The subject of the message.
-     * @param string Encoding of the message ('UTF-8')
-     * @param string End of line type ("\n")
-     */
-    function __construct($src, $dest, $subject, $encoding='UTF-8', $crlf="\n") {
-        // Note that the Pluf autoloader will correctly load this PEAR
-        // object.
-        $this->message = new Mail_mime($crlf);
-        $this->message->_build_params['html_charset'] = $encoding;
-        $this->message->_build_params['text_charset'] = $encoding;
-        $this->message->_build_params['head_charset'] = $encoding;
-        $this->message->_build_params['ignore-iconv'] = true;
-        
-        $this->to_address = $dest;
-        $this->headers = array('From' => $src,
-                               'To' => $dest,
-                               'Date' => date(DATE_RFC2822),
-                               'Subject' => $subject,
-                               );
-    }
+	/**
+	 * Construct the base email.
+	 *
+	 * @param string The email of the sender.
+	 * @param string The destination email.
+	 * @param string The subject of the message.
+	 * @param string Encoding of the message ('UTF-8')
+	 * @param string End of line type ("\n")
+	 */
+	public function __construct($src, $dest, $subject, $encoding='UTF-8', $crlf="\n") {
+		// Note that the Pluf autoloader will correctly load this PEAR
+		// object.
+		$this->message = new Mail_mime($crlf);
+		$this->message->_build_params['html_charset'] = $encoding;
+		$this->message->_build_params['text_charset'] = $encoding;
+		$this->message->_build_params['head_charset'] = $encoding;
+		$this->message->_build_params['ignore-iconv'] = true;
+		
+		$this->to_address = $dest;
+		$this->headers = array('From' => $src,
+			'To' => $dest,
+			'Date' => date(DATE_RFC2822),
+			'Subject' => $subject,
+		);
+	}
 
-    /**
-     * Add the base plain text message to the email.
-     *
-     * @param string The message
-     */
-    function addTextMessage($msg) {
-        $this->message->setTXTBody($msg);
-    }
+	/**
+	 * Add the base plain text message to the email.
+	 *
+	 * @param string The message
+	 */
+	public function addTextMessage($msg) {
+		$this->message->setTXTBody($msg);
+	}
 
-    /**
-     * Set the return path for the email.
-     *
-     * @param string Email
-     */
-    function setReturnPath($email) {
-        $this->headers['Return-Path'] = $email;
-    }
+	/**
+	 * Set the return path for the email.
+	 *
+	 * @param string Email
+	 */
+	public function setReturnPath($email) {
+		$this->headers['Return-Path'] = $email;
+	}
 
-    /**
-     * Add headers to an email.
-     *
-     * @param array Array of headers
-     */
-    function addHeaders($hdrs) {
-        $this->headers = array_merge($this->headers, $hdrs);
-    }
+	/**
+	 * Add headers to an email.
+	 *
+	 * @param array Array of headers
+	 */
+	public function addHeaders($hdrs) {
+		$this->headers = array_merge($this->headers, $hdrs);
+	}
 
-    /**
-     * Add the alternate HTML message to the email.
-     *
-     * @param string The HTML message
-     */
-    function addHtmlMessage($msg) {
-        $this->message->setHTMLBody($msg);
-    }
+	/**
+	 * Add the alternate HTML message to the email.
+	 *
+	 * @param string The HTML message
+	 */
+	public function addHtmlMessage($msg) {
+		$this->message->setHTMLBody($msg);
+	}
 
-    /**
-     * Add an attachment to the message.
-     *
-     * The file to attach must be available on disk and you need to
-     * provide the mimetype of the attachment manually.
-     *
-     * @param string Path to the file to be added.
-     * @param string Mimetype of the file to be added ('text/plain').
-     * @return bool True.
-     */
-    function addAttachment($file, $ctype='text/plain') {
-        $this->message->addAttachment($file, $ctype);
-    }
+	/**
+	 * Add an attachment to the message.
+	 *
+	 * The file to attach must be available on disk and you need to
+	 * provide the mimetype of the attachment manually.
+	 *
+	 * @param string Path to the file to be added.
+	 * @param string Mimetype of the file to be added ('text/plain').
+	 * @return bool True.
+	 */
+	public function addAttachment($file, $ctype='text/plain') {
+		$this->message->addAttachment($file, $ctype);
+	}
 
-    /**
-     * Effectively sends the email.
-     */
-    function sendMail() {
-        $body = $this->message->get();
-        $hdrs = $this->message->headers($this->headers);
+	/**
+	 * Effectively sends the email.
+	 */
+	public function sendMail() {
+		$body = $this->message->get();
+		$hdrs = $this->message->headers($this->headers);
 
-        $params = Gatuf::prefixconfig('mail_', true); // strip the prefix 'mail_'
-        unset($params['backend']);
-        $gmail = new Mail();
-        $mail = $gmail->factory(Gatuf::config('mail_backend', 'mail'),
-                                $params);
-        if (Gatuf::config('send_emails', true)) {
-            $mail->send($this->to_address, $hdrs, $body);
-        }
-        if (defined('IN_UNIT_TESTS')) {
-            $GLOBALS['_PX_UNIT_TESTS']['emails'][] = array($this->to_address, $hdrs, $body);
-        }
-    }
+		$params = Gatuf::prefixconfig('mail_', true); // strip the prefix 'mail_'
+		unset($params['backend']);
+		$gmail = new Mail();
+		$mail = $gmail->factory(
+			Gatuf::config('mail_backend', 'mail'),
+			$params
+		);
+		if (Gatuf::config('send_emails', true)) {
+			$mail->send($this->to_address, $hdrs, $body);
+		}
+		if (defined('IN_UNIT_TESTS')) {
+			$GLOBALS['_PX_UNIT_TESTS']['emails'][] = array($this->to_address, $hdrs, $body);
+		}
+	}
 }

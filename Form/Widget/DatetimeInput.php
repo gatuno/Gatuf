@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -24,27 +23,25 @@
 /**
  * Simple input of type datetime.
  */
-class Gatuf_Form_Widget_DatetimeInput extends Gatuf_Form_Widget_Input
-{
-    public $input_type = 'text';
-    public $format = 'd/m/Y H:i'; // '25-10-2006 14:30' by default do
-                                  // not show the seconds.
+class Gatuf_Form_Widget_DatetimeInput extends Gatuf_Form_Widget_Input {
+	public $input_type = 'text';
+	public $format = 'd/m/Y H:i'; // '25-10-2006 14:30' by default do
+	// not show the seconds.
 
-    /**
-     * Renders the HTML of the input.
-     *
-     * @param string Name of the field.
-     * @param mixed Value for the field, can be a non valid value.
-     * @param array Extra attributes to add to the input form (array())
-     * @return string The HTML string of the input.
-     */
-    public function render($name, $value, $extra_attrs=array())
-    {
-        // Internally we use GMT, so we convert back to the current
-        // timezone.
-        if (strlen($value) > 0) {
-            $value = date($this->format, strtotime($value.' GMT'));
-        }
-        return parent::render($name, $value, $extra_attrs);
-    }
+	/**
+	 * Renders the HTML of the input.
+	 *
+	 * @param string Name of the field.
+	 * @param mixed Value for the field, can be a non valid value.
+	 * @param array Extra attributes to add to the input form (array())
+	 * @return string The HTML string of the input.
+	 */
+	public function render($name, $value, $extra_attrs=array()) {
+		// Internally we use GMT, so we convert back to the current
+		// timezone.
+		if (strlen($value) > 0) {
+			$value = date($this->format, strtotime($value.' GMT'));
+		}
+		return parent::render($name, $value, $extra_attrs);
+	}
 }

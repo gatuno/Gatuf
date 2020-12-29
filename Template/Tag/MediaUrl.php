@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -22,17 +21,16 @@
 # ***** END LICENSE BLOCK ***** */
 
 class Gatuf_Template_Tag_MediaUrl extends Gatuf_Template_Tag {
-    function start ($file='') {
-        echo Gatuf_Template_Tag_MediaUrl::url ($file);
-    }
+	public function start($file='') {
+		echo Gatuf_Template_Tag_MediaUrl::url($file);
+	}
 
-    public static function url($file='') {
-        if ($file !== '' && Gatuf::config ('last_update_file', false) &&
-            false !== ($last_update = Gatuf::fileExists(Gatuf::config('last_update_file')))
-            ) {
-            $file = $file.'?'.substr(md5(filemtime($last_update)), 0, 5);
-        }
-        return Gatuf::config('url_media', Gatuf::config('app_base').'/media').$file;
-    }
+	public static function url($file='') {
+		if ($file !== '' && Gatuf::config('last_update_file', false) &&
+			false !== ($last_update = Gatuf::fileExists(Gatuf::config('last_update_file')))
+			) {
+			$file = $file.'?'.substr(md5(filemtime($last_update)), 0, 5);
+		}
+		return Gatuf::config('url_media', Gatuf::config('app_base').'/media').$file;
+	}
 }
-

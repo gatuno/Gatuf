@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -37,19 +36,18 @@ class Gatuf_DB_Field_File extends Gatuf_DB_Field {
 	 * @param mixed Value ('')
 	 * @param string Column name ('')
 	 */
-	function __construct($value='', $column='', $extra=array()) {
+	public function __construct($value='', $column='', $extra=array()) {
 		parent::__construct($value, $column, $extra);
 		$this->methods = array(array(strtolower($column).'_url', 'Gatuf_DB_Field_File_Url'),
-							   array(strtolower($column).'_path', 'Gatuf_DB_Field_File_Path')
-							   );
+			array(strtolower($column).'_path', 'Gatuf_DB_Field_File_Path')
+		);
 	}
 }
 
 /**
  * Returns the url to access the file.
  */
-function Gatuf_DB_Field_File_Url($field, $method, $model, $args=null)
-{
+function Gatuf_DB_Field_File_Url($field, $method, $model, $args=null) {
 	if (strlen($model->$field) != 0) {
 		return Gatuf::config('upload_url').'/'.$model->$field;
 	}
@@ -65,4 +63,3 @@ function Gatuf_DB_Field_File_Path($field, $method, $model, $args=null) {
 	}
 	return '';
 }
-

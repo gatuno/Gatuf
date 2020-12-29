@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -24,39 +23,39 @@
 class Gatuf_Group extends Gatuf_Model {
 	public $_model = 'Gatuf_Group';
 	
-	function init () {
+	public function init() {
 		$this->_a['table'] = 'groups';
 		$this->_a['model'] = 'Gatuf_Group';
 		$this->primary_key = 'id';
 		
-		$this->_a['cols'] = array (
+		$this->_a['cols'] = array(
 			'id' =>
-			array (
-			       'type' => 'Gatuf_DB_Field_Sequence',
-			       'blank' => true,
+			array(
+				'type' => 'Gatuf_DB_Field_Sequence',
+				'blank' => true,
 			),
 			'name' =>
-			array (
-			       'type' => 'Gatuf_DB_Field_Varchar',
-			       'blank' => false,
-			       'size' => 50,
+			array(
+				'type' => 'Gatuf_DB_Field_Varchar',
+				'blank' => false,
+				'size' => 50,
 			),
 			'description' =>
-			array (
-			       'type' => 'Gatuf_DB_Field_Varchar',
-			       'blank' => false,
-			       'size' => 250,
+			array(
+				'type' => 'Gatuf_DB_Field_Varchar',
+				'blank' => false,
+				'size' => 250,
 			),
 			'permissions' =>
-			array (
-			       'type' => 'Gatuf_DB_Field_Manytomany',
-			       'blank' => true,
-			       'model' => 'Gatuf_Permission',
+			array(
+				'type' => 'Gatuf_DB_Field_Manytomany',
+				'blank' => true,
+				'model' => 'Gatuf_Permission',
 			),
 		);
 	}
 	
-	function __toString() {
+	public function __toString() {
 		return $this->name;
 	}
 }

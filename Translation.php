@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -54,7 +53,7 @@ class Gatuf_Translation {
 	public static function loadSetLocale($lang) {
 		$GLOBALS['_GX_current_locale'] = $lang;
 		setlocale(LC_TIME, array($lang.'.UTF-8',
-								 $lang.'_'.strtoupper($lang).'.UTF-8'));
+			$lang.'_'.strtoupper($lang).'.UTF-8'));
 		if (isset($GLOBALS['_GX_locale'][$lang])) {
 			return; // We consider that it was already loaded.
 		}
@@ -73,7 +72,7 @@ class Gatuf_Translation {
 	/**
 	 * Get the plural form for a given locale.
 	 */
-	public static function getPluralForm ($locale) {
+	public static function getPluralForm($locale) {
 		if (isset(self::$plural_forms[$locale])) {
 			return self::$plural_forms[$locale];
 		}
@@ -106,7 +105,7 @@ class Gatuf_Translation {
 		$acceptedlist = explode(',', $accepted);
 		foreach ($acceptedlist as $lang) {
 			$lang = explode(';', $lang);
-			$lang = str_replace ('-', '_', trim($lang[0]));
+			$lang = str_replace('-', '_', trim($lang[0]));
 			if (in_array($lang, $available)) {
 				return $lang;
 			}
@@ -118,7 +117,7 @@ class Gatuf_Translation {
 			}
 		}
 		$langs = Gatuf::config('languages', array('en'));
-		return $langs[0]; 
+		return $langs[0];
 	}
 
 	/**
@@ -164,9 +163,9 @@ class Gatuf_Translation {
 		$fc= str_replace(array("\r\n", "\r"), array("\n", "\n"), $fc);
 
 		// results array
-		$hash= array ();
+		$hash= array();
 		// temporary array
-		$temp= array ();
+		$temp= array();
 		// state
 		$state= null;
 		$fuzzy= false;
@@ -174,64 +173,66 @@ class Gatuf_Translation {
 		// iterate over lines
 		foreach (explode("\n", $fc) as $line) {
 			$line= trim($line);
-			if ($line === '')
+			if ($line === '') {
 				continue;
+			}
 			if (false === strpos($line, ' ')) {
 				$key = $line;
 				$data = '';
-			} else { 
-				list ($key, $data)= explode(' ', $line, 2);
+			} else {
+				list($key, $data)= explode(' ', $line, 2);
 			}
 			switch ($key) {
-			case '#,' : // flag...
+			case '#,': // flag...
 				$fuzzy= in_array('fuzzy', preg_split('/,\s*/', $data));
-			case '#' : // translator-comments
-			case '#.' : // extracted-comments
-			case '#:' : // reference...
-			case '#|' : // msgid previous-untranslated-string
-			case '#~' : // deprecated translations
+			case '#': // translator-comments
+			case '#.': // extracted-comments
+			case '#:': // reference...
+			case '#|': // msgid previous-untranslated-string
+			case '#~': // deprecated translations
 				// start a new entry
 				if (sizeof($temp) && array_key_exists('msgid', $temp) && array_key_exists('msgstr', $temp)) {
-					if (!$fuzzy)
+					if (!$fuzzy) {
 						$hash[]= $temp;
-					$temp= array ();
+					}
+					$temp= array();
 					$state= null;
 					$fuzzy= false;
 				}
 				break;
-			case 'msgctxt' :
+			case 'msgctxt':
 				// context
-			case 'msgid' :
+			case 'msgid':
 				// untranslated-string
-			case 'msgid_plural' :
+			case 'msgid_plural':
 				// untranslated-string-plural
 				$state= $key;
 				$temp[$state]= $data;
 				break;
-			case 'msgstr' :
+			case 'msgstr':
 				// translated-string
 				$state= 'msgstr';
 				$temp[$state][]= $data;
 				break;
-			default :
-				if (strpos($key, 'msgstr[') !== False) {
+			default:
+				if (strpos($key, 'msgstr[') !== false) {
 					// translated-string-case-n
 					$state= 'msgstr';
 					$temp[$state][]= $data;
 				} else {
 					// continued lines
 					switch ($state) {
-					case 'msgctxt' :
-					case 'msgid' :
-					case 'msgid_plural' :
+					case 'msgctxt':
+					case 'msgid':
+					case 'msgid_plural':
 						$temp[$state] .= "\n" . $line;
 						break;
-					case 'msgstr' :
+					case 'msgstr':
 						$temp[$state][sizeof($temp[$state]) - 1] .= "\n" . $line;
 						break;
-					default :
+					default:
 						// parse error
-						return False;
+						return false;
 					}
 				}
 				break;
@@ -239,18 +240,19 @@ class Gatuf_Translation {
 		}
 
 		// add final entry
-		if ($state == 'msgstr')
+		if ($state == 'msgstr') {
 			$hash[]= $temp;
+		}
 
 		// Cleanup data, merge multiline entries, reindex hash for ksort
 		$temp= $hash;
-		$hash= array ();
+		$hash= array();
 		foreach ($temp as $entry) {
 			foreach ($entry as &$v) {
 				$v = Gatuf_Translation_poCleanHelper($v);
-				if ($v === False) {
+				if ($v === false) {
 					// parse error
-					return False;
+					return false;
 				}
 			}
 			if (isset($entry['msgid_plural'])) {
@@ -270,7 +272,7 @@ class Gatuf_Translation {
 	 */
 	public static function getCachedFile($file) {
 		$phpfile = Gatuf::config('tmp_folder').'/Gatuf_L10n-'.md5($file).'.phps';
-		if (file_exists($phpfile) 
+		if (file_exists($phpfile)
 			&& (filemtime($file) < filemtime($phpfile))) {
 			return include $phpfile;
 		}
@@ -285,23 +287,25 @@ class Gatuf_Translation {
 	 */
 	public static function cacheFile($file, $hash) {
 		$phpfile = Gatuf::config('tmp_folder').'/Gatuf_L10n-'.md5($file).'.phps';
-		file_put_contents($phpfile, 
-						  '<?php return '.var_export($hash, true).'; ?>',
-						  LOCK_EX);
+		file_put_contents(
+			$phpfile,
+			'<?php return '.var_export($hash, true).'; ?>',
+			LOCK_EX
+		);
 		@chmod($phpfile, 0666);
 	}
 }
 
 
-function Gatuf_Translation_poCleanHelper($x) 
-{
+function Gatuf_Translation_poCleanHelper($x) {
 	if (is_array($x)) {
 		foreach ($x as $k => $v) {
 			$x[$k]= Gatuf_Translation_poCleanHelper($v);
 		}
 	} else {
-		if ($x[0] == '"')
+		if ($x[0] == '"') {
 			$x= substr($x, 1, -1);
+		}
 		$x= str_replace("\"\n\"", '', $x);
 		$x= str_replace('$', '\\$', $x);
 		$x= @eval("return \"$x\";");

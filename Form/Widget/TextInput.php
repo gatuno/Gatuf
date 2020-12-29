@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -25,5 +24,5 @@
  * Simple input of type text.
  */
 class Gatuf_Form_Widget_TextInput extends Gatuf_Form_Widget_Input {
-    public $input_type = 'text';
+	public $input_type = 'text';
 }

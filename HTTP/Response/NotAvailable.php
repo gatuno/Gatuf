@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -22,21 +21,23 @@
 # ***** END LICENSE BLOCK ***** */
 
 class Gatuf_HTTP_Response_NotAvailable extends Gatuf_HTTP_Response {
-    function __construct($request) {
-        $content = '';
-        try {
-            $context = new Gatuf_Template_Context(array('query' => $request->query));
-            $tmpl = new Gatuf_Template('503.html');
-            $content = $tmpl->render($context);
-            $mimetype = null;
-        } catch (Exception $e) {
-            $mimetype = 'text/plain';
-            $content = sprintf('The requested URL %s is not available at the moment.'."\n"
-                               .'Please try again later.'."\n\n".'503 - Service Unavailable',
-                               Gatuf_esc($request->query));
-        }
-        parent::__construct($content, $mimetype);
-        $this->status_code = 503;
-        $this->headers['Retry-After'] = 300; // retry after 5 minutes
-    }
+	public function __construct($request) {
+		$content = '';
+		try {
+			$context = new Gatuf_Template_Context(array('query' => $request->query));
+			$tmpl = new Gatuf_Template('503.html');
+			$content = $tmpl->render($context);
+			$mimetype = null;
+		} catch (Exception $e) {
+			$mimetype = 'text/plain';
+			$content = sprintf(
+				'The requested URL %s is not available at the moment.'."\n"
+							   .'Please try again later.'."\n\n".'503 - Service Unavailable',
+				Gatuf_esc($request->query)
+			);
+		}
+		parent::__construct($content, $mimetype);
+		$this->status_code = 503;
+		$this->headers['Retry-After'] = 300; // retry after 5 minutes
+	}
 }

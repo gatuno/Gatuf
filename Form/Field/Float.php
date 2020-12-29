@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -22,29 +21,30 @@
 # ***** END LICENSE BLOCK ***** */
 
 class Gatuf_Form_Field_Float extends Gatuf_Form_Field {
-    public $widget = 'Gatuf_Form_Widget_TextInput';
-    public $max_value = null;
-    public $min_value = null;
+	public $widget = 'Gatuf_Form_Widget_TextInput';
+	public $max_value = null;
+	public $min_value = null;
 
-    public function clean($value)
-    {
-        parent::clean($value);
-        if (in_array($value, $this->empty_values)) {
-            $value = '';
-        }
-        
-        if ($value == '') return $value;
-        
-        if (!is_numeric($value)) {
-            throw new Gatuf_Form_Invalid(__('Enter a number.'));
-        }
-        $value = (float) $value;
-        if ($this->max_value !== null and $this->max_value < $value) {
-            throw new Gatuf_Form_Invalid(sprintf(__('Ensure this value is less than or equal to %s.'), $this->max_value));
-        }
-        if ($this->min_value !== null and $this->min_value > $value) {
-            throw new Gatuf_Form_Invalid(sprintf(__('Ensure this value is greater than or equal to %s.'), $this->min_value));
-        }
-        return $value;
-    }
+	public function clean($value) {
+		parent::clean($value);
+		if (in_array($value, $this->empty_values)) {
+			$value = '';
+		}
+		
+		if ($value == '') {
+			return $value;
+		}
+		
+		if (!is_numeric($value)) {
+			throw new Gatuf_Form_Invalid(__('Enter a number.'));
+		}
+		$value = (float) $value;
+		if ($this->max_value !== null and $this->max_value < $value) {
+			throw new Gatuf_Form_Invalid(sprintf(__('Ensure this value is less than or equal to %s.'), $this->max_value));
+		}
+		if ($this->min_value !== null and $this->min_value > $value) {
+			throw new Gatuf_Form_Invalid(sprintf(__('Ensure this value is greater than or equal to %s.'), $this->min_value));
+		}
+		return $value;
+	}
 }

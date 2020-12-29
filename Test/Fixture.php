@@ -79,7 +79,7 @@ class Gatuf_Test_Fixture {
 		}
 		$out = array();
 		$obj = Gatuf::factory($model);
-		$order = sprintf ('%s ASC', $obj->primary_key);
+		$order = sprintf('%s ASC', $obj->primary_key);
 		foreach ($obj->getList(array('order' => $order)) as $item) {
 			$out[] = self::prepare($item);
 		}
@@ -92,8 +92,8 @@ class Gatuf_Test_Fixture {
 	public static function prepare($model) {
 		$pk = $model->primary_key;
 		$out = array('model' =>  $model->_a['model'],
-					 'pk' => $model->$pk,
-					 'fields' => array());
+			'pk' => $model->$pk,
+			'fields' => array());
 		foreach ($model->_a['cols'] as $col=>$val) {
 			$field = new $val['type']();
 			if ($field->type != 'manytomany') {

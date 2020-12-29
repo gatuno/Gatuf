@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -58,7 +57,7 @@ class Gatuf_DB_Field {
 	 * @param mixed Value ('')
 	 * @param string Column name ('')
 	 */
-	function __construct($value='', $column='', $extra=array()) {
+	public function __construct($value='', $column='', $extra=array()) {
 		$this->value = $value;
 		$this->column = $column;
 		if ($extra) {
@@ -66,4 +65,3 @@ class Gatuf_DB_Field {
 		}
 	}
 }
-

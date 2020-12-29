@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -22,13 +21,13 @@
 # ***** END LICENSE BLOCK ***** */
 
 class Gatuf_HTTP_Response_Json extends Gatuf_HTTP_Response {
-    /**
-     * @param mixed Values, will be encoded using json_encode
-     */
-    function __construct($data, $mimetype=null) {
-        if (null == $mimetype) {
-            $mimetype = 'application/json; charset=utf-8';
-        }
-        parent::__construct(json_encode($data), $mimetype);
-    }
+	/**
+	 * @param mixed Values, will be encoded using json_encode
+	 */
+	public function __construct($data, $mimetype=null) {
+		if (null == $mimetype) {
+			$mimetype = 'application/json; charset=utf-8';
+		}
+		parent::__construct(json_encode($data), $mimetype);
+	}
 }

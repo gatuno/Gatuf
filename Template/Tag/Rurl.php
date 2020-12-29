@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -26,10 +25,11 @@ Gatuf::loadFunction('Gatuf_HTTP_URL_urlForView');
 /**
  * Assign the url to a template variable.
  */
-class Gatuf_Template_Tag_Rurl extends Gatuf_Template_Tag
-{
-    function start($var, $view, $params=array(), $get_params=array()) {
-        $this->context->set($var,
-                            Gatuf_HTTP_URL_urlForView($view, $params, $get_params));
-    }
+class Gatuf_Template_Tag_Rurl extends Gatuf_Template_Tag {
+	public function start($var, $view, $params=array(), $get_params=array()) {
+		$this->context->set(
+			$var,
+			Gatuf_HTTP_URL_urlForView($view, $params, $get_params)
+		);
+	}
 }

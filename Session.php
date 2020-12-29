@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -26,7 +25,7 @@
  * Yes, very crappy
  */
 class Gatuf_Session extends Gatuf_Model {
-    public $_model = 'Gatuf_Session';
+	public $_model = 'Gatuf_Session';
 	public $data = array();
 	public $cookie_name = 'sessionid';
 	public $touched = false;
@@ -35,52 +34,52 @@ class Gatuf_Session extends Gatuf_Model {
 	public $set_test_cookie = false;
 	public $test_cookie = null;
 	
-	function _init () {
-	    $this->cookie_name = Gatuf::config ('session_cookie_id', 'sessionid');
-	    parent::_init ();
+	public function _init() {
+		$this->cookie_name = Gatuf::config('session_cookie_id', 'sessionid');
+		parent::_init();
 	}
 	
-	function init () {
-	    $this->_a['table'] = 'sessions';
-	    $this->_a['model'] = __CLASS__;
-	    $this->primary_key = 'id';
-	    
-	    $this->_a['cols'] = array (
-	        'id' =>
-	        array (
-	               'type' => 'Gatuf_DB_Field_Sequence',
-	               'blank' => true,
-	        ),
-	        'session_key' =>
-	        array (
-	               'type' => 'Gatuf_DB_Field_Varchar',
-	               'blank' => false,
-	               'size' => 100,
-	        ),
-	        'session_data' =>
-	        array (
-	               'type' => 'Gatuf_DB_Field_Text',
-	               'blank' => false,
-	        ),
-	        'expire' =>
-	        array (
-	               'type' => 'Gatuf_DB_Field_Datetime',
-	               'blank' => false,
-	        ),
-	    );
-	    $this->_a['idx'] = array (
-	        'session_key_idx' =>
-	        array (
-	               'type' => 'unique',
-	               'col' => 'session_key'
-	        ),
-	    );
-	    
-	    $this->_admin = array ();
-	    $this->_a['views'] = array ();
+	public function init() {
+		$this->_a['table'] = 'sessions';
+		$this->_a['model'] = __CLASS__;
+		$this->primary_key = 'id';
+		
+		$this->_a['cols'] = array(
+			'id' =>
+			array(
+				'type' => 'Gatuf_DB_Field_Sequence',
+				'blank' => true,
+			),
+			'session_key' =>
+			array(
+				'type' => 'Gatuf_DB_Field_Varchar',
+				'blank' => false,
+				'size' => 100,
+			),
+			'session_data' =>
+			array(
+				'type' => 'Gatuf_DB_Field_Text',
+				'blank' => false,
+			),
+			'expire' =>
+			array(
+				'type' => 'Gatuf_DB_Field_Datetime',
+				'blank' => false,
+			),
+		);
+		$this->_a['idx'] = array(
+			'session_key_idx' =>
+			array(
+				'type' => 'unique',
+				'col' => 'session_key'
+			),
+		);
+		
+		$this->_admin = array();
+		$this->_a['views'] = array();
 	}
 	
-	function setData($key, $value=null) {
+	public function setData($key, $value=null) {
 		if (is_null($value)) {
 			unset($this->data[$key]);
 		} else {
@@ -89,10 +88,10 @@ class Gatuf_Session extends Gatuf_Model {
 		$this->touched = true;
 	}
 	
-	function getData($key=null, $default='') {
-	    if (is_null ($key)) {
-	        return parent::getData();
-	    }
+	public function getData($key=null, $default='') {
+		if (is_null($key)) {
+			return parent::getData();
+		}
 		if (isset($this->data[$key])) {
 			return $this->data[$key];
 		} else {
@@ -100,7 +99,7 @@ class Gatuf_Session extends Gatuf_Model {
 		}
 	}
 	
-	function clear() {
+	public function clear() {
 		$this->data = array();
 		$this->touched = true;
 	}
@@ -108,7 +107,7 @@ class Gatuf_Session extends Gatuf_Model {
 	/**
 	 * Generate a new session key.
 	 */
-	function getNewSessionKey() {
+	public function getNewSessionKey() {
 		while (1) {
 			$key = md5(microtime().rand(0, 123456789).rand(0, 123456789).Gatuf::config('secret_key'));
 			$sess = $this->getList(array('filter' => 'session_key=\''.$key.'\''));
@@ -119,7 +118,7 @@ class Gatuf_Session extends Gatuf_Model {
 		return $key;
 	}
 	
-	function preSave($create=false) {
+	public function preSave($create=false) {
 		$this->session_data = serialize($this->data);
 		if ($this->session_key == '') {
 			$this->session_key = $this->getNewSessionKey();
@@ -127,10 +126,10 @@ class Gatuf_Session extends Gatuf_Model {
 		$this->expire = gmdate('Y-m-d H:i:s', time()+86400);
 	}
 	
-	function restore() {
+	public function restore() {
 		$this->data = unserialize($this->session_data);
 	}
-    
+	
 	/**
 	 * Create a test cookie.
 	 */

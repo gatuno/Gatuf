@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -42,33 +41,38 @@ class Gatuf_Translation_Generator {
 	 * @return array List of files
 	 */
 	public static function list_dir($path, $maxdepth=-1, $mode='FULL', $exclude='', $d=0) {
-		if (substr($path, strlen($path)-1) != '/') { 
-			$path .= '/'; 
-		}	 
+		if (substr($path, strlen($path)-1) != '/') {
+			$path .= '/';
+		}
 		$dirlist = array();
-		if ($mode != 'FILES') { 
-			$dirlist[] = $path; 
+		if ($mode != 'FILES') {
+			$dirlist[] = $path;
 		}
 		if ($handle = opendir($path)) {
 			while (false !== ($file = readdir($handle))) {
-				if ($file != '.' && $file != '..' 
+				if ($file != '.' && $file != '..'
 					&& ($exclude == '' or !preg_match($exclude, $file))) {
 					$file = $path.$file;
-					if (!is_dir($file)) { 
-						if ($mode != 'DIRS') { 
-							$dirlist[] = $file; 
-						} 
+					if (!is_dir($file)) {
+						if ($mode != 'DIRS') {
+							$dirlist[] = $file;
+						}
 					} elseif ($d >=0 && ($d < $maxdepth || $maxdepth < 0)) {
-						$result = self::list_dir($file.'/', $maxdepth, $mode, 
-										   $exclude, $d+1);
+						$result = self::list_dir(
+							$file.'/',
+							$maxdepth,
+							$mode,
+							$exclude,
+							$d+1
+						);
 						$dirlist = array_merge($dirlist, $result);
 					}
 				}
 			}
 			closedir($handle);
 		}
-		if ($d == 0) { 
-			natcasesort($dirlist); 
+		if ($d == 0) {
+			natcasesort($dirlist);
 		}
 		return $dirlist;
 	}
@@ -84,14 +88,18 @@ class Gatuf_Translation_Generator {
 	 * @return bool Success
 	 */
 	public static function rmkdir($dir, $mode=0777) {
-		if (is_dir($dir) || @mkdir($dir, $mode)) return true;
-		if (!self::rmkdir(dirname($dir), $mode)) return false;
+		if (is_dir($dir) || @mkdir($dir, $mode)) {
+			return true;
+		}
+		if (!self::rmkdir(dirname($dir), $mode)) {
+			return false;
+		}
 		return @mkdir($dir, $mode);
 	}
 
 
 	public static function is_pathrelative($dir) {
-		if (strtoupper(substr(PHP_OS,0,3) == 'WIN')) {
+		if (strtoupper(substr(PHP_OS, 0, 3) == 'WIN')) {
 			return (preg_match('/^\w+:/', $dir) <= 0);
 		} else {
 			return (preg_match('/^\//', $dir) <= 0);
@@ -99,7 +107,7 @@ class Gatuf_Translation_Generator {
 	}
 
 	public static function unifypath($path) {
-		if (strtoupper(substr(PHP_OS,0,3) == 'WIN')) {
+		if (strtoupper(substr(PHP_OS, 0, 3) == 'WIN')) {
 			return str_replace('\\', DIRECTORY_SEPARATOR, $path);
 		}
 		return $path;
@@ -113,11 +121,11 @@ class Gatuf_Translation_Generator {
 			$_path = $_curdir.$_path;
 		}
 		$_startPoint = '';
-		if (strtoupper(substr(PHP_OS,0,3) == 'WIN')) {
+		if (strtoupper(substr(PHP_OS, 0, 3) == 'WIN')) {
 			list($_startPoint, $_path) = explode(':', $_path, 2);
 			$_startPoint .= ':';
 		}
-		// From now processing is the same for WIndows and Unix, 
+		// From now processing is the same for WIndows and Unix,
 		// and hopefully for others.
 		$_realparts = array();
 		$_parts = explode(DIRECTORY_SEPARATOR, $_path);

@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -26,38 +25,39 @@
  */
 class Gatuf_Signal {
 
-    /**
-     * Send a signal.
-     *
-     * @param string Signal to be sent.
-     * @param string Sender.
-     * @param array Parameters
-     * @return void
-     */
-    public static function send($signal, $sender, &$params=array()) {
-        if (!empty($GLOBALS['_GATUF_signal'][$signal])) {
-            foreach ($GLOBALS['_GATUF_signal'][$signal] as $key=>$val) {
-                if ($val[2] === null or $sender == $val[2]) {
-                    call_user_func_array(array($val[0], $val[1]), 
-                                         array($signal, &$params));
-                }
-            }
-        }
-    }
+	/**
+	 * Send a signal.
+	 *
+	 * @param string Signal to be sent.
+	 * @param string Sender.
+	 * @param array Parameters
+	 * @return void
+	 */
+	public static function send($signal, $sender, &$params=array()) {
+		if (!empty($GLOBALS['_GATUF_signal'][$signal])) {
+			foreach ($GLOBALS['_GATUF_signal'][$signal] as $key=>$val) {
+				if ($val[2] === null or $sender == $val[2]) {
+					call_user_func_array(
+						array($val[0], $val[1]),
+						array($signal, &$params)
+					);
+				}
+			}
+		}
+	}
 
 
-    /**
-     * Connect to a signal.
-     *
-     * @param string Name of the signal.
-     * @param array array('class', 'method') handling the signal.
-     * @param string Optional sender filtering.
-     */
-    public static function connect($signal, $who, $sender=null) {
-        if (!isset($GLOBALS['_GATUF_signal'][$signal])) {
-            $GLOBALS['_GATUF_signal'][$signal] = array();
-        }
-        $GLOBALS['_GATUF_signal'][$signal][] = array($who[0], $who[1], $sender);
-    }
+	/**
+	 * Connect to a signal.
+	 *
+	 * @param string Name of the signal.
+	 * @param array array('class', 'method') handling the signal.
+	 * @param string Optional sender filtering.
+	 */
+	public static function connect($signal, $who, $sender=null) {
+		if (!isset($GLOBALS['_GATUF_signal'][$signal])) {
+			$GLOBALS['_GATUF_signal'][$signal] = array();
+		}
+		$GLOBALS['_GATUF_signal'][$signal][] = array($who[0], $who[1], $sender);
+	}
 }
-

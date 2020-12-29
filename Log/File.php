@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -36,23 +35,23 @@
  * <code>pluf.log</code> in the configured tmp folder.
  *
  */
-class Gatuf_Log_File
-{
-    /**
-     * Flush the stack to the disk.
-     *
-     * @param $stack Array
-     */
-    public static function write($stack)
-    {
-        $file = Gatuf::config('gatuf_log_file', 
-                        Gatuf::config('tmp_folder', '/tmp').'/gatuf.log');
-        $out = array();
-        foreach ($stack as $elt) {
-            $out[] = date(DATE_ISO8601, (int) $elt[0]).' '.
-                Gatuf_Log::$reverse[$elt[1]].': '.
-                (is_string ($elt[2]) ? $elt[2] : json_encode($elt[2]));
-        }
-        file_put_contents($file, implode(PHP_EOL, $out).PHP_EOL, FILE_APPEND);
-    }
+class Gatuf_Log_File {
+	/**
+	 * Flush the stack to the disk.
+	 *
+	 * @param $stack Array
+	 */
+	public static function write($stack) {
+		$file = Gatuf::config(
+			'gatuf_log_file',
+			Gatuf::config('tmp_folder', '/tmp').'/gatuf.log'
+		);
+		$out = array();
+		foreach ($stack as $elt) {
+			$out[] = date(DATE_ISO8601, (int) $elt[0]).' '.
+				Gatuf_Log::$reverse[$elt[1]].': '.
+				(is_string($elt[2]) ? $elt[2] : json_encode($elt[2]));
+		}
+		file_put_contents($file, implode(PHP_EOL, $out).PHP_EOL, FILE_APPEND);
+	}
 }

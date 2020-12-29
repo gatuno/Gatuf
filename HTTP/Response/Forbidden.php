@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -22,19 +21,19 @@
 # ***** END LICENSE BLOCK ***** */
 
 class Gatuf_HTTP_Response_Forbidden extends Gatuf_HTTP_Response {
-    function __construct($request) {
-        $content = '';
-        try {
-            $context = new Gatuf_Template_Context_Request($request, array('query' => $request->query, 'page_title' => __('403 - Forbidden')));
-            $tmpl = new Gatuf_Template('403.html');
-            $content = $tmpl->render($context);
-            $mimetype = null;
-        } catch (Exception $e) {
-            $mimetype = 'text/plain';
-            $content = 'You are not authorized to view this page. You do not have permission'."\n"
-                .'to view the requested directory or page using the credentials supplied.'."\n\n".'403 - Forbidden';
-        }
-        parent::__construct($content, $mimetype);
-        $this->status_code = 403;
-    }
+	public function __construct($request) {
+		$content = '';
+		try {
+			$context = new Gatuf_Template_Context_Request($request, array('query' => $request->query, 'page_title' => __('403 - Forbidden')));
+			$tmpl = new Gatuf_Template('403.html');
+			$content = $tmpl->render($context);
+			$mimetype = null;
+		} catch (Exception $e) {
+			$mimetype = 'text/plain';
+			$content = 'You are not authorized to view this page. You do not have permission'."\n"
+				.'to view the requested directory or page using the credentials supplied.'."\n\n".'403 - Forbidden';
+		}
+		parent::__construct($content, $mimetype);
+		$this->status_code = 403;
+	}
 }

@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -30,38 +29,38 @@
  * generate those url and parse the results for the dispatcher.
  */
 class Gatuf_HTTP_URL {
-    /**
-     * Generate the URL.
-     *
-     * The & is encoded as &amp; in the url.
-     *
-     * @param string Action url
-     * @param array Associative array of the parameters (array())
-     * @param bool Encode the & in the url (true)
-     * @return string Ready to use URL.
-     */
-    public static function generate($action, $params=array(), $encode=true) {
-        $url = $action;
-        if (count($params)) {
-            $url .= '?' . http_build_query($params, '', ($encode) ? '&amp;' : '&');
-        }
-        return $url;
-    }
+	/**
+	 * Generate the URL.
+	 *
+	 * The & is encoded as &amp; in the url.
+	 *
+	 * @param string Action url
+	 * @param array Associative array of the parameters (array())
+	 * @param bool Encode the & in the url (true)
+	 * @return string Ready to use URL.
+	 */
+	public static function generate($action, $params=array(), $encode=true) {
+		$url = $action;
+		if (count($params)) {
+			$url .= '?' . http_build_query($params, '', ($encode) ? '&amp;' : '&');
+		}
+		return $url;
+	}
 
-    /**
-     * Get the action of the request.
-     *
-     * We directly get the PATH_INFO variable or return '/'
-     *
-     * @return string Action
-     */
-    public static function getAction() {
-        if (isset($_GET['_pluf_action'])) {
-            return $_GET['_pluf_action'];
-        }
-        return (isset($_SERVER['PATH_INFO'])) ?
-            $_SERVER['PATH_INFO'] : '/';
-    }
+	/**
+	 * Get the action of the request.
+	 *
+	 * We directly get the PATH_INFO variable or return '/'
+	 *
+	 * @return string Action
+	 */
+	public static function getAction() {
+		if (isset($_GET['_pluf_action'])) {
+			return $_GET['_pluf_action'];
+		}
+		return (isset($_SERVER['PATH_INFO'])) ?
+			$_SERVER['PATH_INFO'] : '/';
+	}
 }
 
 /**
@@ -73,10 +72,17 @@ class Gatuf_HTTP_URL {
  * @param bool Should the URL be encoded (true).
  * @return string URL.
  */
-function Gatuf_HTTP_URL_urlForView($view, $params=array(), 
-                                  $get_params=array(), $encoded=true) {
-    return Gatuf_HTTP_URL::generate(Gatuf_HTTP_URL_reverse($view, $params), 
-                                   $get_params, $encoded);
+function Gatuf_HTTP_URL_urlForView(
+	$view,
+	$params=array(),
+	$get_params=array(),
+	$encoded=true
+) {
+	return Gatuf_HTTP_URL::generate(
+		Gatuf_HTTP_URL_reverse($view, $params),
+		$get_params,
+		$encoded
+	);
 }
 
 /**
@@ -87,23 +93,23 @@ function Gatuf_HTTP_URL_urlForView($view, $params=array(),
  * @return string URL.
  */
 function Gatuf_HTTP_URL_reverse($view, $params=array()) {
-    $model = '';
-    $method = '';
-    if (false !== strpos($view, '::')) {
-        list($model, $method) = explode('::', $view);
-    }
-    $vdef = array($model, $method, $view);
-    $regbase = array('', array());
-    $regbase = Gatuf_HTTP_URL_find($GLOBALS['_GATUF_vistas'], $vdef, $regbase);
-    if ($regbase === false) {
-        throw new Exception(sprintf('Error, the view: %s has not been found.', $view));
-    }
-    $url = '';
-    foreach ($regbase[1] as $regex) {
-        $url .= Gatuf_HTTP_URL_buildReverseUrl($regex, $params);
-    }
-    $url = $regbase[0].$url;
-    return $url;
+	$model = '';
+	$method = '';
+	if (false !== strpos($view, '::')) {
+		list($model, $method) = explode('::', $view);
+	}
+	$vdef = array($model, $method, $view);
+	$regbase = array('', array());
+	$regbase = Gatuf_HTTP_URL_find($GLOBALS['_GATUF_vistas'], $vdef, $regbase);
+	if ($regbase === false) {
+		throw new Exception(sprintf('Error, the view: %s has not been found.', $view));
+	}
+	$url = '';
+	foreach ($regbase[1] as $regex) {
+		$url .= Gatuf_HTTP_URL_buildReverseUrl($regex, $params);
+	}
+	$url = $regbase[0].$url;
+	return $url;
 }
 
 
@@ -116,32 +122,32 @@ function Gatuf_HTTP_URL_reverse($view, $params=array()) {
  * @return mixed Regex of the view or false
  */
 function Gatuf_HTTP_URL_find($views, $vdef, $regbase) {
-    foreach ($views as $dview) {
-        if (isset($dview['sub'])) {
-            $regbase2 = $regbase;
-            if (empty($regbase2[0])) {
-                $regbase2[0] = $dview['base'];
-            }
-            $regbase2[1][] = $dview['regex'];
-            $res = Gatuf_HTTP_URL_find($dview['sub'], $vdef, $regbase2);
-            if ($res) {
-                return $res;
-            }
-            continue;
-        }
-        if (
-            (isset($dview['name']) && $dview['name'] == $vdef[2])
-            or
-            ($dview['model'] == $vdef[0] && $dview['method'] == $vdef[1])
-            ) {
-            $regbase[1][] = $dview['regex'];
-            if (!empty($dview['base'])) {
-                $regbase[0] = $dview['base'];
-            }
-            return $regbase;
-        }
-    }
-    return false;
+	foreach ($views as $dview) {
+		if (isset($dview['sub'])) {
+			$regbase2 = $regbase;
+			if (empty($regbase2[0])) {
+				$regbase2[0] = $dview['base'];
+			}
+			$regbase2[1][] = $dview['regex'];
+			$res = Gatuf_HTTP_URL_find($dview['sub'], $vdef, $regbase2);
+			if ($res) {
+				return $res;
+			}
+			continue;
+		}
+		if (
+			(isset($dview['name']) && $dview['name'] == $vdef[2])
+			or
+			($dview['model'] == $vdef[0] && $dview['method'] == $vdef[1])
+			) {
+			$regbase[1][] = $dview['regex'];
+			if (!empty($dview['base'])) {
+				$regbase[0] = $dview['base'];
+			}
+			return $regbase;
+		}
+	}
+	return false;
 }
 
 /**
@@ -154,11 +160,11 @@ function Gatuf_HTTP_URL_find($views, $vdef, $regbase) {
  * @return string URL filled with the parameters.
  */
 function Gatuf_HTTP_URL_buildReverseUrl($url_regex, $params=array()) {
-    $url = str_replace(array('\\.', '\\-'), array('.', '-'), $url_regex);
-    if (count($params)) {
-        $groups = array_fill(0, count($params), '#\(([^)]+)\)#'); 
-        $url = preg_replace($groups, $params, $url, 1);
-    }
-    preg_match('/^#\^?([^#\$]+)/', $url, $matches);
-    return $matches[1];
+	$url = str_replace(array('\\.', '\\-'), array('.', '-'), $url_regex);
+	if (count($params)) {
+		$groups = array_fill(0, count($params), '#\(([^)]+)\)#');
+		$url = preg_replace($groups, $params, $url, 1);
+	}
+	preg_match('/^#\^?([^#\$]+)/', $url, $matches);
+	return $matches[1];
 }

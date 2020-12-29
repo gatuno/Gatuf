@@ -1,7 +1,7 @@
 <?php
 /* Gatuf's Creepy Version of the model */
 
-Gatuf::loadFunction ('Gatuf_DB_getConnection');
+Gatuf::loadFunction('Gatuf_DB_getConnection');
 
 class Gatuf_Model {
 	public $_model = __CLASS__; //set it to your model name
@@ -17,10 +17,10 @@ class Gatuf_Model {
 	protected $_fk = array();
 	
 	protected $_m = array('list' => array(), // get_*_list methods
-                          'many' => array(), // many to many
-                          'get' => array(), // foreign keys
-                          'extra' => array(), // added by some fields
-                          );
+		'many' => array(), // many to many
+		'get' => array(), // foreign keys
+		'extra' => array(), // added by some fields
+	);
 	/** 
 	 * Store the attributes of the model. To minimize pollution of the
 	 * property space, all the attributes are stored in this array.
@@ -34,28 +34,28 @@ class Gatuf_Model {
 	 * 'verbose': The verbose name of the model.
 	 */
 	public $_a = array('table' => 'model',
-					   'model' => 'Gatuf_Model',
-					   'cols' => array(),
-					   'idx' => array(),
-					   'views' => array(),
+		'model' => 'Gatuf_Model',
+		'cols' => array(),
+		'idx' => array(),
+		'views' => array(),
 	);
 	
-	function __construct ($pk = null, $values =array ()) {
-		$this->_init ();
+	public function __construct($pk = null, $values =array()) {
+		$this->_init();
 		
-		if (!is_null ($pk)) {
+		if (!is_null($pk)) {
 			$this->get($pk);
 		}
 	}
 	
-	function init() {
+	public function init() {
 		// Define it yourself.
 	}
 	
-	function _init () {
+	public function _init() {
 		$this->_getConnection();
 		/* TODO: Inicializar cache */
-		$this->init ();
+		$this->init();
 		foreach ($this->_a['cols'] as $col => $val) {
 			$field = new $val['type']('', $col);
 			
@@ -63,7 +63,7 @@ class Gatuf_Model {
 			
 			$type = 'foreignkey';
 			if ($type === $field->type) {
-				$this->_m['get']['get_'.$col_lower] = array ($val['model'], $col);
+				$this->_m['get']['get_'.$col_lower] = array($val['model'], $col);
 				/* TODO: Caché aquí también */
 				$this->_fk[$col] = $type;
 			}
@@ -75,7 +75,7 @@ class Gatuf_Model {
 			}
 			
 			foreach ($field->methods as $method) {
-				$this->_m['extra'][$method[0]] = array ($col_lower, $method[1]);
+				$this->_m['extra'][$method[0]] = array($col_lower, $method[1]);
 			}
 			
 			if (array_key_exists('default', $val)) {
@@ -102,8 +102,12 @@ class Gatuf_Model {
 		$keys = array();
 		foreach ($this->_a['cols'] as $col => $val) {
 			$field_type = '';
-			if ($val['type'] == 'Gatuf_DB_Field_Manytomany') $field_type = 'manytomany';
-			if ($val['type'] == 'Gatuf_DB_Field_Foreignkey') $field_type = 'foreignkey';
+			if ($val['type'] == 'Gatuf_DB_Field_Manytomany') {
+				$field_type = 'manytomany';
+			}
+			if ($val['type'] == 'Gatuf_DB_Field_Foreignkey') {
+				$field_type = 'foreignkey';
+			}
 			if (isset($val['model']) && $model === $val['model'] && $type === $field_type) {
 				$keys[$col] = $val;
 			}
@@ -119,11 +123,11 @@ class Gatuf_Model {
 	 * @param string Model
 	 * @return array Foreign keys
 	 */
-	function getForeignKeysToModel($model) {
+	public function getForeignKeysToModel($model) {
 		return $this->getRelationKeysToModel($model, 'foreignkey');
 	}
 	
-	function getData() {
+	public function getData() {
 		foreach ($this->_a['cols'] as $col=>$val) {
 			$field = new $val['type']();
 			if ($field->type == 'manytomany') {
@@ -142,13 +146,13 @@ class Gatuf_Model {
 	 *
 	 * @param object Object to associate to the current object
 	 */
-	function setAssoc($model) {
+	public function setAssoc($model) {
 		if (!$this->delAssoc($model)) {
 			return false;
 		}
 		$hay = array(strtolower($model->_a['model']), strtolower($this->_a['model']));
 		// Calcular la base de datos que contiene la relación M-N
-		if (isset ($GLOBALS['_GATUF_models_related']['manytomany'][$model->_a['model']]) && in_array ($this->_a['model'], $GLOBALS['_GATUF_models_related']['manytomany'][$model->_a['model']])) {
+		if (isset($GLOBALS['_GATUF_models_related']['manytomany'][$model->_a['model']]) && in_array($this->_a['model'], $GLOBALS['_GATUF_models_related']['manytomany'][$model->_a['model']])) {
 			// La relación la tiene el $hay[1]
 			$dbname = $this->_con->dbname;
 			$dbpfx = $this->_con->pfx;
@@ -173,7 +177,7 @@ class Gatuf_Model {
 	 *
 	 * @param object Object to associate to the current object
 	 */
-	function delAssoc($model) {
+	public function delAssoc($model) {
 		//check if ok to make the association
 		//current model has a many to many key with $model
 		//$model has a many to many key with current model
@@ -185,7 +189,7 @@ class Gatuf_Model {
 		}
 		$hay = array(strtolower($model->_a['model']), strtolower($this->_a['model']));
 		// Calcular la base de datos que contiene la relación M-N
-		if (isset ($GLOBALS['_GATUF_models_related']['manytomany'][$model->_a['model']]) && in_array ($this->_a['model'], $GLOBALS['_GATUF_models_related']['manytomany'][$model->_a['model']])) {
+		if (isset($GLOBALS['_GATUF_models_related']['manytomany'][$model->_a['model']]) && in_array($this->_a['model'], $GLOBALS['_GATUF_models_related']['manytomany'][$model->_a['model']])) {
 			// La relación la tiene el $hay[1]
 			$dbname = $this->_con->dbname;
 			$dbpfx = $this->_con->pfx;
@@ -209,7 +213,7 @@ class Gatuf_Model {
 	 * @param array Ids of Model name
 	 * @return bool Success
 	 */
-	function batchAssoc($model_name, $ids) {
+	public function batchAssoc($model_name, $ids) {
 		$currents = $this->getRelated($model_name);
 		foreach ($currents as $cur) {
 			$this->delAssoc($cur);
@@ -224,7 +228,7 @@ class Gatuf_Model {
 		return true;
 	}
 	
-	function _getConnection () {
+	public function _getConnection() {
 		static $con = null;
 		if ($this->_con !== null) {
 			return $this->_con;
@@ -238,7 +242,7 @@ class Gatuf_Model {
 		return $this->_con;
 	}
 	
-	function getSqlTable () {
+	public function getSqlTable() {
 		return $this->_con->dbname.'.'.$this->_con->pfx.$this->_a['table'];
 	}
 	
@@ -247,7 +251,7 @@ class Gatuf_Model {
 	 *
 	 * @param string Property to get
 	 */
-	function __get($prop) {
+	public function __get($prop) {
 		return (array_key_exists($prop, $this->_data)) ?
 			$this->_data[$prop] : $this->__call($prop, array());
 	}
@@ -258,11 +262,11 @@ class Gatuf_Model {
 	 * @param string Property to set
 	 * @param mixed Value to set
 	 */
-	function __set($prop, $val) {
+	public function __set($prop, $val) {
 		if (null !== $val and isset($this->_fk[$prop])) {
 			$key = $val->primary_key;
 			$this->_data[$prop] = $val->$key;
-			//unset($this->_cache['get_'.$prop]);
+		//unset($this->_cache['get_'.$prop]);
 		} else {
 			$this->_data[$prop] = $val;
 		}
@@ -274,7 +278,7 @@ class Gatuf_Model {
 	 * @param string Method
 	 * @param array Arguments
 	 */
-	function __call($method, $args) {
+	public function __call($method, $args) {
 		// The foreign keys of the current object.
 		if (isset($this->_m['get'][$method])) {
 			/*if (isset($this->_cache[$method])) {
@@ -284,7 +288,9 @@ class Gatuf_Model {
 				if ($this->_cache[$method]->id == '') $this->_cache[$method] = null;
 				return $this->_cache[$method];*/
 				$ret = new $this->_m['get'][$method][0]();
-				if (!$ret->get($this->_data[$this->_m['get'][$method][1]])) $ret = null;
+				if (!$ret->get($this->_data[$this->_m['get'][$method][1]])) {
+					$ret = null;
+				}
 				
 				return $ret;
 			}
@@ -314,8 +320,7 @@ class Gatuf_Model {
 	 * @param int Id of the item.
 	 * @return mixed Item or false if not found.
 	 */
-	function get($id)
-	{
+	public function get($id) {
 		$req = 'SELECT * FROM '.$this->getSqlTable().' WHERE '.$this->primary_key.'='.$this->_toDb($id, $this->primary_key);
 		if (false === ($rs = $this->_con->select($req))) {
 			throw new Exception($this->_con->getError());
@@ -333,44 +338,44 @@ class Gatuf_Model {
 		return $this;
 	}
 	
-	public function getOne($p=array ()) {
+	public function getOne($p=array()) {
 		if (!is_array($p)) {
-			$p = array ('filter' => $p);
+			$p = array('filter' => $p);
 		}
 		
-		$items = $this->getList ($p);
-		if ($items->count () == 1) {
+		$items = $this->getList($p);
+		if ($items->count() == 1) {
 			return $items[0];
 		}
-		if ($items->count () == 0) {
+		if ($items->count() == 0) {
 			return null;
 		}
-		throw new Exception (__('Error: More than one matching item found.'));
+		throw new Exception(__('Error: More than one matching item found.'));
 	}
 	
-	function getList ($p=array()) {
+	public function getList($p=array()) {
 		$default = array('view' => null,
-						 'filter' => null,
-						 'order' => null,
-						 'start' => null,
-						 'select' => null,
-						 'nb' => null,
-						 'count' => false);
-		$p = array_merge ($default, $p);
+			'filter' => null,
+			'order' => null,
+			'start' => null,
+			'select' => null,
+			'nb' => null,
+			'count' => false);
+		$p = array_merge($default, $p);
 		if (!is_null($p['view']) && !isset($this->_a['views'][$p['view']])) {
 			throw new Exception(sprintf(__('The view "%s" is not defined.'), $p['view']));
 		}
 		$query = array(
-					   'select' => $this->getSelect (),
-					   'from' => $this->getSqlTable (),
-					   'join' => '',
-					   'where' => '',
-					   'group' => '',
-					   'having' => '',
-					   'order' => $this->default_order,
-					   'limit' => '',
-					   'props' => array(),
-					   );
+			'select' => $this->getSelect(),
+			'from' => $this->getSqlTable(),
+			'join' => '',
+			'where' => '',
+			'group' => '',
+			'having' => '',
+			'order' => $this->default_order,
+			'limit' => '',
+			'props' => array(),
+		);
 		
 		if (!is_null($p['view'])) {
 			$query = array_merge($query, $this->_a['views'][$p['view']]);
@@ -450,29 +455,31 @@ class Gatuf_Model {
 		}
 		
 		if (count($rs) == 0) {
-			return new ArrayObject ();
+			return new ArrayObject();
 		}
 		
 		if ($p['count'] == true) {
-			if (empty($rs) or count($rs) == 0) { 
-				return 0; 
+			if (empty($rs) or count($rs) == 0) {
+				return 0;
 			} else {
 				return (int) $rs[0]['nb_items'];
 			}
 		}
 		
-		$res = new ArrayObject ();
+		$res = new ArrayObject();
 		foreach ($rs as $row) {
-			$this->_reset ();
+			$this->_reset();
 			foreach ($this->_a['cols'] as $col => $val) {
-				if (isset($row[$col])) $this->_data[$col] = $this->_fromDb($row[$col], $col);
+				if (isset($row[$col])) {
+					$this->_data[$col] = $this->_fromDb($row[$col], $col);
+				}
 			}
 			
 			foreach ($query['props'] as $prop) {
 				$this->_data[$prop] = (isset($row[$prop])) ? $row[$prop] : null;
 			}
 			
-			$this->restore ();
+			$this->restore();
 			$res[] = clone ($this);
 		}
 		
@@ -490,19 +497,19 @@ class Gatuf_Model {
 	 *			  the keys
 	 * @return array Array of items
 	 */
-	function getRelated($model, $method=null, $p=array()) {
-		$default = array('view' => null, 
-						 'filter' => null, 
-						 'order' => null, 
-						 'start' => null, 
-						 'nb' => null, 
-						 'count' => false);
+	public function getRelated($model, $method=null, $p=array()) {
+		$default = array('view' => null,
+			'filter' => null,
+			'order' => null,
+			'start' => null,
+			'nb' => null,
+			'count' => false);
 		$p = array_merge($default, $p);
 		if ('' == $this->_data[$this->primary_key]) {
 			return new ArrayObject();
 		}
 		$m = new $model();
-		if (isset($this->_m['list'][$method]) 
+		if (isset($this->_m['list'][$method])
 			and is_array($this->_m['list'][$method])) {
 			$foreignkey = $this->_m['list'][$method][1];
 			if (strlen($foreignkey) == 0) {
@@ -520,10 +527,10 @@ class Gatuf_Model {
 		} else {
 			// Many to many: We generate a special view that is making
 			// the join
-			$hay = array(strtolower($m->_a['model']), 
-						 strtolower($this->_a['model']));
+			$hay = array(strtolower($m->_a['model']),
+				strtolower($this->_a['model']));
 			// Calcular la base de datos que contiene la relación M-N
-			if (isset ($GLOBALS['_GATUF_models_related']['manytomany'][$m->_a['model']]) && in_array ($this->_a['model'], $GLOBALS['_GATUF_models_related']['manytomany'][$m->_a['model']])) {
+			if (isset($GLOBALS['_GATUF_models_related']['manytomany'][$m->_a['model']]) && in_array($this->_a['model'], $GLOBALS['_GATUF_models_related']['manytomany'][$m->_a['model']])) {
 				// La relación la tiene el $hay[1]
 				$dbname = $this->_con->dbname;
 				$dbpfx = $this->_con->pfx;
@@ -543,14 +550,14 @@ class Gatuf_Model {
 				}
 			} else {
 				$m->_a['views']['__manytomany__'] = array('join' => '',
-													 'where' => '');
+					'where' => '');
 				$p['view'] = '';
 			}
-			$m->_a['views'][$p['view'].'__manytomany__']['join'] .= 
+			$m->_a['views'][$p['view'].'__manytomany__']['join'] .=
 				' LEFT JOIN '.$dbname.'.'.$table.' ON '
-				.$this->_con->qn(strtolower($m->_a['model']).'_'.$m->primary_key).' = '.(isset ($m->_a['views'][$p['view'].'__manytomany__']['from']) ? $m->_a['views'][$p['view'].'__manytomany__']['from'] : $m->getSqlTable()).'.'.$m->primary_key;
+				.$this->_con->qn(strtolower($m->_a['model']).'_'.$m->primary_key).' = '.(isset($m->_a['views'][$p['view'].'__manytomany__']['from']) ? $m->_a['views'][$p['view'].'__manytomany__']['from'] : $m->getSqlTable()).'.'.$m->primary_key;
 
-			$m->_a['views'][$p['view'].'__manytomany__']['where'] = $this->_con->qn(strtolower($this->_a['model']).'_'.$this->primary_key).'='.$this->_con->esc ($this->_data[$this->primary_key]);
+			$m->_a['views'][$p['view'].'__manytomany__']['where'] = $this->_con->qn(strtolower($this->_a['model']).'_'.$this->primary_key).'='.$this->_con->esc($this->_data[$this->primary_key]);
 			$p['view'] = $p['view'].'__manytomany__';
 		}
 		return $m->getList($p);
@@ -559,13 +566,13 @@ class Gatuf_Model {
 	/**
 	 * Generate the SQL select from the columns
 	 */
-	function getSelect() {
+	public function getSelect() {
 		/*if (isset($this->_cache['getSelect'])) return $this->_cache['getSelect']; FIXME: Caché */
 		$select = array();
 		$table = $this->getSqlTable();
 		foreach ($this->_a['cols'] as $col=>$val) {
 			if ($val['type'] != 'Gatuf_DB_Field_Manytomany') {
-				$select[] = $table.'.'.$this->_con->qn($col).' AS '.$this->_con->qn($col); 
+				$select[] = $table.'.'.$this->_con->qn($col).' AS '.$this->_con->qn($col);
 			}
 		}
 		/*$this->_cache['getSelect'] = implode(', ', $select);
@@ -583,7 +590,7 @@ class Gatuf_Model {
 	 * @param string Where clause to update specific items. ('')
 	 * @return bool Success
 	 */
-	function update ($where='') {
+	public function update($where='') {
 		$this->preSave(false);
 		$req = 'UPDATE '.$this->getSqlTable().' SET'."\n";
 		$fields = array();
@@ -628,7 +635,7 @@ class Gatuf_Model {
 	 * @param bool Raw insert (false)
 	 * @return bool Success
 	 */
-	function create($raw=false) {
+	public function create($raw=false) {
 		if (!$raw) {
 			$this->preSave(true);
 		}
@@ -673,7 +680,7 @@ class Gatuf_Model {
 	 *
 	 * @return array Models deleted if deleting current model.
 	 */
-	function getDeleteSideEffect() {
+	public function getDeleteSideEffect() {
 		$affected = array();
 		foreach ($this->_m['list'] as $method=>$details) {
 			if (is_array($details)) {
@@ -701,7 +708,7 @@ class Gatuf_Model {
 	 *
 	 * FIXME: No real test of circular references. It can break.
 	 */
-	function delete() {
+	public function delete() {
 		if (false === $this->get($this->_data[$this->primary_key])) {
 			return false;
 		}
@@ -745,7 +752,7 @@ class Gatuf_Model {
 	/**
 	 * Reset the fields to default values.
 	 */
-	function _reset() {
+	public function _reset() {
 		foreach ($this->_a['cols'] as $col => $val) {
 			if (isset($val['default'])) {
 				$this->_data[$col] = $val['default'];
@@ -757,48 +764,54 @@ class Gatuf_Model {
 		}
 	}
 	
-	function getCount($p=array()) {
+	public function getCount($p=array()) {
 		$p['count'] = true;
 		$count = $this->getList($p);
 		return (int) $count;
 	}
 	
-	public function displayVal ($field) {
+	public function displayVal($field) {
 		return $this->$field;
 	}
 	
-	public function restore () {}
+	public function restore() {
+	}
 	
-	public function preSave ($create=false) {}
+	public function preSave($create=false) {
+	}
 	
-	public function postSave ($create=false) {}
+	public function postSave($create=false) {
+	}
 	
-	public function preDelete () {}
+	public function preDelete() {
+	}
 	
-	function setFromFormData ($cleaned_values) {
+	public function setFromFormData($cleaned_values) {
 		foreach ($cleaned_values as $key=>$val) {
 			$this->_data[$key] = $val;
 		}
 	}
 	
-	function _toDb ($val, $col) {
+	public function _toDb($val, $col) {
 		$m = $this->_con->type_cast[$this->_a['cols'][$col]['type']][1];
 		return $m($val, $this->_con);
 	}
 	
-	function _fromDb ($val, $col) {
+	public function _fromDb($val, $col) {
 		$m = $this->_con->type_cast[$this->_a['cols'][$col]['type']][0];
 		return ($m == 'Gatuf_DB_IdentityFromDb') ? $val : $m($val);
 	}
 	
 	protected function _setupAutomaticListMethods($type) {
 		$current_model = $this->_a['model'];
-		if (isset ($GLOBALS['_GATUF_models_related'][$type][$current_model])) {
+		if (isset($GLOBALS['_GATUF_models_related'][$type][$current_model])) {
 			$relations = $GLOBALS['_GATUF_models_related'][$type][$current_model];
 			foreach ($relations as $related) {
 				if ($related != $current_model) {
 					$model = new $related();
-				} else $model = clone $this;
+				} else {
+					$model = clone $this;
+				}
 				$fkeys = $model->getRelationKeysToModel($current_model, $type);
 				foreach ($fkeys as $fkey => $val) {
 					$mname = (isset($val['relate_name'])) ? $val['relate_name'] : $related;
@@ -815,14 +828,14 @@ class Gatuf_Model {
 	}
 }
 
-function Gatuf_Model_InArray ($model, $array) {
+function Gatuf_Model_InArray($model, $array) {
 	if ($model->$model->primary_key == '') {
 		return false;
 	}
 	
 	foreach ($array as $modelin) {
 		if ($modelin->_a['model'] == $model->_a['model']
-		    and $modelin->$modelin->primary_key == $model->$model->primary_key) {
+			and $modelin->$modelin->primary_key == $model->$model->primary_key) {
 			return true;
 		}
 	}
@@ -830,9 +843,9 @@ function Gatuf_Model_InArray ($model, $array) {
 }
 
 function Gatuf_Model_RemoveDuplicates($array) {
-	$res = array ();
+	$res = array();
 	foreach ($array as $model) {
-		if (!Gatuf_Model_InArray ($model, $res)) {
+		if (!Gatuf_Model_InArray($model, $res)) {
 			$res[] = $model;
 		}
 	}

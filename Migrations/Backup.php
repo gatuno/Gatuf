@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -31,28 +30,30 @@
  * @param string Name of the backup (null)
  * @return int The backup was correctly written
  */
-function Gatuf_Migrations_Backup_run($folder, $name=null)
-{
-    $models = array('Gatuf_DB_SchemaInfo',
-                    'Gatuf_Session',
-                    Gatuf::config('gatuf_custom_user','Gatuf_User'),
-                    Gatuf::config('gatuf_custom_group','Gatuf_Group'),
-                    'Gatuf_Message',
-                    'Gatuf_Permission',
-                    'Gatuf_GSetting',
-                    );
-    $db = Gatuf::db();
-    // Now, for each table, we dump the content in json, this is a
-    // memory intensive operation
-    $to_json = array();
-    foreach ($models as $model) {
-        $to_json[$model] = Gatuf_Test_Fixture::dump($model, false);
-    }
-    if (null == $name) {
-        $name = date('Y-m-d');
-    }
-    return file_put_contents(sprintf('%s/%s-Gatuf.json', $folder, $name),
-                             json_encode($to_json), LOCK_EX);
+function Gatuf_Migrations_Backup_run($folder, $name=null) {
+	$models = array('Gatuf_DB_SchemaInfo',
+		'Gatuf_Session',
+		Gatuf::config('gatuf_custom_user', 'Gatuf_User'),
+		Gatuf::config('gatuf_custom_group', 'Gatuf_Group'),
+		'Gatuf_Message',
+		'Gatuf_Permission',
+		'Gatuf_GSetting',
+	);
+	$db = Gatuf::db();
+	// Now, for each table, we dump the content in json, this is a
+	// memory intensive operation
+	$to_json = array();
+	foreach ($models as $model) {
+		$to_json[$model] = Gatuf_Test_Fixture::dump($model, false);
+	}
+	if (null == $name) {
+		$name = date('Y-m-d');
+	}
+	return file_put_contents(
+		sprintf('%s/%s-Gatuf.json', $folder, $name),
+		json_encode($to_json),
+		LOCK_EX
+	);
 }
 
 /**
@@ -62,25 +63,24 @@ function Gatuf_Migrations_Backup_run($folder, $name=null)
  * @param string Backup name
  * @return bool Success
  */
-function Gatuf_Migrations_Backup_restore($folder, $name)
-{
-    $models = array('Gatuf_DB_SchemaInfo',
-                    'Gatuf_Session',
-                    Gatuf::config('gatuf_custom_user','Gatuf_User'),
-                    Gatuf::config('gatuf_custom_group','Gatuf_Group'),
-                    'Gatuf_Message',
-                    'Gatuf_Permission',
-                    'Gatuf_GSetting',
-                    );
-    $db = Gatuf::db();
-    $schema = new Gatuf_DB_Schema($db);
-    foreach ($models as $model) {
-        $schema->model = new $model();
-        $schema->createTables();
-    }
-    $full_data = json_decode(file_get_contents(sprintf('%s/%s-Gatuf.json', $folder, $name)), true);
-    foreach ($full_data as $model => $data) {
-        Gatuf_Test_Fixture::load($data, false);
-    }
-    return true;
+function Gatuf_Migrations_Backup_restore($folder, $name) {
+	$models = array('Gatuf_DB_SchemaInfo',
+		'Gatuf_Session',
+		Gatuf::config('gatuf_custom_user', 'Gatuf_User'),
+		Gatuf::config('gatuf_custom_group', 'Gatuf_Group'),
+		'Gatuf_Message',
+		'Gatuf_Permission',
+		'Gatuf_GSetting',
+	);
+	$db = Gatuf::db();
+	$schema = new Gatuf_DB_Schema($db);
+	foreach ($models as $model) {
+		$schema->model = new $model();
+		$schema->createTables();
+	}
+	$full_data = json_decode(file_get_contents(sprintf('%s/%s-Gatuf.json', $folder, $name)), true);
+	foreach ($full_data as $model => $data) {
+		Gatuf_Test_Fixture::load($data, false);
+	}
+	return true;
 }

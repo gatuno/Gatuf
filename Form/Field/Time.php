@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -29,29 +28,28 @@ class Gatuf_Form_Field_Time extends Gatuf_Form_Field {
 		if (in_array($value, $this->empty_values)) {
 			return '';
 		}
-		$match = array ();
+		$match = array();
 		if (preg_match("/^(2[0-3]|[01][0-9]|[0-9]):([0-5][0-9])(:[0-5][0-9])?\s*([ap]m)?$/i", $value, $match)) {
 			/* Valido */
 			$hora = $match[1];
 			$minuto = $match[2];
 			
-			if (isset ($match[4])) {
+			if (isset($match[4])) {
 				if ($hora > 12) {
-					throw new Gatuf_Form_Invalid (__('Enter a valid time.'));
+					throw new Gatuf_Form_Invalid(__('Enter a valid time.'));
 				}
 				if ($hora != 12 && $match[4] == 'pm') {
 					$hora += 12;
 				}
 			}
 			$seg = 0;
-			if (isset ($match[3])) {
-				$seg = substr ($match[3], 1);
+			if (isset($match[3])) {
+				$seg = substr($match[3], 1);
 			}
-			
 		} else {
-		    throw new Gatuf_Form_Invalid (__('Enter a valid time.'));
+			throw new Gatuf_Form_Invalid(__('Enter a valid time.'));
 		}
-		$full = sprintf ('%02s:%02s:%02s', $hora, $minuto, $seg);
-		return date_create_from_format ('H:i:s', $full);
+		$full = sprintf('%02s:%02s:%02s', $hora, $minuto, $seg);
+		return date_create_from_format('H:i:s', $full);
 	}
 }

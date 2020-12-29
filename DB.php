@@ -1,8 +1,16 @@
 <?php
 
 class Gatuf_DB {
-	static function get($engine, $server, $database, $login, $password, 
-	                    $prefix, $debug=false, $version='') {
+	public static function get(
+		$engine,
+		$server,
+		$database,
+		$login,
+		$password,
+		$prefix,
+		$debug=false,
+		$version=''
+	) {
 		$engine = 'Gatuf_DB_'.$engine;
 		$con = new $engine($login, $password, $server, $database, $prefix, $debug, $version);
 		return $con;
@@ -10,54 +18,56 @@ class Gatuf_DB {
 }
 
 function Gatuf_DB_getConnection() {
-	if (isset($GLOBALS['_GATUF_db']) && 
+	if (isset($GLOBALS['_GATUF_db']) &&
 		(is_resource($GLOBALS['_GATUF_db']->con_id) or is_object($GLOBALS['_GATUF_db']->con_id))) {
 		return $GLOBALS['_GATUF_db'];
 	}
-	$GLOBALS['_GATUF_db'] = Gatuf_DB::get(Gatuf::config('db_engine'),
-	                                      Gatuf::config('db_server'),
-	                                      Gatuf::config('db_database'),
-	                                      Gatuf::config('db_login'),
-	                                      Gatuf::config('db_password'),
-	                                      Gatuf::config('db_table_prefix'),
-	                                      Gatuf::config('debug'));
+	$GLOBALS['_GATUF_db'] = Gatuf_DB::get(
+		Gatuf::config('db_engine'),
+		Gatuf::config('db_server'),
+		Gatuf::config('db_database'),
+		Gatuf::config('db_login'),
+		Gatuf::config('db_password'),
+		Gatuf::config('db_table_prefix'),
+		Gatuf::config('debug')
+	);
 	return $GLOBALS['_GATUF_db'];
 }
 
 function Gatuf_DB_defaultTypecast() {
 	return array(
-	             'Gatuf_DB_Field_Boolean' =>
-	                 array('Gatuf_DB_BooleanFromDb', 'Gatuf_DB_BooleanToDb'),
-	             'Gatuf_DB_Field_Date' =>
-	                 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_DateToDb'),
-	             'Gatuf_DB_Field_Datetime' =>
-	                 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
-	             'Gatuf_DB_Field_Email' =>
-	                 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
-	             'Gatuf_DB_Field_File' =>
-	                 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
-	             'Gatuf_DB_Field_Float' =>
-	                 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
-	             'Gatuf_DB_Field_Foreignkey' =>
-	                 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
-	             'Gatuf_DB_Field_Integer' =>
-	                 array('Gatuf_DB_IntegerFromDb', 'Gatuf_DB_IntegerToDb'),
-	             'Gatuf_DB_Field_Password' =>
-	                 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_PasswordToDb'),
-	             'Gatuf_DB_Field_Sequence' =>
-	                 array('Gatuf_DB_IntegerFromDb', 'Gatuf_DB_IntegerToDb'),
-	             'Gatuf_DB_Field_Text' =>
-	                 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
-	             'Gatuf_DB_Field_Varchar' =>
-	                 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
-	             'Gatuf_DB_Field_Serialized' =>
-	                 array('Gatuf_DB_SerializedFromDb', 'Gatuf_DB_SerializedToDb'),
-	             'Gatuf_DB_Field_Compressed' =>
-	                 array('Gatuf_DB_CompressedFromDb', 'Gatuf_DB_CompressedToDb'),
-	             'Gatuf_DB_Field_Char' =>
-	                 array('Gatuf_DB_IdentityFromDB', 'Gatuf_DB_IdentityToDb'),
-	             'Gatuf_DB_Field_Time' =>
-	                 array('Gatuf_DB_TimeFromDb', 'Gatuf_DB_TimeToDb'),
+		'Gatuf_DB_Field_Boolean' =>
+					 array('Gatuf_DB_BooleanFromDb', 'Gatuf_DB_BooleanToDb'),
+		'Gatuf_DB_Field_Date' =>
+					 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_DateToDb'),
+		'Gatuf_DB_Field_Datetime' =>
+					 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
+		'Gatuf_DB_Field_Email' =>
+					 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
+		'Gatuf_DB_Field_File' =>
+					 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
+		'Gatuf_DB_Field_Float' =>
+					 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
+		'Gatuf_DB_Field_Foreignkey' =>
+					 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
+		'Gatuf_DB_Field_Integer' =>
+					 array('Gatuf_DB_IntegerFromDb', 'Gatuf_DB_IntegerToDb'),
+		'Gatuf_DB_Field_Password' =>
+					 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_PasswordToDb'),
+		'Gatuf_DB_Field_Sequence' =>
+					 array('Gatuf_DB_IntegerFromDb', 'Gatuf_DB_IntegerToDb'),
+		'Gatuf_DB_Field_Text' =>
+					 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
+		'Gatuf_DB_Field_Varchar' =>
+					 array('Gatuf_DB_IdentityFromDb', 'Gatuf_DB_IdentityToDb'),
+		'Gatuf_DB_Field_Serialized' =>
+					 array('Gatuf_DB_SerializedFromDb', 'Gatuf_DB_SerializedToDb'),
+		'Gatuf_DB_Field_Compressed' =>
+					 array('Gatuf_DB_CompressedFromDb', 'Gatuf_DB_CompressedToDb'),
+		'Gatuf_DB_Field_Char' =>
+					 array('Gatuf_DB_IdentityFromDB', 'Gatuf_DB_IdentityToDb'),
+		'Gatuf_DB_Field_Time' =>
+					 array('Gatuf_DB_TimeFromDb', 'Gatuf_DB_TimeToDb'),
 	);
 }
 
@@ -79,28 +89,28 @@ function Gatuf_DB_IdentityToDb($val, $db) {
 	return $db->esc($val);
 }
 
-function Gatuf_DB_DateToDb ($val, $db) {
+function Gatuf_DB_DateToDb($val, $db) {
 	if (null === $val) {
 		return 'NULL';
 	}
-	if (false === strpos ($val, '/')) {
-		return $db->esc ($val);
+	if (false === strpos($val, '/')) {
+		return $db->esc($val);
 	}
-	return $db->esc (implode('-', array_reverse(explode('/', $val))));
+	return $db->esc(implode('-', array_reverse(explode('/', $val))));
 }
 
-function Gatuf_DB_TimeToDb ($val, $db) {
+function Gatuf_DB_TimeToDb($val, $db) {
 	if (null === $val) {
 		return 'NULL';
 	}
 	if ($val instanceof DateTime) {
-		return $db->esc ($val->format ('H:i:s'));
+		return $db->esc($val->format('H:i:s'));
 	}
-	return $db->esc ($val);
+	return $db->esc($val);
 }
 
-function Gatuf_DB_TimeFromDb ($val) {
-	return date_create_from_format ('H:i:s', $val);
+function Gatuf_DB_TimeFromDb($val) {
+	return date_create_from_format('H:i:s', $val);
 }
 
 function Gatuf_DB_SerializedFromDb($val) {
@@ -162,4 +172,3 @@ function Gatuf_DB_PasswordToDb($val, $db) {
 	$salt = Gatuf_Utils::getRandomString(5);
 	return $db->esc('sha1:'.$salt.':'.sha1($salt.$val));
 }
-

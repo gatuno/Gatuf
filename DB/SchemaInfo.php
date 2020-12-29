@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -21,33 +20,31 @@
 #
 # ***** END LICENSE BLOCK ***** */
 
-class Gatuf_DB_SchemaInfo extends Gatuf_Model
-{
-    public $_model = __CLASS__;
+class Gatuf_DB_SchemaInfo extends Gatuf_Model {
+	public $_model = __CLASS__;
 
-    function init()
-    {
-        $this->_a['table'] = 'schema_info';
-        $this->_a['model'] = 'Gatuf_DB_SchemaInfo';
-        $this->_a['cols'] = array(
-                             // It is mandatory to have an "id" column.
-                            'id' =>
-                            array(
-                                  'type' => 'Gatuf_DB_Field_Sequence',
-                                  //It is automatically added.
-                                  'blank' => true, 
-                                  ),
-                            'application' =>
-                            array(
-                                  'type' => 'Gatuf_DB_Field_Varchar',
-                                  'blank' => false,
-                                  'unique' => true,
-                                  ),
-                            'version' => 
-                            array(
-                                  'type' => 'Gatuf_DB_Field_Integer',
-                                  'blank' => false,
-                                  ),
-                            );
-    }
+	public function init() {
+		$this->_a['table'] = 'schema_info';
+		$this->_a['model'] = 'Gatuf_DB_SchemaInfo';
+		$this->_a['cols'] = array(
+			// It is mandatory to have an "id" column.
+			'id' =>
+			array(
+				'type' => 'Gatuf_DB_Field_Sequence',
+				//It is automatically added.
+				'blank' => true,
+			),
+			'application' =>
+			array(
+				'type' => 'Gatuf_DB_Field_Varchar',
+				'blank' => false,
+				'unique' => true,
+			),
+			'version' =>
+			array(
+				'type' => 'Gatuf_DB_Field_Integer',
+				'blank' => false,
+			),
+		);
+	}
 }

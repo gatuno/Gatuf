@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -25,13 +24,11 @@
  * Simple input of type file.
  */
 class Gatuf_Form_Widget_FileInput extends Gatuf_Form_Widget_Input {
-    public $input_type = 'file';
-    public $needs_multipart_form = true;
+	public $input_type = 'file';
+	public $needs_multipart_form = true;
 
-    public function render($name, $value, $extra_attrs=array())
-    {
-        $value = '';
-        return parent::render($name, $value, $extra_attrs);
-    }
-
+	public function render($name, $value, $extra_attrs=array()) {
+		$value = '';
+		return parent::render($name, $value, $extra_attrs);
+	}
 }

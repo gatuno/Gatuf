@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -33,75 +32,75 @@
  * Credit Anonymous on http://www.php.net/mcrypt
  */
 class Gatuf_Crypt {
-    public $key = '';
+	public $key = '';
 
-    /**
-     * Construct the encryption object.
-     *
-     * @param string The encryption key ('')
-     */ 
-    function __construct($key='') {
-        $this->key = $key;
-    }
+	/**
+	 * Construct the encryption object.
+	 *
+	 * @param string The encryption key ('')
+	 */
+	public function __construct($key='') {
+		$this->key = $key;
+	}
 
-    /**
-     * Encrypt a string with a key.
-     *
-     * If the key is not given, $this->key is used. If $this->key is
-     * empty an exception is raised.
-     *
-     * @param string String to encode
-     * @param string Encryption key ('')
-     * @return string Encoded string
-     */
-    function encrypt($string, $key='') { 
-        if ($key == '') {
-            $key = $this->key;
-        }
-        if ($key == '') {
-            throw new Exception('No encryption key provided.');
-        }
-        $result = ''; 
-        $strlen = strlen($string);
-        $keylen = strlen($key);
-        for($i=0; $i<$strlen; $i++) { 
-            $char = substr($string, $i, 1); 
-            $keychar = substr($key, ($i % $keylen)-1, 1); 
-            $char = chr(ord($char)+ord($keychar));
-            $result.=$char; 
-        }
-        $result = base64_encode($result);
-        return str_replace(array('+','/','='), array('-','_','~'), $result);
-    }
+	/**
+	 * Encrypt a string with a key.
+	 *
+	 * If the key is not given, $this->key is used. If $this->key is
+	 * empty an exception is raised.
+	 *
+	 * @param string String to encode
+	 * @param string Encryption key ('')
+	 * @return string Encoded string
+	 */
+	public function encrypt($string, $key='') {
+		if ($key == '') {
+			$key = $this->key;
+		}
+		if ($key == '') {
+			throw new Exception('No encryption key provided.');
+		}
+		$result = '';
+		$strlen = strlen($string);
+		$keylen = strlen($key);
+		for ($i=0; $i<$strlen; $i++) {
+			$char = substr($string, $i, 1);
+			$keychar = substr($key, ($i % $keylen)-1, 1);
+			$char = chr(ord($char)+ord($keychar));
+			$result.=$char;
+		}
+		$result = base64_encode($result);
+		return str_replace(array('+','/','='), array('-','_','~'), $result);
+	}
 
-    /**
-     * Decrypt a string with a key.
-     *
-     * If the key is not given, $this->key is used. If $this->key is
-     * empty an exception is raised.
-     *
-     * @param string String to decode
-     * @param string Encryption key ('')
-     * @return string Decoded string
-     */
-    function decrypt($string, $key='') {
-        if ($key == '') {
-            $key = $this->key;
-        }
-        if ($key == '') {
-            throw new Exception('No encryption key provided.');
-        }
-        $result = '';
-        $string = str_replace(array('-','_','~'), array('+','/','='), $string);
-        $string = base64_decode($string);
-        $strlen = strlen($string);
-        $keylen = strlen($key);
-        for($i=0; $i<$strlen; $i++) { 
-            $char = substr($string, $i, 1);
-            $keychar = substr($key, ($i % $keylen)-1, 1);
-            $char = chr(ord($char)-ord($keychar));
-            $result.=$char;
-        }
-        return $result;
-    }
+	/**
+	 * Decrypt a string with a key.
+	 *
+	 * If the key is not given, $this->key is used. If $this->key is
+	 * empty an exception is raised.
+	 *
+	 * @param string String to decode
+	 * @param string Encryption key ('')
+	 * @return string Decoded string
+	 */
+	public function decrypt($string, $key='') {
+		if ($key == '') {
+			$key = $this->key;
+		}
+		if ($key == '') {
+			throw new Exception('No encryption key provided.');
+		}
+		$result = '';
+		$string = str_replace(array('-','_','~'), array('+','/','='), $string);
+		$string = base64_decode($string);
+		$strlen = strlen($string);
+		$keylen = strlen($key);
+		for ($i=0; $i<$strlen; $i++) {
+			$char = substr($string, $i, 1);
+			$keychar = substr($key, ($i % $keylen)-1, 1);
+			$char = chr(ord($char)-ord($keychar));
+			$result.=$char;
+		}
+		return $result;
+	}
 }

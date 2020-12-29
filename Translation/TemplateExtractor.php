@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -37,27 +36,27 @@ class Gatuf_Translation_TemplateExtractor {
 	/** 
 	 * Variables. 
 	 */
-	protected $_vartype = array(T_CONSTANT_ENCAPSED_STRING, 
-								T_DNUMBER, T_ENCAPSED_AND_WHITESPACE, 
-								T_LNUMBER, T_OBJECT_OPERATOR, T_STRING, 
-								T_WHITESPACE, T_ARRAY);
+	protected $_vartype = array(T_CONSTANT_ENCAPSED_STRING,
+		T_DNUMBER, T_ENCAPSED_AND_WHITESPACE,
+		T_LNUMBER, T_OBJECT_OPERATOR, T_STRING,
+		T_WHITESPACE, T_ARRAY);
 
 	/** 
 	 * Assignation operators. 
 	 */
-	protected $_assignOp = array(T_AND_EQUAL, T_DIV_EQUAL, T_MINUS_EQUAL, 
-								 T_MOD_EQUAL, T_MUL_EQUAL, T_OR_EQUAL, 
-								 T_PLUS_EQUAL, T_PLUS_EQUAL, T_SL_EQUAL, 
-								 T_SR_EQUAL, T_XOR_EQUAL);
+	protected $_assignOp = array(T_AND_EQUAL, T_DIV_EQUAL, T_MINUS_EQUAL,
+		T_MOD_EQUAL, T_MUL_EQUAL, T_OR_EQUAL,
+		T_PLUS_EQUAL, T_PLUS_EQUAL, T_SL_EQUAL,
+		T_SR_EQUAL, T_XOR_EQUAL);
 
 	/** 
 	 * Operators. 
 	 */
-	protected  $_op = array(T_BOOLEAN_AND, T_BOOLEAN_OR, T_EMPTY, T_INC, 
-							T_ISSET, T_IS_EQUAL, T_IS_GREATER_OR_EQUAL, 
-							T_IS_IDENTICAL, T_IS_NOT_EQUAL, T_IS_NOT_IDENTICAL,
-							T_IS_SMALLER_OR_EQUAL, T_LOGICAL_AND, T_LOGICAL_OR,
-							T_LOGICAL_XOR, T_SR, T_SL, T_DOUBLE_ARROW);
+	protected $_op = array(T_BOOLEAN_AND, T_BOOLEAN_OR, T_EMPTY, T_INC,
+		T_ISSET, T_IS_EQUAL, T_IS_GREATER_OR_EQUAL,
+		T_IS_IDENTICAL, T_IS_NOT_EQUAL, T_IS_NOT_IDENTICAL,
+		T_IS_SMALLER_OR_EQUAL, T_LOGICAL_AND, T_LOGICAL_OR,
+		T_LOGICAL_XOR, T_SR, T_SL, T_DOUBLE_ARROW);
 
 	/**
 	 * Authorized elements in variables.
@@ -77,24 +76,24 @@ class Gatuf_Translation_TemplateExtractor {
 	/**
 	 * Output filters.
 	 */
-	protected $_modifier = array('upper' => 'strtoupper', 
-								 'lower' => 'strtolower',
-								 'escxml' => 'htmlspecialchars', 
-								 'escape' => 'Gatuf_Template_htmlspecialchars',
-								 'strip_tags' => 'strip_tags', 
-								 'escurl' => 'rawurlencode',
-								 'capitalize' => 'ucwords',
-								 // Not var_export because of recursive issues.
-								 'debug' => 'print_r', 
-								 'fulldebug' => 'var_export',
-								 'count' => 'count',
-								 'nl2br' => 'nl2br',
-								 'trim' => 'trim',
-								 'unsafe' => 'Gatuf_Template_unsafe',
-								 'safe' => 'Gatuf_Template_unsafe',
-								 'date' => 'Gatuf_Template_dateFormat',
-								 'time' => 'Gatuf_Template_timeFormat',
-								 );
+	protected $_modifier = array('upper' => 'strtoupper',
+		'lower' => 'strtolower',
+		'escxml' => 'htmlspecialchars',
+		'escape' => 'Gatuf_Template_htmlspecialchars',
+		'strip_tags' => 'strip_tags',
+		'escurl' => 'rawurlencode',
+		'capitalize' => 'ucwords',
+		// Not var_export because of recursive issues.
+		'debug' => 'print_r',
+		'fulldebug' => 'var_export',
+		'count' => 'count',
+		'nl2br' => 'nl2br',
+		'trim' => 'trim',
+		'unsafe' => 'Gatuf_Template_unsafe',
+		'safe' => 'Gatuf_Template_unsafe',
+		'date' => 'Gatuf_Template_dateFormat',
+		'time' => 'Gatuf_Template_timeFormat',
+	);
 
 	/**
 	 * After the compilation is completed, this contains the list of
@@ -111,8 +110,8 @@ class Gatuf_Translation_TemplateExtractor {
 	 * in the configuration of the application.
 	 */
 	protected $_allowedTags = array(
-									'url' => 'Gatuf_Template_Tag_Url',
-									);
+		'url' => 'Gatuf_Template_Tag_Url',
+	);
 	/**
 	 * During compilation, all the tags are created once so to query
 	 * their interface easily.
@@ -158,8 +157,7 @@ class Gatuf_Translation_TemplateExtractor {
 	 *			  should be found. (array())
 	 * @param bool Load directly the template content. (true)
 	 */
-	function __construct($template_file, $folders=array(), $load=true)
-	{
+	public function __construct($template_file, $folders=array(), $load=true) {
 		$allowedtags = Gatuf::config('template_tags', array());
 		$this->_allowedTags = array_merge($allowedtags, $this->_allowedTags);
 		$modifiers = Gatuf::config('template_modifiers', array());
@@ -171,8 +169,11 @@ class Gatuf_Translation_TemplateExtractor {
 		$this->_sourceFile = $template_file;
 		$this->_allowedInVar = array_merge($this->_vartype, $this->_op);
 		$this->_allowedInExpr = array_merge($this->_vartype, $this->_op);
-		$this->_allowedAssign = array_merge($this->_vartype, $this->_assignOp, 
-											$this->_op);
+		$this->_allowedAssign = array_merge(
+			$this->_vartype,
+			$this->_assignOp,
+			$this->_op
+		);
 		$this->templateFolders = $folders;
 		if ($load) {
 			$this->loadTemplateFile($template_file);
@@ -182,8 +183,7 @@ class Gatuf_Translation_TemplateExtractor {
 	/**
 	 * Get blocktrans.
 	 */
-	function getBlockTrans()
-	{
+	public function getBlockTrans() {
 		$tplcontent = $this->templateContent;
 		$tplcontent = preg_replace('!{\*(.*?)\*}!s', '', $tplcontent);
 		$match = array();
@@ -198,8 +198,7 @@ class Gatuf_Translation_TemplateExtractor {
 	/**
 	 * Get simple trans call.
 	 */
-	function getSimpleTrans()
-	{
+	public function getSimpleTrans() {
 		$tplcontent = $this->templateContent;
 		$tplcontent = preg_replace('!{\*(.*?)\*}!s', '', $tplcontent);
 		$match = array();
@@ -216,8 +215,7 @@ class Gatuf_Translation_TemplateExtractor {
 	 *
 	 * @return string PHP code of the compiled template.
 	 */
-	function compile() 
-	{
+	public function compile() {
 		$result = '';
 		$blocktrans = $this->getBlockTrans();
 		// Parse the blocktrans
@@ -226,26 +224,34 @@ class Gatuf_Translation_TemplateExtractor {
 			if (preg_match('!{blocktrans(.*?)}(.*?){plural}(.*?){/blocktrans}!s', $block, $match)) {
 				$sing = $match[2];
 				$plural = $match[3];
-				$sing = preg_replace_callback('/{((.).*?)}/s', 
-											   array($this, '_callbackInTransBlock'), 
-											   $sing);
-				$plural = preg_replace_callback('/{((.).*?)}/s', 
-											   array($this, '_callbackInTransBlock'), 
-											   $plural);
+				$sing = preg_replace_callback(
+					'/{((.).*?)}/s',
+					array($this, '_callbackInTransBlock'),
+					$sing
+				);
+				$plural = preg_replace_callback(
+					'/{((.).*?)}/s',
+					array($this, '_callbackInTransBlock'),
+					$plural
+				);
 				$result .= '_n(\''.addcslashes($sing, "'").'\', \''.addcslashes($plural, "'").'\', $n);'."\n";
 			} elseif (preg_match('!{blocktrans}(.*?){/blocktrans}!s', $block, $match)) {
-				$sing = preg_replace_callback('/{((.).*?)}/s', 
-											   array($this, '_callbackInTransBlock'), 
-											   $match[1]);
+				$sing = preg_replace_callback(
+					'/{((.).*?)}/s',
+					array($this, '_callbackInTransBlock'),
+					$match[1]
+				);
 				$result .= '__(\''.addcslashes($sing, "'").'\');'."\n";
 			}
 		}
 
 		$simpletrans = $this->getSimpleTrans();
 		foreach ($simpletrans as $content) {
-			$result .= preg_replace_callback('/{((.).*?)}/s', 
-											 array($this, '_callback'), 
-											 $content);
+			$result .= preg_replace_callback(
+				'/{((.).*?)}/s',
+				array($this, '_callback'),
+				$content
+			);
 		}
 		return '<?php # This is not a valid php code. It is just for gettext use'."\n\n".$result.' ?>';
 	}
@@ -259,8 +265,7 @@ class Gatuf_Translation_TemplateExtractor {
 	 *
 	 * @param string Relative path of the file to load.
 	 */
-	function loadTemplateFile($file)
-	{
+	public function loadTemplateFile($file) {
 		// FIXME: Very small security check, could be better.
 		if (strpos($file, '..') !== false) {
 			throw new Exception(sprintf(__('Template file contains invalid characters: %s'), $file));
@@ -275,9 +280,8 @@ class Gatuf_Translation_TemplateExtractor {
 		throw new Exception(sprintf(__('Template file not found: %s'), $file));
 	}
 
-	function _callback($matches) 
-	{
-		list(,$tag, $firstcar) = $matches;
+	public function _callback($matches) {
+		list(, $tag, $firstcar) = $matches;
 		if ($firstcar != 't') {
 			trigger_error(sprintf(__('Invalid tag in translation extractor: %s'), $tag), E_USER_ERROR);
 			return '';
@@ -287,19 +291,20 @@ class Gatuf_Translation_TemplateExtractor {
 			trigger_error(sprintf(__('Invalid function syntax: %s'), $tag), E_USER_ERROR);
 			return '';
 		}
-		if (count($m) == 4){
+		if (count($m) == 4) {
 			$m[2] = $m[3];
 		}
-		if (!isset($m[2])) $m[2] = '';
+		if (!isset($m[2])) {
+			$m[2] = '';
+		}
 		if ($m[1] == 'trans') {
 			return $this->_parseFunction($m[1], $m[2]);
-		} 
+		}
 		return '';
 	}
 
-	function _callbackInTransBlock($matches) 
-	{
-		list(,$tag, $firstcar) = $matches;
+	public function _callbackInTransBlock($matches) {
+		list(, $tag, $firstcar) = $matches;
 		if (!preg_match('/^\$|[\'"]|[a-zA-Z\/]$/', $firstcar)) {
 			trigger_error(sprintf(__('Invalid tag syntax: %s'), $tag), E_USER_ERROR);
 			return '';
@@ -313,19 +318,17 @@ class Gatuf_Translation_TemplateExtractor {
 		return '';
 	}
 
-	function _parseVariable($expr)
-	{
+	public function _parseVariable($expr) {
 		$tok = explode('|', $expr);
 		$res = $this->_parseFinal(array_shift($tok), $this->_allowedInVar);
 		// We do not take into account the modifiers.
 		return $res;
 	}
 
-	function _parseFunction($name, $args)
-	{
+	public function _parseFunction($name, $args) {
 		switch ($name) {
 		case 'trans':
-			$argfct = $this->_parseFinal($args, $this->_allowedAssign); 
+			$argfct = $this->_parseFinal($args, $this->_allowedAssign);
 			$res = '__('.$argfct.');'."\n";
 			break;
 		default:
@@ -350,9 +353,11 @@ class Gatuf_Translation_TemplateExtractor {
 
 	*/
 
-	function _parseFinal($string, $allowed=array(), 
-						 $exceptchar=array(';'))
-	{
+	public function _parseFinal(
+		$string,
+		$allowed=array(),
+		$exceptchar=array(';')
+	) {
 		$tokens = token_get_all('<?php '.$string.'?>');
 		$result = '';
 		$first = true;
@@ -373,7 +378,7 @@ class Gatuf_Translation_TemplateExtractor {
 			if (is_array($tok)) {
 				list($type, $str) = $tok;
 				$first = false;
-				if($type == T_CLOSE_TAG){
+				if ($type == T_CLOSE_TAG) {
 					continue;
 				}
 				if ($type == T_AS) {
@@ -413,4 +418,3 @@ class Gatuf_Translation_TemplateExtractor {
 		return $result;
 	}
 }
-

@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -21,6 +20,5 @@
 #
 # ***** END LICENSE BLOCK ***** */
 
-class Gatuf_Exception_DoesNotExist extends Gatuf_Exception
-{
+class Gatuf_Exception_DoesNotExist extends Gatuf_Exception {
 }

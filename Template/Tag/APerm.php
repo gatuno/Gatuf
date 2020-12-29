@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -34,16 +33,14 @@
  * </code>
  *
  */
-class Gatuf_Template_Tag_APerm extends Gatuf_Template_Tag
-{
-    /**
-     * @param string Variable to get the permission
-     * @param Pluf_User
-     * @param string Permission string
-     * @param mixed Optional Pluf_Model if using row level permission (null)
-     */
-    function start($var, $user, $perm, $object=null)
-    {
-        $this->context->set($var, $user->hasPerm($perm, $object));
-    }
+class Gatuf_Template_Tag_APerm extends Gatuf_Template_Tag {
+	/**
+	 * @param string Variable to get the permission
+	 * @param Pluf_User
+	 * @param string Permission string
+	 * @param mixed Optional Pluf_Model if using row level permission (null)
+	 */
+	public function start($var, $user, $perm, $object=null) {
+		$this->context->set($var, $user->hasPerm($perm, $object));
+	}
 }

@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -31,144 +30,147 @@
  * is checking that all the output is valid HTML and write a logfile if
  * this is not the case.
  */
-class Gatuf_HTTP_Response
-{
-    /**
-     * Content of the response.
-     */
-    public $content = '';
+class Gatuf_HTTP_Response {
+	/**
+	 * Content of the response.
+	 */
+	public $content = '';
 
-    /**
-     * Array of the headers to add.
-     *
-     * For example $this->headers['Content-Type'] = 'text/html; charset=utf-8';
-     */
-    public $headers = array();
+	/**
+	 * Array of the headers to add.
+	 *
+	 * For example $this->headers['Content-Type'] = 'text/html; charset=utf-8';
+	 */
+	public $headers = array();
 
-    /**
-     * Status code of the answer.
-     */
-    public $status_code = 200;
+	/**
+	 * Status code of the answer.
+	 */
+	public $status_code = 200;
 
-    /**
-     * Cookies to send.
-     *
-     * $this->cookies['my_cookie'] = 'content of the cookie';
-     */
-    public $cookies = array();
+	/**
+	 * Cookies to send.
+	 *
+	 * $this->cookies['my_cookie'] = 'content of the cookie';
+	 */
+	public $cookies = array();
 
-    /**
-     * Status code list.
-     *
-     * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
-     */
-    public $status_code_list = array(
-                                     '100' => 'CONTINUE',
-                                     '101' => 'SWITCHING PROTOCOLS',
-                                     '200' => 'OK',
-                                     '201' => 'CREATED',
-                                     '202' => 'ACCEPTED',
-                                     '203' => 'NON-AUTHORITATIVE INFORMATION',
-                                     '204' => 'NO CONTENT',
-                                     '205' => 'RESET CONTENT',
-                                     '206' => 'PARTIAL CONTENT',
-                                     '300' => 'MULTIPLE CHOICES',
-                                     '301' => 'MOVED PERMANENTLY',
-                                     '302' => 'FOUND',
-                                     '303' => 'SEE OTHER',
-                                     '304' => 'NOT MODIFIED',
-                                     '305' => 'USE PROXY',
-                                     '306' => 'RESERVED',
-                                     '307' => 'TEMPORARY REDIRECT',
-                                     '400' => 'BAD REQUEST',
-                                     '401' => 'UNAUTHORIZED',
-                                     '402' => 'PAYMENT REQUIRED',
-                                     '403' => 'FORBIDDEN',
-                                     '404' => 'NOT FOUND',
-                                     '405' => 'METHOD NOT ALLOWED',
-                                     '406' => 'NOT ACCEPTABLE',
-                                     '407' => 'PROXY AUTHENTICATION REQUIRED',
-                                     '408' => 'REQUEST TIMEOUT',
-                                     '409' => 'CONFLICT',
-                                     '410' => 'GONE',
-                                     '411' => 'LENGTH REQUIRED',
-                                     '412' => 'PRECONDITION FAILED',
-                                     '413' => 'REQUEST ENTITY TOO LARGE',
-                                     '414' => 'REQUEST-URI TOO LONG',
-                                     '415' => 'UNSUPPORTED MEDIA TYPE',
-                                     '416' => 'REQUESTED RANGE NOT SATISFIABLE',
-                                     '417' => 'EXPECTATION FAILED',
-                                     '500' => 'INTERNAL SERVER ERROR',
-                                     '501' => 'NOT IMPLEMENTED',
-                                     '502' => 'BAD GATEWAY',
-                                     '503' => 'SERVICE UNAVAILABLE',
-                                     '504' => 'GATEWAY TIMEOUT',
-                                     '505' => 'HTTP VERSION NOT SUPPORTED'
-                                     );
+	/**
+	 * Status code list.
+	 *
+	 * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+	 */
+	public $status_code_list = array(
+		'100' => 'CONTINUE',
+		'101' => 'SWITCHING PROTOCOLS',
+		'200' => 'OK',
+		'201' => 'CREATED',
+		'202' => 'ACCEPTED',
+		'203' => 'NON-AUTHORITATIVE INFORMATION',
+		'204' => 'NO CONTENT',
+		'205' => 'RESET CONTENT',
+		'206' => 'PARTIAL CONTENT',
+		'300' => 'MULTIPLE CHOICES',
+		'301' => 'MOVED PERMANENTLY',
+		'302' => 'FOUND',
+		'303' => 'SEE OTHER',
+		'304' => 'NOT MODIFIED',
+		'305' => 'USE PROXY',
+		'306' => 'RESERVED',
+		'307' => 'TEMPORARY REDIRECT',
+		'400' => 'BAD REQUEST',
+		'401' => 'UNAUTHORIZED',
+		'402' => 'PAYMENT REQUIRED',
+		'403' => 'FORBIDDEN',
+		'404' => 'NOT FOUND',
+		'405' => 'METHOD NOT ALLOWED',
+		'406' => 'NOT ACCEPTABLE',
+		'407' => 'PROXY AUTHENTICATION REQUIRED',
+		'408' => 'REQUEST TIMEOUT',
+		'409' => 'CONFLICT',
+		'410' => 'GONE',
+		'411' => 'LENGTH REQUIRED',
+		'412' => 'PRECONDITION FAILED',
+		'413' => 'REQUEST ENTITY TOO LARGE',
+		'414' => 'REQUEST-URI TOO LONG',
+		'415' => 'UNSUPPORTED MEDIA TYPE',
+		'416' => 'REQUESTED RANGE NOT SATISFIABLE',
+		'417' => 'EXPECTATION FAILED',
+		'500' => 'INTERNAL SERVER ERROR',
+		'501' => 'NOT IMPLEMENTED',
+		'502' => 'BAD GATEWAY',
+		'503' => 'SERVICE UNAVAILABLE',
+		'504' => 'GATEWAY TIMEOUT',
+		'505' => 'HTTP VERSION NOT SUPPORTED'
+	);
 
  
-    /**
-     * Constructor of the response.
-     *
-     * @param string Content of the response ('')
-     * @param string MimeType of the response (null) if not given will
-     * default to the one given in the configuration 'mimetype'
-     */
-    function __construct($content='', $mimetype=null)
-    {
-        if (is_null($mimetype)) {
-            $mimetype = 'text/html; charset=utf-8';
-        }
-        $this->content = $content;
-        $this->headers['Content-Type'] = $mimetype;
-        $this->headers['X-Powered-By'] = 'Gatuf/Pluf Framework';
-        $this->status_code = 200;
-        $this->cookies = array();
-    }
+	/**
+	 * Constructor of the response.
+	 *
+	 * @param string Content of the response ('')
+	 * @param string MimeType of the response (null) if not given will
+	 * default to the one given in the configuration 'mimetype'
+	 */
+	public function __construct($content='', $mimetype=null) {
+		if (is_null($mimetype)) {
+			$mimetype = 'text/html; charset=utf-8';
+		}
+		$this->content = $content;
+		$this->headers['Content-Type'] = $mimetype;
+		$this->headers['X-Powered-By'] = 'Gatuf/Pluf Framework';
+		$this->status_code = 200;
+		$this->cookies = array();
+	}
 
-    /**
-     * Render a response object.
-     */
-    function render($output_body=true)
-    {
-        if ($this->status_code >= 200 
-            && $this->status_code != 204 
-            && $this->status_code != 304) {
-            $this->headers['Content-Length'] = strlen($this->content);
-        }
-        $this->outputHeaders();
-        if ($output_body) {
-            echo $this->content;
-        }
-    }
+	/**
+	 * Render a response object.
+	 */
+	public function render($output_body=true) {
+		if ($this->status_code >= 200
+			&& $this->status_code != 204
+			&& $this->status_code != 304) {
+			$this->headers['Content-Length'] = strlen($this->content);
+		}
+		$this->outputHeaders();
+		if ($output_body) {
+			echo $this->content;
+		}
+	}
 
-    /**
-     * Output headers.
-     */
-    function outputHeaders()
-    {
-        if (!defined('IN_UNIT_TESTS')) {
-            header('HTTP/1.0 '.$this->status_code.' '
-                   .$this->status_code_list[$this->status_code],
-                   true, $this->status_code);
-            foreach ($this->headers as $header => $ch) {
-                header($header.': '.$ch);
-            }
-            foreach ($this->cookies as $cookie => $data) {
-                // name, data, expiration, path, domain, secure, http only
-                $expire = (null == $data) ? time()-31536000 : time()+31536000;
-                $data = (null == $data) ? '' : $data;
-                setcookie($cookie, $data, $expire,
-                          '/',
-                          null, 
-                          false,
-                          true); 
-            }
-        } else {
-            $_COOKIE = array();
-            foreach ($this->cookies as $cookie => $data) {
-                $_COOKIE[$cookie] = $data;
-            }
-        }
-    }
+	/**
+	 * Output headers.
+	 */
+	public function outputHeaders() {
+		if (!defined('IN_UNIT_TESTS')) {
+			header(
+				'HTTP/1.0 '.$this->status_code.' '
+				   .$this->status_code_list[$this->status_code],
+				true,
+				$this->status_code
+			);
+			foreach ($this->headers as $header => $ch) {
+				header($header.': '.$ch);
+			}
+			foreach ($this->cookies as $cookie => $data) {
+				// name, data, expiration, path, domain, secure, http only
+				$expire = (null == $data) ? time()-31536000 : time()+31536000;
+				$data = (null == $data) ? '' : $data;
+				setcookie(
+					$cookie,
+					$data,
+					$expire,
+					'/',
+					null,
+					false,
+					true
+				);
+			}
+		} else {
+			$_COOKIE = array();
+			foreach ($this->cookies as $cookie => $data) {
+				$_COOKIE[$cookie] = $data;
+			}
+		}
+	}
 }

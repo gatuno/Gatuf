@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -40,7 +39,7 @@ class Gatuf_DB_Schema {
 	 */
 	public $schema = null;
 
-	function __construct($db, $model=null) {
+	public function __construct($db, $model=null) {
 		$this->con = $db;
 		$this->model = $model;
 		$this->schema = Gatuf::factory('Gatuf_DB_Schema_'.$db->engine, $db);
@@ -51,7 +50,7 @@ class Gatuf_DB_Schema {
 	 *
 	 * @return object Pluf_DB_Schema_XXXX
 	 */
-	function getGenerator() {
+	public function getGenerator() {
 		return $this->schema;
 	}
 
@@ -60,7 +59,7 @@ class Gatuf_DB_Schema {
 	 *
 	 * @return mixed True if success or database error.
 	 */
-	function createTables() {
+	public function createTables() {
 		$sql = $this->schema->getSqlCreate($this->model);
 		foreach ($sql as $k => $query) {
 			if (false === $this->con->execute($query)) {
@@ -82,7 +81,7 @@ class Gatuf_DB_Schema {
 	 *
 	 * @throws Exception
 	 */
-	function createConstraints() {
+	public function createConstraints() {
 		$sql = $this->schema->getSqlCreateConstraints($this->model);
 		foreach ($sql as $k => $query) {
 			if (false === $this->con->execute($query)) {
@@ -96,7 +95,7 @@ class Gatuf_DB_Schema {
 	 *
 	 * @return mixed True if success or database error.
 	 */
-	function dropTables() {
+	public function dropTables() {
 		$sql = $this->schema->getSqlDelete($this->model);
 		foreach ($sql as $k => $query) {
 			if (false === $this->con->execute($query)) {
@@ -113,7 +112,7 @@ class Gatuf_DB_Schema {
 	 * @throws Exception
 	 * @return boolean
 	 */
-	function dropConstraints() {
+	public function dropConstraints() {
 		$sql = $this->schema->getSqlDeleteConstraints($this->model);
 		foreach ($sql as $k => $query) {
 			if (false === $this->con->execute($query)) {

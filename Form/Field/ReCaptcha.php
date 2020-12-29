@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -66,101 +65,106 @@
  *   Ben Maurer
  */
 class Gatuf_Form_Field_ReCaptcha extends Gatuf_Form_Field {
-    public $widget = 'Gatuf_Form_Widget_ReCaptcha';
-    public $privkey = '';
-    public $remoteip = '';
-    public $extra_params = array();
+	public $widget = 'Gatuf_Form_Widget_ReCaptcha';
+	public $privkey = '';
+	public $remoteip = '';
+	public $extra_params = array();
 
-    public function clean($value) {
-        // will throw the Pluf_Form_Invalid exception in case of
-        // error.
-        self::checkAnswer($this->privkey, $this->remoteip, 
-                          $value[0], $value[1], $this->extra_params);
-        return $value;
-    }
+	public function clean($value) {
+		// will throw the Pluf_Form_Invalid exception in case of
+		// error.
+		self::checkAnswer(
+			$this->privkey,
+			$this->remoteip,
+			$value[0],
+			$value[1],
+			$this->extra_params
+		);
+		return $value;
+	}
 
-    /**
-     * Submits an HTTP POST to a reCAPTCHA server
-     *
-     * @param string Host
-     * @param string Path
-     * @param array Data
-     * @param int port (80
-     * @return array response
-     */
-    public static function httpPost($host, $path, $data, $port=80) {
+	/**
+	 * Submits an HTTP POST to a reCAPTCHA server
+	 *
+	 * @param string Host
+	 * @param string Path
+	 * @param array Data
+	 * @param int port (80
+	 * @return array response
+	 */
+	public static function httpPost($host, $path, $data, $port=80) {
+		$req = self::qsencode($data);
+		$http_request  = "POST $path HTTP/1.0\r\n";
+		$http_request .= "Host: $host\r\n";
+		$http_request .= "Content-Type: application/x-www-form-urlencoded;\r\n";
+		$http_request .= "Content-Length: " . strlen($req) . "\r\n";
+		$http_request .= "User-Agent: reCAPTCHA/PHP\r\n";
+		$http_request .= "\r\n";
+		$http_request .= $req;
 
-        $req = self::qsencode($data);
-        $http_request  = "POST $path HTTP/1.0\r\n";
-        $http_request .= "Host: $host\r\n";
-        $http_request .= "Content-Type: application/x-www-form-urlencoded;\r\n";
-        $http_request .= "Content-Length: " . strlen($req) . "\r\n";
-        $http_request .= "User-Agent: reCAPTCHA/PHP\r\n";
-        $http_request .= "\r\n";
-        $http_request .= $req;
+		if (false === ($fs=@fsockopen($host, $port, $errno, $errstr, 10))) {
+			throw new Gatuf_Form_Invalid(__('Cannot connect to the reCaptcha server for validation.'));
+		}
+		fwrite($fs, $http_request);
+		$response = '';
+		while (!feof($fs)) {
+			$response .= fgets($fs, 1160); // One TCP-IP packet
+		}
+		fclose($fs);
+		return explode("\r\n\r\n", $response, 2);
+	}
 
-        if (false === ($fs=@fsockopen($host, $port, $errno, $errstr, 10))) {
-            throw new Gatuf_Form_Invalid(__('Cannot connect to the reCaptcha server for validation.'));
-        }
-        fwrite($fs, $http_request);
-        $response = '';
-        while (!feof($fs)) {
-            $response .= fgets($fs, 1160); // One TCP-IP packet
-        }
-        fclose($fs);
-        return explode("\r\n\r\n", $response, 2);
-    }
+	/**
+	 * Encodes the given data into a query string format
+	 *
+	 * @param array Array of string elements to be encoded
+	 * @return string Encoded request
+	 */
+	public static function qsencode($data) {
+		$d = array();
+		foreach ($data as $key => $value) {
+			$d[] = $key.'='.urlencode(stripslashes($value));
+		}
+		return implode('&', $d);
+	}
 
-    /**
-     * Encodes the given data into a query string format
-     *
-     * @param array Array of string elements to be encoded
-     * @return string Encoded request
-     */
-    public static function qsencode($data) 
-    {
-        $d = array();
-        foreach ($data as $key => $value) {
-            $d[] = $key.'='.urlencode(stripslashes($value));
-        }
-        return implode('&', $d);
-    }
+	/**
+	 * Calls an HTTP POST function to verify if the user's guess was correct
+	 * @param string $privkey
+	 * @param string $remoteip
+	 * @param string $challenge
+	 * @param string $response
+	 * @param array $extra_params an array of extra variables to post to the server
+	 * @return ReCaptchaResponse
+	 */
+	public static function checkAnswer($privkey, $remoteip, $challenge, $response, $extra_params=array()) {
+		if ($privkey == '') {
+			throw new Gatuf_Form_Invalid(__('To use reCAPTCHA you must set your API key.'));
+		}
+		if ($remoteip == '') {
+			throw new Gatuf_Form_Invalid(__('For security reasons, you must pass the remote ip to reCAPTCHA.'));
+		}
+		//discard spam submissions
+		if (strlen($challenge) == 0 || strlen($response) == 0) {
+			return false;
+		}
 
-    /**
-     * Calls an HTTP POST function to verify if the user's guess was correct
-     * @param string $privkey
-     * @param string $remoteip
-     * @param string $challenge
-     * @param string $response
-     * @param array $extra_params an array of extra variables to post to the server
-     * @return ReCaptchaResponse
-     */
-    public static function checkAnswer($privkey, $remoteip, $challenge, $response, $extra_params=array()) {
-        if ($privkey == '') {
-            throw new Gatuf_Form_Invalid(__('To use reCAPTCHA you must set your API key.'));
-        }
-        if ($remoteip == '') {
-            throw new Gatuf_Form_Invalid(__('For security reasons, you must pass the remote ip to reCAPTCHA.'));
-        }
-        //discard spam submissions
-        if (strlen($challenge) == 0 || strlen($response) == 0) {
-            return false;
-        }
+		$response = self::httpPost(
+			'api-verify.recaptcha.net',
+			'/verify',
+			array(
+				'privatekey' => $privkey,
+				'remoteip' => $remoteip,
+				'challenge' => $challenge,
+				'response' => $response
+			) + $extra_params
+		);
 
-        $response = self::httpPost('api-verify.recaptcha.net', '/verify',
-                                   array(
-                                         'privatekey' => $privkey,
-                                         'remoteip' => $remoteip,
-                                         'challenge' => $challenge,
-                                         'response' => $response
-                                         ) + $extra_params
-                                   );
-
-        $answers = explode("\n", $response[1]);
-        if (trim($answers[0]) == 'true') {
-            return true;
-        } else {
-            throw new Gatuf_Form_Invalid($answers[1]);
-        }
-    }
+		$answers = explode("\n", $response[1]);
+		if (trim($answers[0]) == 'true') {
+			return true;
+		} else {
+			throw new Gatuf_Form_Invalid($answers[1]);
+		}
+	}
 }

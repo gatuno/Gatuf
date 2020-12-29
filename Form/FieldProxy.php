@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -27,20 +26,21 @@
  */
 
 class Gatuf_Form_FieldProxy {
-    protected $form = null;
+	protected $form = null;
 
-    public function __construct(&$form)
-    {
-        $this->form = $form;
-    }
+	public function __construct(&$form) {
+		$this->form = $form;
+	}
 
-    /**
-     * No control are performed. If you access a non existing field it
-     * will simply throw an error.
-     */
-    public function __get($field) {
-        return new Gatuf_Form_BoundField($this->form,
-                                        $this->form->fields[$field],
-                                        $field);
-    }
+	/**
+	 * No control are performed. If you access a non existing field it
+	 * will simply throw an error.
+	 */
+	public function __get($field) {
+		return new Gatuf_Form_BoundField(
+			$this->form,
+			$this->form->fields[$field],
+			$field
+		);
+	}
 }

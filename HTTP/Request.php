@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -26,39 +25,37 @@
  *
  * It is given as first arguments to the view as first argument.
  */
-class Gatuf_HTTP_Request
-{
-    public $POST = array();
-    public $GET = array();
-    public $REQUEST = array();
-    public $COOKIE = array();
-    public $FILES = array();
-    public $query = '';
-    public $method = '';
-    public $uri = '';
-    public $view = '';
-    public $remote_addr = '';
-    public $http_host = '';
-    public $SERVER = array();
-    public $uid = '';
-    public $time = '';
+class Gatuf_HTTP_Request {
+	public $POST = array();
+	public $GET = array();
+	public $REQUEST = array();
+	public $COOKIE = array();
+	public $FILES = array();
+	public $query = '';
+	public $method = '';
+	public $uri = '';
+	public $view = '';
+	public $remote_addr = '';
+	public $http_host = '';
+	public $SERVER = array();
+	public $uid = '';
+	public $time = '';
 
-    function __construct($query)
-    {
-        $http = new Gatuf_HTTP();
-        $http->removeTheMagic();
-        $this->POST =& $_POST;
-        $this->GET =& $_GET;
-        $this->REQUEST =& $_REQUEST;
-        $this->COOKIE =& $_COOKIE;
-        $this->FILES =& $_FILES;
-        $this->query = $query;
-        $this->method = $_SERVER['REQUEST_METHOD'];
-        $this->uri = $_SERVER['REQUEST_URI'];
-        $this->remote_addr = $_SERVER['REMOTE_ADDR'];
-        $this->http_host = (isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : '';
-        $this->SERVER =& $_SERVER;
-        $this->uid = $GLOBALS['_GATUF_uniqid'];
-        $this->time = (isset($_SERVER['REQUEST_TIME'])) ? $_SERVER['REQUEST_TIME'] : time();
-    }
+	public function __construct($query) {
+		$http = new Gatuf_HTTP();
+		$http->removeTheMagic();
+		$this->POST =& $_POST;
+		$this->GET =& $_GET;
+		$this->REQUEST =& $_REQUEST;
+		$this->COOKIE =& $_COOKIE;
+		$this->FILES =& $_FILES;
+		$this->query = $query;
+		$this->method = $_SERVER['REQUEST_METHOD'];
+		$this->uri = $_SERVER['REQUEST_URI'];
+		$this->remote_addr = $_SERVER['REMOTE_ADDR'];
+		$this->http_host = (isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : '';
+		$this->SERVER =& $_SERVER;
+		$this->uid = $GLOBALS['_GATUF_uniqid'];
+		$this->time = (isset($_SERVER['REQUEST_TIME'])) ? $_SERVER['REQUEST_TIME'] : time();
+	}
 }

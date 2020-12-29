@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -25,24 +24,24 @@
  * Class storing the data that are then used in the template.
  */
 class Gatuf_Template_Context {
-    public $_vars;
+	public $_vars;
 
-    function __construct($vars=array()) {
-        $this->_vars = new Gatuf_Template_ContextVars($vars);
-    }
+	public function __construct($vars=array()) {
+		$this->_vars = new Gatuf_Template_ContextVars($vars);
+	}
 
-    function get($var) {
-        if (isset($this->_vars[$var])) {
-            return $this->_vars[$var];
-        }
-        return '';
-    }
+	public function get($var) {
+		if (isset($this->_vars[$var])) {
+			return $this->_vars[$var];
+		}
+		return '';
+	}
 
-    function set($var, $value) {
-        $this->_vars[$var] = $value;
-    }
-    
-    function setByRef ($var, &$value) {
-    	$this->_vars[$var] = $value;
-    }
+	public function set($var, $value) {
+		$this->_vars[$var] = $value;
+	}
+	
+	public function setByRef($var, &$value) {
+		$this->_vars[$var] = $value;
+	}
 }

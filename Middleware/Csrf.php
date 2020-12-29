@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -30,95 +29,91 @@
  *
  * Based on concepts from the Django CSRF middleware.
  */
-class Gatuf_Middleware_Csrf
-{
-    public static function makeToken($session_key)
-    {
-        return md5(Gatuf::config('secret_key').$session_key);
-    }
+class Gatuf_Middleware_Csrf {
+	public static function makeToken($session_key) {
+		return md5(Gatuf::config('secret_key').$session_key);
+	}
 
-    /**
-     * Process the request.
-     *
-     * When processing the request, if a POST request with a session,
-     * we will check that the token is available and valid.
-     *
-     * @param Gatuf_HTTP_Request The request
-     * @return bool false
-     */
-    function process_request(&$request)
-    {
-        if ($request->method != 'POST') {
-            return false;
-        }
-        $cookie_name = Gatuf::config('session_cookie_id', 'sessionid');
-        if (!isset($request->COOKIE[$cookie_name])) {
-            // no session, nothing to do
-            return false;
-        }
-        try {
-            $data = Gatuf_Middleware_Session::_decodeData($request->COOKIE[$cookie_name]);
-        } catch (Exception $e) {
-            // no valid session
-            return false;
-        }
-        if (!isset($data['Gatuf_Session_key'])) {
-            // no session key
-            return false;
-        }
-        $token = self::makeToken($data['Gatuf_Session_key']);
-        if (!isset($request->POST['csrfmiddlewaretoken'])) {
-            return new Gatuf_HTTP_Response_Forbidden($request);
-        }
-        if ($request->POST['csrfmiddlewaretoken'] != $token) {
-            return new Gatuf_HTTP_Response_Forbidden($request);
-        }
-        return false;
-    }
+	/**
+	 * Process the request.
+	 *
+	 * When processing the request, if a POST request with a session,
+	 * we will check that the token is available and valid.
+	 *
+	 * @param Gatuf_HTTP_Request The request
+	 * @return bool false
+	 */
+	public function process_request(&$request) {
+		if ($request->method != 'POST') {
+			return false;
+		}
+		$cookie_name = Gatuf::config('session_cookie_id', 'sessionid');
+		if (!isset($request->COOKIE[$cookie_name])) {
+			// no session, nothing to do
+			return false;
+		}
+		try {
+			$data = Gatuf_Middleware_Session::_decodeData($request->COOKIE[$cookie_name]);
+		} catch (Exception $e) {
+			// no valid session
+			return false;
+		}
+		if (!isset($data['Gatuf_Session_key'])) {
+			// no session key
+			return false;
+		}
+		$token = self::makeToken($data['Gatuf_Session_key']);
+		if (!isset($request->POST['csrfmiddlewaretoken'])) {
+			return new Gatuf_HTTP_Response_Forbidden($request);
+		}
+		if ($request->POST['csrfmiddlewaretoken'] != $token) {
+			return new Gatuf_HTTP_Response_Forbidden($request);
+		}
+		return false;
+	}
 
-    /**
-     * Process the response of a view.
-     *
-     * If we find a POST form, add the token to it.
-     *
-     * @param Gatuf_HTTP_Request The request
-     * @param Gatuf_HTTP_Response The response
-     * @return Gatuf_HTTP_Response The response
-     */
-    function process_response($request, $response)
-    {
-        $cookie_name = Gatuf::config('session_cookie_id', 'sessionid');
-        if (!isset($request->COOKIE[$cookie_name])) {
-            // no session, nothing to do
-            return $response;
-        }
-        if (!isset($response->headers['Content-Type'])) {
-            return $response;
-        }
-        try {
-            $data = Gatuf_Middleware_Session::_decodeData($request->COOKIE[$cookie_name]);
-        } catch (Exception $e) {
-            // no valid session
-            return $response;
-        }
-        if (!isset($data['Gatuf_Session_key'])) {
-            // no session key
-            return $response;
-        }
-        $ok = false;
-        $cts = array('text/html', 'application/xhtml+xml');
-        foreach ($cts as $ct) {
-            if (false !== strripos($response->headers['Content-Type'], $ct)) {
-                $ok = true;
-                break;
-            }
-        }
-        if (!$ok) {
-            return $response;
-        }
-        $token = self::makeToken($data['Gatuf_Session_key']);
-        $extra = '<div style="display:none;"><input type="hidden" name="csrfmiddlewaretoken" value="'.$token.'" /></div>';
-        $response->content = preg_replace('/(<form\W[^>]*\bmethod=(\'|"|)POST(\'|"|)\b[^>]*>)/i', '$1'.$extra, $response->content);
-        return $response;
-    }
+	/**
+	 * Process the response of a view.
+	 *
+	 * If we find a POST form, add the token to it.
+	 *
+	 * @param Gatuf_HTTP_Request The request
+	 * @param Gatuf_HTTP_Response The response
+	 * @return Gatuf_HTTP_Response The response
+	 */
+	public function process_response($request, $response) {
+		$cookie_name = Gatuf::config('session_cookie_id', 'sessionid');
+		if (!isset($request->COOKIE[$cookie_name])) {
+			// no session, nothing to do
+			return $response;
+		}
+		if (!isset($response->headers['Content-Type'])) {
+			return $response;
+		}
+		try {
+			$data = Gatuf_Middleware_Session::_decodeData($request->COOKIE[$cookie_name]);
+		} catch (Exception $e) {
+			// no valid session
+			return $response;
+		}
+		if (!isset($data['Gatuf_Session_key'])) {
+			// no session key
+			return $response;
+		}
+		$ok = false;
+		$cts = array('text/html', 'application/xhtml+xml');
+		foreach ($cts as $ct) {
+			if (false !== strripos($response->headers['Content-Type'], $ct)) {
+				$ok = true;
+				break;
+			}
+		}
+		if (!$ok) {
+			return $response;
+		}
+		$token = self::makeToken($data['Gatuf_Session_key']);
+		$extra = '<div style="display:none;"><input type="hidden" name="csrfmiddlewaretoken" value="'.$token.'" /></div>';
+		$response->content = preg_replace('/(<form\W[^>]*\bmethod=(\'|"|)POST(\'|"|)\b[^>]*>)/i', '$1'.$extra, $response->content);
+		return $response;
+	}
 }

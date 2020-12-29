@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -22,19 +21,19 @@
 # ***** END LICENSE BLOCK ***** */
 
 class Gatuf_Form_Field_Email extends Gatuf_Form_Field {
-    public $widget = 'Gatuf_Form_Widget_TextInput';
+	public $widget = 'Gatuf_Form_Widget_TextInput';
 
-    public function clean($value) {
-        parent::clean($value);
-        if (in_array($value, $this->empty_values)) {
-            $value = '';
-        }
-        if ($value == '') {
-            return $value;
-        }
-        if (!Gatuf_Utils::isValidEmail($value)) {
-            throw new Gatuf_Form_Invalid(__('Enter a valid email address.'));
-        }
-        return $value;
-    }
+	public function clean($value) {
+		parent::clean($value);
+		if (in_array($value, $this->empty_values)) {
+			$value = '';
+		}
+		if ($value == '') {
+			return $value;
+		}
+		if (!Gatuf_Utils::isValidEmail($value)) {
+			throw new Gatuf_Form_Invalid(__('Enter a valid email address.'));
+		}
+		return $value;
+	}
 }

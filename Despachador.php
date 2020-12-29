@@ -1,7 +1,6 @@
 <?php
 class Gatuf_Despachador {
-	
-	public static function despachar ($query = '') {
+	public static function despachar($query = '') {
 		try {
 			$query = preg_replace('#^(/)+#', '/', '/'.$query);
 			$req = new Gatuf_HTTP_Request($query);
@@ -53,34 +52,33 @@ class Gatuf_Despachador {
 		}
 	}
 	
-	public static function match ($req, $firstpass = true) {
+	public static function match($req, $firstpass = true) {
 		try {
 			$views = $GLOBALS['_GATUF_vistas'];
 			$to_match = $req->query;
-			$n = count ($views);
+			$n = count($views);
 			$i = 0;
 			while ($i < $n) {
 				$ctl = $views [$i];
-				if (preg_match ($ctl['regex'], $to_match, $match)) {
-					if (!isset ($ctl['sub'])) {
-						return self::send ($req, $ctl, $match);
+				if (preg_match($ctl['regex'], $to_match, $match)) {
+					if (!isset($ctl['sub'])) {
+						return self::send($req, $ctl, $match);
 					} else {
 						$views = $ctl['sub'];
 						$i = 0;
-						$n = count ($views);
-						$to_match = substr ($to_match, strlen ($match[0]));
+						$n = count($views);
+						$to_match = substr($to_match, strlen($match[0]));
 						continue;
 					}
 				}
 				$i++;
 			}
 		} catch (Gatuf_HTTP_Error404 $e) {
-			
 		}
 		
-		if ($firstpass and substr ($req->query, -1) != '/') {
+		if ($firstpass and substr($req->query, -1) != '/') {
 			$req->query .= '/';
-			$res = self::match ($req, false);
+			$res = self::match($req, false);
 
 			if ($res->status_code != 404) {
 				Gatuf::loadFunction('Gatuf_HTTP_URL_urlForView');
@@ -91,41 +89,43 @@ class Gatuf_Despachador {
 				return new Gatuf_HTTP_Response_Redirect($url, 301);
 			}
 		}
-        return new Gatuf_HTTP_Response_NotFound($req);
+		return new Gatuf_HTTP_Response_NotFound($req);
 	}
 	
 	public static function send($req, $ctl, $match) {
 		/* Guardar la vista y el match en la petición http */
-		$req->view = array ($ctl, $match);
+		$req->view = array($ctl, $match);
 		
 		/* Cargar la clase vista controladora */
 		$m = new $ctl['model']();
 		/* Aquí verificar por precondiciones antes de la llamada */
 		if (isset($m->{$ctl['method'].'_precond'})) {
 			$preconds = $m->{$ctl['method'].'_precond'};
-            if (!is_array($preconds)) {
-                $preconds = array($preconds);
-            }
-            foreach ($preconds as $precond) {
-                if (!is_array($precond)) {
-                    $res = call_user_func_array(
-                                                explode('::', $precond), 
-                                                array(&$req)
-                                                );
-                } else {
-                    $res = call_user_func_array(
-                                                explode('::', $precond[0]), 
-                                                array_merge(array(&$req), 
-                                                            array_slice($precond, 1))
-                                                );
-                }
-                if ($res !== true) {
-                    return $res;
-                }
-            } 
-        }
+			if (!is_array($preconds)) {
+				$preconds = array($preconds);
+			}
+			foreach ($preconds as $precond) {
+				if (!is_array($precond)) {
+					$res = call_user_func_array(
+						explode('::', $precond),
+						array(&$req)
+					);
+				} else {
+					$res = call_user_func_array(
+						explode('::', $precond[0]),
+						array_merge(
+													array(&$req),
+													array_slice($precond, 1)
+												)
+					);
+				}
+				if ($res !== true) {
+					return $res;
+				}
+			}
+		}
 		
-		if (!isset ($ctl['params'])) {
+		if (!isset($ctl['params'])) {
 			return $m->{$ctl['method']}($req, $match);
 		} else {
 			return $m->{$ctl['method']}($req, $match, $ctl['params']);

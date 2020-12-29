@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -22,20 +21,22 @@
 # ***** END LICENSE BLOCK ***** */
 
 class Gatuf_HTTP_Response_NotFound extends Gatuf_HTTP_Response {
-    function __construct($request) {
-        $content = '';
-        try {
-            $context = new Gatuf_Template_Context(array('query' => $request->query));
-            $tmpl = new Gatuf_Template('404.html');
-            $content = $tmpl->render($context);
-            $mimetype = null;
-        } catch (Exception $e) {
-            $mimetype = 'text/plain';
-            $content = sprintf('The requested URL %s was not found on this server.'."\n"
-                               .'Please check the URL and try again.'."\n\n".'404 - Not Found',
-                               Gatuf_esc($request->query));
-        }
-        parent::__construct($content, $mimetype);
-        $this->status_code = 404;
-    }
+	public function __construct($request) {
+		$content = '';
+		try {
+			$context = new Gatuf_Template_Context(array('query' => $request->query));
+			$tmpl = new Gatuf_Template('404.html');
+			$content = $tmpl->render($context);
+			$mimetype = null;
+		} catch (Exception $e) {
+			$mimetype = 'text/plain';
+			$content = sprintf(
+				'The requested URL %s was not found on this server.'."\n"
+							   .'Please check the URL and try again.'."\n\n".'404 - Not Found',
+				Gatuf_esc($request->query)
+			);
+		}
+		parent::__construct($content, $mimetype);
+		$this->status_code = 404;
+	}
 }

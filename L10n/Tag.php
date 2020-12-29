@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -29,7 +28,7 @@
  * @param bool Print the result (true)
  */
 class Gatuf_L10n_Tag extends Gatuf_Template_Tag {
-	function start($code, $what='country', $echo=true) {
+	public function start($code, $what='country', $echo=true) {
 		if ($what == 'country') {
 			$cn = Gatuf_L10n::getCountryCodes(true);
 		} else {

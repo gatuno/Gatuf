@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -27,23 +26,20 @@
 set_include_path(get_include_path().PATH_SEPARATOR.dirname(__FILE__));
 require 'Gatuf.php';
 
-function usage()
-{
-    echo 'Usage examples:'."\n"
-        .' Extract all:      extracttemplates.php path/to/config.php path/to/outpudir'."\n";
-
+function usage() {
+	echo 'Usage examples:'."\n"
+		.' Extract all:      extracttemplates.php path/to/config.php path/to/outpudir'."\n";
 }
-function debug($what)
-{
-    global $debug;
-    if ($debug) {
-        echo($what."\n");
-    }
+function debug($what) {
+	global $debug;
+	if ($debug) {
+		echo($what."\n");
+	}
 }
 
 if ($argc !== 3) {
-    usage();
-    die();
+	usage();
+	die();
 }
 $conf = $argv[1];
 $outputdir = $argv[2];

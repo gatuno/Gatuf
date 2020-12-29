@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -25,24 +24,27 @@
  * Base class for all the input widgets. (Except radio and checkbox).
  */
 class Gatuf_Form_Widget_Input extends Gatuf_Form_Widget {
-    /**
-     * Renders the HTML of the input.
-     *
-     * @param string Name of the field.
-     * @param mixed Value for the field, can be a non valid value.
-     * @param array Extra attributes to add to the input form (array())
-     * @return string The HTML string of the input.
-     */
-    public function render($name, $value, $extra_attrs=array())
-    {
-        if ($value === null) $value = '';
-        $final_attrs = $this->buildAttrs(array('name' => $name, 
-                                               'type' => $this->input_type),
-                                         $extra_attrs);
-        if ($value !== '') {
-            $value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-            $final_attrs['value'] = $value;
-        }
-        return new Gatuf_Template_SafeString('<input'.Gatuf_Form_Widget_Attrs($final_attrs).' />', true);
-    }
+	/**
+	 * Renders the HTML of the input.
+	 *
+	 * @param string Name of the field.
+	 * @param mixed Value for the field, can be a non valid value.
+	 * @param array Extra attributes to add to the input form (array())
+	 * @return string The HTML string of the input.
+	 */
+	public function render($name, $value, $extra_attrs=array()) {
+		if ($value === null) {
+			$value = '';
+		}
+		$final_attrs = $this->buildAttrs(
+			array('name' => $name,
+				'type' => $this->input_type),
+			$extra_attrs
+		);
+		if ($value !== '') {
+			$value = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
+			$final_attrs['value'] = $value;
+		}
+		return new Gatuf_Template_SafeString('<input'.Gatuf_Form_Widget_Attrs($final_attrs).' />', true);
+	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-$user_model = Gatuf::config('gatuf_custom_user','Gatuf_User');
+$user_model = Gatuf::config('gatuf_custom_user', 'Gatuf_User');
 $group_model = Gatuf::config('gatuf_custom_group', 'Gatuf_Group');
 
 return array(

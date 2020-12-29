@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -25,15 +24,15 @@
  * Special array where the keyed indexes can be accessed as properties.
  */
 class Gatuf_Template_ContextVars extends ArrayObject {
-    function __get($prop) {
-        return (isset($this[$prop])) ? $this[$prop] : '';
-    }
+	public function __get($prop) {
+		return (isset($this[$prop])) ? $this[$prop] : '';
+	}
 
-    function __set($prop, $value) {
-        $this[$prop] = $value;
-    }
+	public function __set($prop, $value) {
+		$this[$prop] = $value;
+	}
 
-    function __toString() {
-        return var_export($this, true);
-    }
+	public function __toString() {
+		return var_export($this, true);
+	}
 }

@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -40,14 +39,12 @@
  * @param Pluf_HTTP_Request Request object (null)
  * @return Pluf_HTTP_Response The response with the rendered template
  */
-function Gatuf_Shortcuts_RenderToResponse($tplfile, $params, $request=null)
-{
-    $tmpl = new Gatuf_Template($tplfile);
-    if (is_null($request)) {
-        $context = new Gatuf_Template_Context($params);
-    } else {
-        $context = new Gatuf_Template_Context_Request($request, $params);
-    }
-    return new Gatuf_HTTP_Response($tmpl->render($context));
+function Gatuf_Shortcuts_RenderToResponse($tplfile, $params, $request=null) {
+	$tmpl = new Gatuf_Template($tplfile);
+	if (is_null($request)) {
+		$context = new Gatuf_Template_Context($params);
+	} else {
+		$context = new Gatuf_Template_Context_Request($request, $params);
+	}
+	return new Gatuf_HTTP_Response($tmpl->render($context));
 }
-

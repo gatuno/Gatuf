@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -22,16 +21,16 @@
 # ***** END LICENSE BLOCK ***** */
 
 class Gatuf_HTTP_Response_Redirect extends Gatuf_HTTP_Response {
-    /**
-     * Redirect response to a given URL.
-     *
-     * @param string URL
-     * @paran int Redirect code (302) or 301 for permanent
-     */
-    function __construct($url, $code=302) {
-        $content = sprintf(__('<a href="%s">Please, click here to be redirected</a>.'), $url);
-        parent::__construct($content);
-        $this->headers['Location'] = $url;
-        $this->status_code = $code;
-    }
+	/**
+	 * Redirect response to a given URL.
+	 *
+	 * @param string URL
+	 * @paran int Redirect code (302) or 301 for permanent
+	 */
+	public function __construct($url, $code=302) {
+		$content = sprintf(__('<a href="%s">Please, click here to be redirected</a>.'), $url);
+		parent::__construct($content);
+		$this->headers['Location'] = $url;
+		$this->status_code = $code;
+	}
 }

@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -25,51 +24,59 @@
  * Simple checkbox.
  */
 class Gatuf_Form_Widget_SelectMultipleInput_Checkbox extends Gatuf_Form_Widget_SelectMultipleInput {
-    /**
-     * Renders the HTML of the input.
-     *
-     * @param string Name of the field.
-     * @param array Value for the field, can be a non valid value.
-     * @param array Extra attributes to add to the input form (array())
-     * @param array Extra choices (array())
-     * @return string The HTML string of the input.
-     */
-    public function render($name, $value, $extra_attrs=array(), 
-                           $choices=array()) {
-        $output = array();
-        if ($value === null or $value == '') {
-            $value = array();
-        }
-        $final_attrs = $this->buildAttrs($extra_attrs);
-        $output[] = '<ul>';
-        $choices = array_merge($this->choices, $choices);
-        $i=0;
-        $base_id = $final_attrs['id'];
-        foreach ($choices as $option_label=>$option_value) {
+	/**
+	 * Renders the HTML of the input.
+	 *
+	 * @param string Name of the field.
+	 * @param array Value for the field, can be a non valid value.
+	 * @param array Extra attributes to add to the input form (array())
+	 * @param array Extra choices (array())
+	 * @return string The HTML string of the input.
+	 */
+	public function render(
+		$name,
+		$value,
+		$extra_attrs=array(),
+		$choices=array()
+	) {
+		$output = array();
+		if ($value === null or $value == '') {
+			$value = array();
+		}
+		$final_attrs = $this->buildAttrs($extra_attrs);
+		$output[] = '<ul>';
+		$choices = array_merge($this->choices, $choices);
+		$i=0;
+		$base_id = $final_attrs['id'];
+		foreach ($choices as $option_label=>$option_value) {
+			$final_attrs['id'] = $base_id.'_'.$i;
+			$final_attrs['value'] = htmlspecialchars($option_value, ENT_COMPAT, 'UTF-8');
+			if (in_array($option_value, $value)) {
+				$final_attrs['checked'] = 'checked';
+			} else {
+				unset($final_attrs['checked']);
+			}
+			$check_attrs = $this->buildAttrs(
+				array('name' => $name.'[]',
+					'type' => 'checkbox'),
+				$final_attrs
+			);
+			$rendered = new Gatuf_Template_SafeString('<input'.Gatuf_Form_Widget_Attrs($check_attrs).' />', true);
+			$output[] = sprintf(
+				'<li><label>%s %s</label></li>',
+				$rendered,
+				htmlspecialchars($option_label, ENT_COMPAT, 'UTF-8')
+			);
+			$i++;
+		}
+		$output[] = '</ul>';
+		return new Gatuf_Template_SafeString(implode("\n", $output), true);
+	}
 
-            $final_attrs['id'] = $base_id.'_'.$i;
-            $final_attrs['value'] = htmlspecialchars($option_value, ENT_COMPAT, 'UTF-8');
-            if (in_array($option_value, $value)) {
-                $final_attrs['checked'] = 'checked';
-            } else {
-                unset ($final_attrs['checked']);
-            }
-            $check_attrs = $this->buildAttrs(array('name' => $name.'[]', 
-                                               'type' => 'checkbox'),
-                                         $final_attrs);
-            $rendered = new Gatuf_Template_SafeString('<input'.Gatuf_Form_Widget_Attrs($check_attrs).' />', true);
-            $output[] = sprintf('<li><label>%s %s</label></li>', $rendered,
-                                htmlspecialchars($option_label, ENT_COMPAT, 'UTF-8'));
-            $i++;
-        }
-        $output[] = '</ul>';
-        return new Gatuf_Template_SafeString(implode("\n", $output), true);
-    }
-
-    public function idForLabel($id) {
-        if ($id) {
-            $id .= '_0';
-        }
-        return $id;
-    }
+	public function idForLabel($id) {
+		if ($id) {
+			$id .= '_0';
+		}
+		return $id;
+	}
 }

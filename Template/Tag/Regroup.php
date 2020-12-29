@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -112,54 +111,54 @@
  *
  * Based on concepts from the Django regroup template tag.
  */
-class Gatuf_Template_Tag_Regroup extends Gatuf_Template_Tag
-{
-    /**
-     * @see Gatuf_Template_Tag::start()
-     * @param mixed $data The object to group.
-     * @param string $by The attribute ti group by.
-     * @param string $assign The name of the resulting object.
-     * @throws InvalidArgumentException If no argument is provided.
-     */
-    public function start($data, $by, $assign)
-    {
-        $grouped = array();
-        $tmp = array();
+class Gatuf_Template_Tag_Regroup extends Gatuf_Template_Tag {
+	/**
+	 * @see Gatuf_Template_Tag::start()
+	 * @param mixed $data The object to group.
+	 * @param string $by The attribute ti group by.
+	 * @param string $assign The name of the resulting object.
+	 * @throws InvalidArgumentException If no argument is provided.
+	 */
+	public function start($data, $by, $assign) {
+		$grouped = array();
+		$tmp = array();
 
-        foreach ($data as $group) {
-            if (is_object($group)) {
-                if (is_subclass_of($group, 'Gatuf_Model')) {
-                    $raw = $group->getData();
-                    if (!array_key_exists($by, $raw)) {
-                        continue;
-                    }
-                } else {
-                    $ref = new ReflectionObject($group);
-                    if (!$ref->hasProperty($by)) {
-                        continue;
-                    }
-                }
-                $key = $group->$by;
-                $list = $group;
-            } else {
-                if (!array_key_exists($by, $group)) {
-                    continue;
-                }
-                $key = $group[$by];
-                $list = new ArrayObject($group, ArrayObject::ARRAY_AS_PROPS);
-            }
+		foreach ($data as $group) {
+			if (is_object($group)) {
+				if (is_subclass_of($group, 'Gatuf_Model')) {
+					$raw = $group->getData();
+					if (!array_key_exists($by, $raw)) {
+						continue;
+					}
+				} else {
+					$ref = new ReflectionObject($group);
+					if (!$ref->hasProperty($by)) {
+						continue;
+					}
+				}
+				$key = $group->$by;
+				$list = $group;
+			} else {
+				if (!array_key_exists($by, $group)) {
+					continue;
+				}
+				$key = $group[$by];
+				$list = new ArrayObject($group, ArrayObject::ARRAY_AS_PROPS);
+			}
 
-            if (!array_key_exists($key, $tmp)) {
-                $tmp[$key] = array();
-            }
-            $tmp[$key][] = $list;
-        }
+			if (!array_key_exists($key, $tmp)) {
+				$tmp[$key] = array();
+			}
+			$tmp[$key][] = $list;
+		}
 
-        foreach ($tmp as $key => $list) {
-            $grouped[] = new ArrayObject(array('grouper' => $key,
-                                               'list' => $list),
-                                         ArrayObject::ARRAY_AS_PROPS);
-        }
-        $this->context->set(trim($assign), $grouped);
-    }
+		foreach ($tmp as $key => $list) {
+			$grouped[] = new ArrayObject(
+				array('grouper' => $key,
+					'list' => $list),
+				ArrayObject::ARRAY_AS_PROPS
+			);
+		}
+		$this->context->set(trim($assign), $grouped);
+	}
 }

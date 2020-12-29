@@ -33,7 +33,7 @@ class Gatuf_Middleware_Translation {
 	 * @param Pluf_HTTP_Request The request
 	 * @return bool false
 	 */
-	function process_request(&$request) {
+	public function process_request(&$request) {
 		// Find which language to use. By priority:
 		// A session value with 'gatuf_language'
 		// A cookie with 'gatuf_language'
@@ -67,11 +67,15 @@ class Gatuf_Middleware_Translation {
 	 * @param Pluf_HTTP_Response The response
 	 * @return Pluf_HTTP_Response The response
 	 */
-	function process_response($request, $response) {
+	public function process_response($request, $response) {
 		$vary_h = array();
 		if (!empty($response->headers['Vary'])) {
-			$vary_h = preg_split('/\s*,\s*/', $response->headers['Vary'],
-								 -1, PREG_SPLIT_NO_EMPTY);
+			$vary_h = preg_split(
+				'/\s*,\s*/',
+				$response->headers['Vary'],
+				-1,
+				PREG_SPLIT_NO_EMPTY
+			);
 		}
 		if (!in_array('accept-language', $vary_h)) {
 			$vary_h[] = 'accept-language';
@@ -81,10 +85,12 @@ class Gatuf_Middleware_Translation {
 		return $response;
 	}
 	
-	public static function processContext ($signal, &$params) {
-		$params['context'] = array_merge ($params['context'],
-			Gatuf_Middleware_Translation_ContextPreProcessor($params['request']));
-    }
+	public static function processContext($signal, &$params) {
+		$params['context'] = array_merge(
+			$params['context'],
+			Gatuf_Middleware_Translation_ContextPreProcessor($params['request'])
+		);
+	}
 }
 
 /**

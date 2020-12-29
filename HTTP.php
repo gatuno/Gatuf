@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -24,37 +23,35 @@
 /**
  * Base HTTP tools.
  */
-class Gatuf_HTTP
-{
+class Gatuf_HTTP {
 
-    /**
-     * Break magic_quotes
-     *
-     * @credit Olivier Meunier
-     */
-    function removeTheMagic()
-    {
-        if (get_magic_quotes_gpc()) {
-            if (!empty($_GET)) {
-                array_walk($_GET, 'Gatuf_HTTP_magicStrip');
-            }
-            if (!empty($_POST)) {
-                array_walk($_POST, 'Gatuf_HTTP_magicStrip');
-            }
-            if (!empty($_REQUEST)) {
-                array_walk($_REQUEST, 'Gatuf_HTTP_magicStrip');
-            }
-            if (!empty($_COOKIE)) {
-                array_walk($_COOKIE, 'Gatuf_HTTP_magicStrip');
-            }
-        }
-        if (function_exists('ini_set')) {
-            @ini_set('session.use_cookies', '1');
-            @ini_set('session.use_only_cookies', '1');
-            @ini_set('session.use_trans_sid', '0');
-            @ini_set('url_rewriter.tags', '');
-        }
-    }
+	/**
+	 * Break magic_quotes
+	 *
+	 * @credit Olivier Meunier
+	 */
+	public function removeTheMagic() {
+		if (get_magic_quotes_gpc()) {
+			if (!empty($_GET)) {
+				array_walk($_GET, 'Gatuf_HTTP_magicStrip');
+			}
+			if (!empty($_POST)) {
+				array_walk($_POST, 'Gatuf_HTTP_magicStrip');
+			}
+			if (!empty($_REQUEST)) {
+				array_walk($_REQUEST, 'Gatuf_HTTP_magicStrip');
+			}
+			if (!empty($_COOKIE)) {
+				array_walk($_COOKIE, 'Gatuf_HTTP_magicStrip');
+			}
+		}
+		if (function_exists('ini_set')) {
+			@ini_set('session.use_cookies', '1');
+			@ini_set('session.use_only_cookies', '1');
+			@ini_set('session.use_trans_sid', '0');
+			@ini_set('url_rewriter.tags', '');
+		}
+	}
 }
 
 
@@ -63,9 +60,8 @@ class Gatuf_HTTP
  *
  * @credit Olivier Meunier
  */
-function Gatuf_HTTP_magicStrip(&$k, $key)
-{
-    $k = Gatuf_HTTP_handleMagicQuotes($k);
+function Gatuf_HTTP_magicStrip(&$k, $key) {
+	$k = Gatuf_HTTP_handleMagicQuotes($k);
 }
 
 /**
@@ -73,19 +69,18 @@ function Gatuf_HTTP_magicStrip(&$k, $key)
  *
  * @credit Olivier Meunier
  */
-function Gatuf_HTTP_handleMagicQuotes(&$value)
-{
-    if (is_array($value)) {
-        $result = array();
-        foreach ($value as $k => $v) {
-            if (is_array($v)) {
-                $result[$k] = Gatuf_HTTP_handleMagicQuotes($v);
-            } else {
-                $result[$k] = stripslashes($v);
-            }
-        }
-        return $result;
-    } else {
-        return stripslashes($value);
-    }
+function Gatuf_HTTP_handleMagicQuotes(&$value) {
+	if (is_array($value)) {
+		$result = array();
+		foreach ($value as $k => $v) {
+			if (is_array($v)) {
+				$result[$k] = Gatuf_HTTP_handleMagicQuotes($v);
+			} else {
+				$result[$k] = stripslashes($v);
+			}
+		}
+		return $result;
+	} else {
+		return stripslashes($value);
+	}
 }

@@ -1,5 +1,4 @@
 <?php
-/* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
 # This file is part of Plume Framework, a simple PHP Application Framework.
@@ -29,25 +28,23 @@
  * possible to predict it.
  */
 class Gatuf_HTTP_Response_CommandPassThru extends Gatuf_HTTP_Response {
-    /**
-     * The command argument must be a safe string!
-     *
-     * @param string Command to run.
-     * @param string Mimetype (null)
-     */
-    function __construct($command, $mimetype=null)
-    {
-        parent::__construct($command, $mimetype);
-    }
+	/**
+	 * The command argument must be a safe string!
+	 *
+	 * @param string Command to run.
+	 * @param string Mimetype (null)
+	 */
+	public function __construct($command, $mimetype=null) {
+		parent::__construct($command, $mimetype);
+	}
 
-    /**
-     * Render a response object.
-     */
-    function render($output_body=true)
-    {
-        $this->outputHeaders();
-        if ($output_body) {
-            passthru($this->content);
-        }
-    }
+	/**
+	 * Render a response object.
+	 */
+	public function render($output_body=true) {
+		$this->outputHeaders();
+		if ($output_body) {
+			passthru($this->content);
+		}
+	}
 }
