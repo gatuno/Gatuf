@@ -23,7 +23,7 @@
 class Gatuf_Form_Field_Date extends Gatuf_Form_Field {
 	public $widget = 'Gatuf_Form_Widget_TextInput';
 	public $input_formats = array(
-		'd-m-y', 'd-m-Y', 'd/m/y', 'd/m/Y', // 25-10-06, 25-10-2006, 25/10/06, 25/10/2006
+		'y-m-d', 'Y-m-d', 'd/m/y', 'd/m/Y', // 06-10-25, 2006-10-25, 25/10/06, 25/10/2006
 		'M d Y', 'M d, Y',      // 'Oct 25 2006', 'Oct 25, 2006'
 		'd M Y', 'd M, Y',      // '25 Oct 2006', '25 Oct, 2006'
 		'F d Y', 'F d, Y',      // 'October 25 2006', 'October 25, 2006'
@@ -39,7 +39,7 @@ class Gatuf_Form_Field_Date extends Gatuf_Form_Field {
 		foreach ($this->input_formats as $format) {
 			$date = date_create_from_format($format, $value);
 			if (false !== $date && $date->format($format) == $value) {
-				return $date->format('d/m/Y');
+				return $date->format('Y-m-d');
 			}
 		}
 		throw new Gatuf_Form_Invalid(__('Enter a valid date.'));
