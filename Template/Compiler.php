@@ -220,8 +220,11 @@ class Gatuf_Template_Compiler {
 		 */
 		$params = array('tags' => array(),
 			'modifiers' => array());
-		/*Pluf_Signal::send('Pluf_Template_Compiler::construct_template_tags_modifiers', 
-						  'Pluf_Template_Compiler', $params);*/
+		Gatuf_Signal::send(
+			'Gatuf_Template_Compiler::construct_template_tags_modifiers',
+			'Gatuf_Template_Compiler',
+			$params
+		);
 		$this->_allowedTags = array_merge(
 			$this->_allowedTags,
 			$params['tags'],

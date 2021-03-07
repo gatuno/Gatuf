@@ -163,7 +163,7 @@ class Gatuf_Form_Field {
 		$field = clone($this);
 		$field->multiple = false;
 		reset($value);
-		while (list($i, $val) = each($value)) {
+		foreach ($value as $i => $val) {
 			$value[$i] = $field->clean($val);
 		}
 		reset($value);

@@ -3,7 +3,7 @@
 class Gatuf_Form_Widget_DateSimple extends Gatuf_Form_Widget {
 	public $want_choices = false;
 	public $format = '/';
-	public $allowed_formats = array ('/', '-', 'long', 'dmy', 'ymd');
+	public $allowed_formats = array('/', '-', 'long', 'dmy', 'ymd');
 	
 	public function __construct($attrs=array()) {
 		if (isset($attrs['format'])) {
@@ -12,8 +12,8 @@ class Gatuf_Form_Widget_DateSimple extends Gatuf_Form_Widget {
 		}
 		parent::__construct($attrs);
 		
-		if (!in_array ($this->format, $this->allowed_formats)) {
-			throw new Exception ('Invalid format '.$this->format.' for widget DateSimple');
+		if (!in_array($this->format, $this->allowed_formats)) {
+			throw new Exception('Invalid format '.$this->format.' for widget DateSimple');
 		}
 	}
 	
@@ -28,37 +28,41 @@ class Gatuf_Form_Widget_DateSimple extends Gatuf_Form_Widget {
 		$anio = 0;
 		
 		if ($value != '') {
-			$date = date_create_from_format ($format, $value);
-			if (false === $date || $date->format ($format) != $value) {
+			$date = date_create_from_format($format, $value);
+			if (false === $date || $date->format($format) != $value) {
 				/* Una fecha mal formada o inválida */
-				$splits = explode ('-', $value, 3);
+				$splits = explode('-', $value, 3);
 				$anio = (int) $splits[0];
 				$mes = (int) $splits[1];
 				$dia = (int) $splits[2];
 			} else {
-				$dia = (int) $date->format ('d');
-				$mes = (int) $date->format ('m');
-				$anio = (int) $date->format ('Y');
+				$dia = (int) $date->format('d');
+				$mes = (int) $date->format('m');
+				$anio = (int) $date->format('Y');
 			}
 		}
 		
-		$dia_attrs = $this->buildAttrs(array('name' => 'dia_'.$name), array_merge ($extra_attrs, array ('id' => 'dia_'.$extra_attrs['id'])));
+		$dia_attrs = $this->buildAttrs(array('name' => 'dia_'.$name), array_merge($extra_attrs, array('id' => 'dia_'.$extra_attrs['id'])));
 		
-		$output = array ();
+		$output = array();
 		
 		if ($this->format == 'dmy') {
 			$output[] = __('D').': ';
-		} else if ($this->format == 'ymd') {
-			$output[] = __('Y').': ';
-		} else if ($this->format == 'long') {
-		 	$output[] = __('Day').': ';
+		} else {
+			if ($this->format == 'ymd') {
+				$output[] = __('Y').': ';
+			} else {
+				if ($this->format == 'long') {
+					$output[] = __('Day').': ';
+				}
+			}
 		}
 		
 		if ($this->format == '-' || $this->format == 'ymd') {
 			if ($anio != 0) {
-				$local_attrs = array ('id' => 'anio_'.$extra_attrs['id'], 'size' => 8, 'value' => $anio);
+				$local_attrs = array('id' => 'anio_'.$extra_attrs['id'], 'size' => 8, 'value' => $anio);
 			} else {
-				$local_attrs = array ('id' => 'anio_'.$extra_attrs['id'], 'size' => 8);
+				$local_attrs = array('id' => 'anio_'.$extra_attrs['id'], 'size' => 8);
 			}
 			$anio_attrs = $this->buildAttrs(array('name' => 'anio_'.$name), $local_attrs);
 			$output[] = '<input'.Gatuf_Form_Widget_Attrs($anio_attrs).' />';
@@ -66,9 +70,9 @@ class Gatuf_Form_Widget_DateSimple extends Gatuf_Form_Widget {
 			$output[] = '<select'.Gatuf_Form_Widget_Attrs($dia_attrs).'>';
 			for ($g = 1; $g <= 31; $g++) {
 				if ($dia == $g) {
-					$output[] = sprintf ('<option value="%s" selected="selected">%s</option>', $g, $g);
+					$output[] = sprintf('<option value="%s" selected="selected">%s</option>', $g, $g);
 				} else {
-					$output[] = sprintf ('<option value="%s">%s</option>', $g, $g);
+					$output[] = sprintf('<option value="%s">%s</option>', $g, $g);
 				}
 			}
 			$output[] = '</select>';
@@ -76,54 +80,64 @@ class Gatuf_Form_Widget_DateSimple extends Gatuf_Form_Widget {
 		
 		if ($this->format == 'dmy' || $this->format == 'ymd') {
 			$output[] = __('M').': ';
-		} else if ($this->format == 'long') {
-		 	$output[] = __('Month').': ';
-		} else if ($this->format == '-' || $this->format == '/') {
-			$output[] = ' '.$this->format.' ';
+		} else {
+			if ($this->format == 'long') {
+				$output[] = __('Month').': ';
+			} else {
+				if ($this->format == '-' || $this->format == '/') {
+					$output[] = ' '.$this->format.' ';
+				}
+			}
 		}
 		
-		$mes_attrs = $this->buildAttrs(array('name' => 'mes_'.$name), array_merge ($extra_attrs, array ('id' => 'mes_'.$extra_attrs['id'])));
+		$mes_attrs = $this->buildAttrs(array('name' => 'mes_'.$name), array_merge($extra_attrs, array('id' => 'mes_'.$extra_attrs['id'])));
 		$output[] = '<select'.Gatuf_Form_Widget_Attrs($mes_attrs).'>';
 		
 		for ($g = 1; $g <= 12; $g++) {
 			if ($this->format == 'long') {
 				$visual = date('F', mktime(0, 0, 0, $g));
 			} else {
-				$visual = str_pad ($g, 2, '0', STR_PAD_LEFT);
+				$visual = str_pad($g, 2, '0', STR_PAD_LEFT);
 			}
 			if ($mes == $g) {
-				$output[] = sprintf ('<option value="%s" selected="selected">%s</option>', $g, $visual);
+				$output[] = sprintf('<option value="%s" selected="selected">%s</option>', $g, $visual);
 			} else {
-				$output[] = sprintf ('<option value="%s">%s</option>', $g, $visual);
+				$output[] = sprintf('<option value="%s">%s</option>', $g, $visual);
 			}
 		}
 		$output[] = '</select>';
 		
 		if ($this->format == 'dmy') {
 			$output[] = __('Y').': ';
-		} else if ($this->format == 'ymd') {
-			$output[] = __('D').': ';
-		} else if ($this->format == 'long') {
-		 	$output[] = __('Year').': ';
-		} else if ($this->format == '-' || $this->format == '/') {
-			$output[] = ' '.$this->format.' ';
+		} else {
+			if ($this->format == 'ymd') {
+				$output[] = __('D').': ';
+			} else {
+				if ($this->format == 'long') {
+					$output[] = __('Year').': ';
+				} else {
+					if ($this->format == '-' || $this->format == '/') {
+						$output[] = ' '.$this->format.' ';
+					}
+				}
+			}
 		}
 		
 		if ($this->format == '-' || $this->format == 'ymd') {
 			$output[] = '<select'.Gatuf_Form_Widget_Attrs($dia_attrs).'>';
 			for ($g = 1; $g <= 31; $g++) {
 				if ($dia == $g) {
-					$output[] = sprintf ('<option value="%s" selected="selected">%s</option>', $g, $g);
+					$output[] = sprintf('<option value="%s" selected="selected">%s</option>', $g, $g);
 				} else {
-					$output[] = sprintf ('<option value="%s">%s</option>', $g, $g);
+					$output[] = sprintf('<option value="%s">%s</option>', $g, $g);
 				}
 			}
 			$output[] = '</select>';
 		} else {
 			if ($anio != 0) {
-				$local_attrs = array ('id' => 'anio_'.$extra_attrs['id'], 'size' => 8, 'value' => $anio);
+				$local_attrs = array('id' => 'anio_'.$extra_attrs['id'], 'size' => 8, 'value' => $anio);
 			} else {
-				$local_attrs = array ('id' => 'anio_'.$extra_attrs['id'], 'size' => 8);
+				$local_attrs = array('id' => 'anio_'.$extra_attrs['id'], 'size' => 8);
 			}
 			$anio_attrs = $this->buildAttrs(array('name' => 'anio_'.$name), $local_attrs);
 			$output[] = '<input'.Gatuf_Form_Widget_Attrs($anio_attrs).' />';
@@ -139,10 +153,9 @@ class Gatuf_Form_Widget_DateSimple extends Gatuf_Form_Widget {
 		return 'dia_'.$id;
 	}
 	
-	public function valueFromFormData ($name, $data) {
-		if (isset($data['dia_'.$name]) && isset ($data['mes_'.$name]) && isset ($data['anio_'.$name])) {
-			
-			return $data['anio_'.$name].'-'.str_pad ($data['mes_'.$name], 2, '0', STR_PAD_LEFT).'-'.str_pad ($data['dia_'.$name], 2, '0', STR_PAD_LEFT);
+	public function valueFromFormData($name, $data) {
+		if (isset($data['dia_'.$name]) && isset($data['mes_'.$name]) && isset($data['anio_'.$name])) {
+			return $data['anio_'.$name].'-'.str_pad($data['mes_'.$name], 2, '0', STR_PAD_LEFT).'-'.str_pad($data['dia_'.$name], 2, '0', STR_PAD_LEFT);
 		}
 		return null;
 	}

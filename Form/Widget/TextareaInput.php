@@ -49,10 +49,10 @@ class Gatuf_Form_Widget_TextareaInput extends Gatuf_Form_Widget {
 		);
 		return new Gatuf_Template_SafeString(
 			sprintf(
-					   	'<textarea%s>%s</textarea>',
-					   	Gatuf_Form_Widget_Attrs($final_attrs),
-					   	htmlspecialchars($value, ENT_COMPAT, 'UTF-8')
-					   ),
+				'<textarea%s>%s</textarea>',
+				Gatuf_Form_Widget_Attrs($final_attrs),
+				htmlspecialchars($value, ENT_COMPAT, 'UTF-8')
+			),
 			true
 		);
 	}

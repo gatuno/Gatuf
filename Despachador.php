@@ -114,9 +114,9 @@ class Gatuf_Despachador {
 					$res = call_user_func_array(
 						explode('::', $precond[0]),
 						array_merge(
-													array(&$req),
-													array_slice($precond, 1)
-												)
+							array(&$req),
+							array_slice($precond, 1)
+						)
 					);
 				}
 				if ($res !== true) {
