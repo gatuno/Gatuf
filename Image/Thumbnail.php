@@ -145,14 +145,8 @@ class Gatuf_Image_Thumbnail {
 		$zx = $W/$width;
 		$zy = $H/$height;
 
-		if (Gatuf_Image_Thumbnail::gd_version() >= 2) {
-			if (($img2=imagecreatetruecolor(round($width), round($height)))===false) {
-				return false;
-			}
-		} else {
-			if (($img2=ImageCreate(round($width), round($height)))===false) {
-				return false;
-			}
+		if (($img2=imagecreatetruecolor(round($width), round($height)))===false) {
+			return false;
 		}
 		$this->resampleBicubic($img2, $img, 0, 0, 0, 0, $width, $height, $zx, $zy);
 		if (@imagepng($img2, $this->getPath(), 9) === false) {
@@ -166,33 +160,6 @@ class Gatuf_Image_Thumbnail {
 		}
 	}
 	
-	/**
-	 * Get the current GD version. Need the output buffering functions.
-	 */
-	public static function gd_version() {
-		static $gd_version_number = null;
-		if ($gd_version_number === null) {
-			// Use output buffering to get results from phpinfo()
-			// without disturbing the page we're in.  Output
-			// buffering is "stackable" so we don't even have to
-			// worry about previous or encompassing buffering.
-			ob_start();
-			phpinfo(8);
-			$module_info = ob_get_contents();
-			ob_end_clean();
-			if (preg_match(
-				"/\bgd\s+version\b[^\d\n\r]+?([\d\.]+)/i",
-				$module_info,
-				$matches
-			)) {
-				$gd_version_number = $matches[1];
-			} else {
-				$gd_version_number = '0';
-			}
-		}
-		return $gd_version_number;
-	}
-
 	/* ========================================================================
 	 *   Private functions, should not be called from outside of the class.
 	 * ========================================================================
