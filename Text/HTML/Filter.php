@@ -143,7 +143,13 @@ class Gatuf_Text_HTML_Filter {
 	}
 
 	public function escape_comments($data) {
-		$data = preg_replace("/<!--(.*?)-->/se", "'<!--'.HtmlSpecialChars(\$this->StripSingle('\\1')).'-->'", $data);
+		$data = preg_replace_callback("/<!--(.*?)-->/s", 
+		function ($matches) {
+			return '<!--'.
+			HtmlSpecialChars ($this->StripSingle($matches[1])).
+			'-->';
+		},
+		$data);
 		return $data;
 	}
 
@@ -169,7 +175,11 @@ class Gatuf_Text_HTML_Filter {
 	}
 
 	public function check_tags($data) {
-		$data = preg_replace("/<(.*?)>/se", "\$this->process_tag(\$this->StripSingle('\\1'))", $data);
+		$data = preg_replace_callback ("/<(.*?)>/s", 
+		function ($matches) {
+			return $this->process_tag($this->StripSingle($matches[1]));
+		},
+		$data);
 		foreach (array_keys($this->tag_counts) as $tag) {
 			for ($i=0; $i<$this->tag_counts[$tag]; $i++) {
 				$data .= "</$tag>";
@@ -276,20 +286,25 @@ class Gatuf_Text_HTML_Filter {
 		if (preg_match('/[a-z]/', $data_notags)) {
 			return $data;
 		}
-		return preg_replace(
-			"/(>|^)([^<]+?)(<|$)/se",
-			"\$this->StripSingle('\\1').".
-							"\$this->fix_case_inner(\$this->StripSingle('\\2')).".
-							"\$this->StripSingle('\\3')",
+		return preg_replace_callback(
+			"/(>|^)([^<]+?)(<|$)/s",
+			function ($matches) {
+				return $this->StripSingle ($matches[1]).
+				$this->fix_case_inner ($this->StripSingle ($matches[2])).
+				$this->StripSingle ($matches[3]);
+			},
 			$data
 		);
 	}
 
 	public function fix_case_inner($data) {
 		$data = StrToLower($data);
-		$data = preg_replace(
-			'/(^|[^\w\s\';,\\-])(\s*)([a-z])/e',
-			"\$this->StripSingle('\\1\\2').StrToUpper(\$this->StripSingle('\\3'))",
+		$data = preg_replace_callback(
+			'/(^|[^\w\s\';,\\-])(\s*)([a-z])/',
+			function ($matches) {
+				return $this->StripSingle ($matches[1].$matches[2]).
+				StrToUpper($this->StripSingle($matches[3]));
+			},
 			$data
 		);
 		return $data;
@@ -297,17 +312,21 @@ class Gatuf_Text_HTML_Filter {
 
 	public function validate_entities($data) {
 		// validate entities throughout the string
-		$data = preg_replace(
-			'!&([^&;]*)(?=(;|&|$))!e',
-			"\$this->check_entity(\$this->StripSingle('\\1'), \$this->StripSingle('\\2'))",
+		$data = preg_replace_callback(
+			'!&([^&;]*)(?=(;|&|$))!',
+			function ($matches) {
+				return $this->check_entity($this->StripSingle ($matches[1]), $this->StripSingle($matches[2]));
+			},
 			$data
 		);
 		// validate quotes outside of tags
-		$data = preg_replace(
-			"/(>|^)([^<]+?)(<|$)/se",
-			"\$this->StripSingle('\\1').".
-							 "str_replace('\"', '&quot;', \$this->StripSingle('\\2')).".
-							 "\$this->StripSingle('\\3')",
+		$data = preg_replace_callback(
+			"/(>|^)([^<]+?)(<|$)/s",
+			function ($matches) {
+				return $this->StripSingle($matches[1]).
+				str_replace('"', '&quot;', $this->StripSingle($matches[2])).
+				$this->StripSingle ($matches[3]);
+			},
 			$data
 		);
 		return $data;

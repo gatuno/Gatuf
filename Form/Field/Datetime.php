@@ -23,9 +23,9 @@
 class Gatuf_Form_Field_Datetime extends Gatuf_Form_Field {
 	public $widget = 'Gatuf_Form_Widget_DatetimeInput';
 	public $input_formats = array(
-		'%d-%m-%Y %H:%M:%S',     // '25-10-2006 14:30:59'
-		'%d-%m-%Y %H:%M',        // '25-10-2006 14:30'
-		'%d-%m-%Y',              // '25-10-2006'
+		'%Y-%m-%d %H:%M:%S',     // '25-10-2006 14:30:59'
+		'%Y-%m-%d %H:%M',        // '25-10-2006 14:30'
+		'%Y-%m-%d',              // '25-10-2006'
 		'%d/%m/%Y %H:%M:%S',     // '25/10/2006 14:30:59'
 		'%d/%m/%Y %H:%M',        // '25/10/2006 14:30'
 		'%d/%m/%Y',              // '25/10/2006'

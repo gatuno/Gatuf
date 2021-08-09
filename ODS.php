@@ -56,9 +56,17 @@ class Gatuf_ODS {
 			array(
 				'xmltag' => 'style:style',
 				'attrs' => array(
-					'style:name' => 'cel',
+					'style:name' => 'ce1',
 					'style:family' => 'table-cell',
 					'style:data-style-name' => 'CELTEXT',
+				),
+			),
+			array(
+				'xmltag' => 'style:style',
+				'attrs' => array(
+					'style:name' => 'ce2',
+					'style:family' => 'table-cell',
+					'style:data-style-name' => 'N0',
 				),
 			),
 			array(
@@ -134,7 +142,25 @@ class Gatuf_ODS {
 			$this->hojas[$sheet][$row] = array();
 		}
 		
-		$this->hojas[$sheet][$row][$col] = array('office:value-type' => 'string', 'table:style-name' => 'cel', 'value' => $string);
+		$this->hojas[$sheet][$row][$col] = array('office:value-type' => 'string', 'table:style-name' => 'ce1', 'value' => $string);
+	}
+	
+	public function addNumericCell($sheet, $row, $col, $number) {
+		if ($row < 1 || $col < 1) {
+			throw new Exception('Fila y columna inválidas');
+		}
+		if ($this->max_col[$sheet] < $col) {
+			$this->max_col[$sheet] = $col;
+		}
+		if ($this->max_row[$sheet] < $row) {
+			$this->max_row[$sheet] = $row;
+		}
+		
+		if (!isset($this->hojas[$sheet][$row])) {
+			$this->hojas[$sheet][$row] = array();
+		}
+		
+		$this->hojas[$sheet][$row][$col] = array('office:value-type' => 'float', 'table:style-name' => 'ce2', 'office:value' => $number);
 	}
 	
 	public function addMergedStringCell($sheet, $row, $col, $string, $span_cols, $span_rows) {
@@ -408,8 +434,9 @@ class Gatuf_ODS {
 		$zip = new ZipArchive();
 		
 		$this->nombre = $tmp_dir.uniqid().'.ods';
-		if ($zip->open($this->nombre, ZipArchive::OVERWRITE) !== true) {
-			throw new Exception('Falló al abrir el archivo temporal');
+		$ret = $zip->open($this->nombre, ZipArchive::OVERWRITE | ZipArchive::CREATE);
+		if ($ret !== true) {
+			throw new Exception('Falló al abrir el archivo temporal. '.$ret);
 		}
 		
 		/* El mimetype */
