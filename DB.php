@@ -68,6 +68,8 @@ function Gatuf_DB_defaultTypecast() {
 					 array('Gatuf_DB_IdentityFromDB', 'Gatuf_DB_IdentityToDb'),
 		'Gatuf_DB_Field_Time' =>
 					 array('Gatuf_DB_TimeFromDb', 'Gatuf_DB_TimeToDb'),
+		'Gatuf_DB_Field_SerializedJSON' =>
+					 array('Gatuf_DB_JSONFromDb', 'Gatuf_DB_JSONToDb'),
 	);
 }
 
@@ -171,4 +173,18 @@ function Gatuf_DB_PasswordToDb($val, $db) {
 	// We need to hash the value.
 	$salt = Gatuf_Utils::getRandomString(5);
 	return $db->esc('sha1:'.$salt.':'.sha1($salt.$val));
+}
+
+function Gatuf_DB_JSONFromDb($val) {
+	if ($val) {
+		return json_decode($val);
+	}
+	return $val;
+}
+
+function Gatuf_DB_JSONToDb($val, $db) {
+	if (null === $val) {
+		return 'NULL';
+	}
+	return $db->esc(json_encode($val));
 }
