@@ -30,8 +30,9 @@ class Gatuf_HTTP_Response_Forbidden extends Gatuf_HTTP_Response {
 			$mimetype = null;
 		} catch (Exception $e) {
 			$mimetype = 'text/plain';
-			$content = 'You are not authorized to view this page. You do not have permission'."\n"
-				.'to view the requested directory or page using the credentials supplied.'."\n\n".'403 - Forbidden';
+			$content = __('You are not authorized to view this page')."\n".
+				__('You do not have permission to view the requested directory or page using the credentials supplied.')."\n\n".
+				__('403 - Forbidden');
 		}
 		parent::__construct($content, $mimetype);
 		$this->status_code = 403;

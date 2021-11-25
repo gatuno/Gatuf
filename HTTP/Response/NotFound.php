@@ -30,11 +30,11 @@ class Gatuf_HTTP_Response_NotFound extends Gatuf_HTTP_Response {
 			$mimetype = null;
 		} catch (Exception $e) {
 			$mimetype = 'text/plain';
-			$content = sprintf(
-				'The requested URL %s was not found on this server.'."\n"
-							   .'Please check the URL and try again.'."\n\n".'404 - Not Found',
-				Gatuf_esc($request->query)
-			);
+			$content = 
+				sprintf(__('The requested URL %s was not found on this server.'), Gatuf_esc($request->query)).
+				"\n".
+				__('Please check the URL and try again.')."\n\n".
+				__('404 - Not Found');
 		}
 		parent::__construct($content, $mimetype);
 		$this->status_code = 404;

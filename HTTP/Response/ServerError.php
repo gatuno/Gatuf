@@ -42,9 +42,10 @@ class Gatuf_HTTP_Response_ServerError extends Gatuf_HTTP_Response {
 			$mimetype = null;
 		} catch (Exception $e) {
 			$mimetype = 'text/plain';
-			$content = 'The server encountered an unexpected condition which prevented it from fulfilling your request.'."\n\n"
-				.'An email has been sent to the administrators, we will correct this error as soon as possible. Thank you for your comprehension.'
-				."\n\n".'500 - Internal Server Error';
+			$content = __('The server encountered an unexpected condition which prevented it from fulfilling your request.')."\n\n".
+				__('An email has been sent to the administrators, we will correct this error as soon as possible. Thank you for your comprehension.').
+				"\n\n".
+				__('500 - Internal Server Error');
 		}
 		parent::__construct($content, $mimetype);
 		$this->status_code = 500;

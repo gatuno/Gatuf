@@ -117,7 +117,7 @@ class Gatuf_Translation {
 			}
 		}
 		$langs = Gatuf::config('languages', array('en'));
-		return $langs[0];
+		return array_shift($langs);
 	}
 
 	/**
