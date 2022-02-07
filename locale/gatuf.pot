@@ -1,0 +1,320 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-02-06 18:37-0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: Model.php:353
+msgid "Error: More than one matching item found."
+msgstr ""
+
+#: Model.php:366
+#, php-format
+msgid "The view \"%s\" is not defined."
+msgstr ""
+
+#: Model.php:516
+#, php-format
+msgid "No matching foreign key found in model: %s for model %s"
+msgstr ""
+
+#: Paginator.php:445
+msgid "Prev"
+msgstr ""
+
+#: Paginator.php:494
+msgid "Next"
+msgstr ""
+
+#: Paginator.php:645
+msgid "Name"
+msgstr ""
+
+#: Paginator.php:697
+msgid "asc"
+msgstr ""
+
+#: Paginator.php:700
+msgid "desc"
+msgstr ""
+
+#: Paginator.php:723
+msgid "Filter the list:"
+msgstr ""
+
+#: Paginator.php:726
+msgid "Filter"
+msgstr ""
+
+#: Paginator.php:820
+msgid "now"
+msgstr ""
+
+#: Utils.php:99 Utils.php:99
+#, php-format
+msgid "%d byte"
+msgid_plural "%d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: HTTP/Response/NotFound.php:34
+#, php-format
+msgid "The requested URL %s was not found on this server."
+msgstr ""
+
+#: HTTP/Response/NotFound.php:36
+msgid "Please check the URL and try again."
+msgstr ""
+
+#: HTTP/Response/NotFound.php:37
+msgid "404 - Not Found"
+msgstr ""
+
+#: HTTP/Response/Forbidden.php:27 HTTP/Response/Forbidden.php:35
+msgid "403 - Forbidden"
+msgstr ""
+
+#: HTTP/Response/Forbidden.php:33
+msgid "You are not authorized to view this page"
+msgstr ""
+
+#: HTTP/Response/Forbidden.php:34
+msgid ""
+"You do not have permission to view the requested directory or page using the "
+"credentials supplied."
+msgstr ""
+
+#: HTTP/Response/RedirectToLogin.php:58 HTTP/Response/Redirect.php:31
+#, php-format
+msgid "<a href=\"%s\">Please, click here to be redirected</a>."
+msgstr ""
+
+#: HTTP/Response/ServerError.php:45
+msgid ""
+"The server encountered an unexpected condition which prevented it from "
+"fulfilling your request."
+msgstr ""
+
+#: HTTP/Response/ServerError.php:46
+msgid ""
+"An email has been sent to the administrators, we will correct this error as "
+"soon as possible. Thank you for your comprehension."
+msgstr ""
+
+#: HTTP/Response/ServerError.php:48
+msgid "500 - Internal Server Error"
+msgstr ""
+
+#: Test/Fixture.php:38
+#, php-format
+msgid "Fixture file not found: %s."
+msgstr ""
+
+#: Test/Fixture.php:53
+#, php-format
+msgid "Cannot load existing model <%1$s(%2$s)>."
+msgstr ""
+
+#: Translation/TemplateExtractor.php:271
+#, php-format
+msgid "Template file contains invalid characters: %s"
+msgstr ""
+
+#: Translation/TemplateExtractor.php:280
+#, php-format
+msgid "Template file not found: %s"
+msgstr ""
+
+#: Translation/TemplateExtractor.php:286
+#, php-format
+msgid "Invalid tag in translation extractor: %s"
+msgstr ""
+
+#: Translation/TemplateExtractor.php:291
+#, php-format
+msgid "Invalid function syntax: %s"
+msgstr ""
+
+#: Translation/TemplateExtractor.php:309
+#, php-format
+msgid "Invalid tag syntax: %s"
+msgstr ""
+
+#: Translation/TemplateExtractor.php:394
+#, php-format
+msgid "Invalid syntax: (%s) %s."
+msgstr ""
+
+#: Translation/TemplateExtractor.php:399
+#, php-format
+msgid "Invalid character: (%s) %s."
+msgstr ""
+
+#: Form/Field.php:120 Form/Field.php:123
+msgid "This field is required."
+msgstr ""
+
+#: Form/Widget/DateSimple.php:50 Form/Widget/DateSimple.php:114
+msgid "D"
+msgstr ""
+
+#: Form/Widget/DateSimple.php:53 Form/Widget/DateSimple.php:111
+msgid "Y"
+msgstr ""
+
+#: Form/Widget/DateSimple.php:56
+msgid "Day"
+msgstr ""
+
+#: Form/Widget/DateSimple.php:82
+msgid "M"
+msgstr ""
+
+#: Form/Widget/DateSimple.php:85
+msgid "Month"
+msgstr ""
+
+#: Form/Widget/DateSimple.php:117
+msgid "Year"
+msgstr ""
+
+#: Form/Field/Integer.php:38
+msgid "The value must be an integer."
+msgstr ""
+
+#: Form/Field/Integer.php:59 Form/Field/Varchar.php:65
+msgid "Invalid choice"
+msgstr ""
+
+#: Form/Field/Integer.php:81
+#, php-format
+msgid "Ensure that this value is not greater than %1$d."
+msgstr ""
+
+#: Form/Field/Integer.php:84
+#, php-format
+msgid "Ensure that this value is not lower than %1$d."
+msgstr ""
+
+#: Form/Field/Time.php:39 Form/Field/Time.php:50
+msgid "Enter a valid time."
+msgstr ""
+
+#: Form/Field/File.php:40 Form/Field/File.php:64
+msgid "No files were uploaded. Please try to send the file again."
+msgstr ""
+
+#: Form/Field/File.php:49 Form/Field/File.php:55
+#, php-format
+msgid ""
+"The uploaded file is too large. Reduce the size of the file to %s and send "
+"it again."
+msgstr ""
+
+#: Form/Field/File.php:60
+msgid "The upload did not complete. Please try to send the file again."
+msgstr ""
+
+#: Form/Field/File.php:71
+msgid ""
+"The server has no temporary folder correctly configured to store the "
+"uploaded file."
+msgstr ""
+
+#: Form/Field/File.php:74
+msgid "The uploaded file has been stopped by an extension."
+msgstr ""
+
+#: Form/Field/File.php:77
+msgid ""
+"An error occured when upload the file. Please try to send the file again."
+msgstr ""
+
+#: Form/Field/File.php:81
+#, php-format
+msgid ""
+"The uploaded file is too big (%1$s). Reduce the size to less than %2$s and "
+"try again."
+msgstr ""
+
+#: Form/Field/File.php:151
+msgid ""
+"An error occured when creating the upload path. Please try to send the file "
+"again."
+msgstr ""
+
+#: Form/Field/File.php:155
+#, php-format
+msgid "A file with the name \"%s\" has already been uploaded."
+msgstr ""
+
+#: Form/Field/File.php:158
+msgid ""
+"An error occured when uploading the file. Please try to send the file again."
+msgstr ""
+
+#: Form/Field/ReCaptcha.php:106
+msgid "Cannot connect to the reCaptcha server for validation."
+msgstr ""
+
+#: Form/Field/ReCaptcha.php:142
+msgid "To use reCAPTCHA you must set your API key."
+msgstr ""
+
+#: Form/Field/ReCaptcha.php:145
+msgid "For security reasons, you must pass the remote ip to reCAPTCHA."
+msgstr ""
+
+#: Form/Field/Email.php:35
+msgid "Enter a valid email address."
+msgstr ""
+
+#: Form/Field/Float.php:39
+msgid "Enter a number."
+msgstr ""
+
+#: Form/Field/Float.php:43
+#, php-format
+msgid "Ensure this value is less than or equal to %s."
+msgstr ""
+
+#: Form/Field/Float.php:46
+#, php-format
+msgid "Ensure this value is greater than or equal to %s."
+msgstr ""
+
+#: Form/Field/Varchar.php:42
+#, php-format
+msgid "Ensure this value has at most %1$d characters (it has %2$d)."
+msgstr ""
+
+#: Form/Field/Varchar.php:45
+#, php-format
+msgid "Ensure this value has at least %1$d characters (it has %2$d)."
+msgstr ""
+
+#: Form/Field/Datetime.php:63
+msgid "Enter a valid date/time."
+msgstr ""
+
+#: Form/Field/Date.php:45
+msgid "Enter a valid date."
+msgstr ""
+
+#: Form/Field/Url.php:32
+msgid "Enter a valid address."
+msgstr ""

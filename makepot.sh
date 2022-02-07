@@ -22,6 +22,6 @@
 # 
 # Create the pot file for Gatuf.
 #
-xgettext -o gatuf.pot -p ./Gatuf/locale --force-po --from-code=UTF-8 --keyword --keyword=__ --keyword=_n:1,2 -L PHP *.php
+xgettext -o gatuf.pot -p ./locale --force-po --from-code=UTF-8 --keyword --keyword=__ --keyword=_n:1,2 -L PHP *.php
 sleep 5
-find Gatuf/ -iname "*.php" -exec xgettext  -o gatuf.pot -p ./Gatuf/locale --from-code=UTF-8 -j --keyword --keyword=__ --keyword=_n:1,2 -L PHP {} \;
+find . -iname "*.php" -exec xgettext  -o gatuf.pot -p ./locale --from-code=UTF-8 -j --keyword --keyword=__ --keyword=_n:1,2 -L PHP {} \;

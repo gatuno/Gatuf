@@ -78,7 +78,7 @@ class Gatuf_Form_Field_File extends Gatuf_Form_Field {
 		}
 		if ($value['size'] > $this->max_size) {
 			throw new Gatuf_Form_Invalid(sprintf(
-				__('The uploaded file is to big (%1$s). Reduce the size to less than %2$s and try again.'),
+				__('The uploaded file is too big (%1$s). Reduce the size to less than %2$s and try again.'),
 				Gatuf_Utils::prettySize($value['size']),
 				Gatuf_Utils::prettySize($this->max_size)
 			));
