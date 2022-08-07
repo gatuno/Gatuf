@@ -110,10 +110,9 @@ class Gatuf_Mail {
 		// Note that the Pluf autoloader will correctly load this PEAR
 		// object.
 		$this->message = new Mail_mime($crlf);
-		$this->message->_build_params['html_charset'] = $encoding;
-		$this->message->_build_params['text_charset'] = $encoding;
-		$this->message->_build_params['head_charset'] = $encoding;
-		$this->message->_build_params['ignore-iconv'] = true;
+		$this->message->setParam ('html_charset', $encoding);
+		$this->message->setParam ('text_charset', $encoding);
+		$this->message->setParam ('head_charset', $encoding);
 		
 		$this->to_address = $dest;
 		$this->headers = array('From' => $src,
