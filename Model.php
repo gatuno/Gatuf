@@ -150,20 +150,17 @@ class Gatuf_Model {
 		if (!$this->delAssoc($model)) {
 			return false;
 		}
-		$hay = array(strtolower($model->_a['model']), strtolower($this->_a['model']));
 		// Calcular la base de datos que contiene la relación M-N
 		if (isset($GLOBALS['_GATUF_models_related']['manytomany'][$model->_a['model']]) && in_array($this->_a['model'], $GLOBALS['_GATUF_models_related']['manytomany'][$model->_a['model']])) {
-			// La relación la tiene el $hay[1]
-			$dbname = $this->_con->dbname;
-			$dbpfx = $this->_con->pfx;
+			// La relación la tiene el $this
+			$table = Gatuf_ModelUtils::getAssocTable ($this, $model);
+			$pfxdbname = $this->getSqlTableNamepfx ();
 		} else {
-			$dbname = $model->_con->dbname;
-			$dbpfx = $model->_con->pfx;
+			$table = Gatuf_ModelUtils::getAssocTable ($model, $this);
+			$pfxdbname = $model->getSqlTableNamepfx ();
 		}
-		sort($hay);
 		$pk = $model->primary_key;
-		$table = $dbpfx.$hay[0].'_'.$hay[1].'_assoc';
-		$req = 'INSERT INTO '.$dbname.'.'.$table."\n";
+		$req = 'INSERT INTO '.$pfxdbname.'.'.$table."\n";
 		$req .= '('.$this->_con->qn(strtolower($this->_a['model']).'_'.$this->primary_key).', '
 			.$this->_con->qn(strtolower($model->_a['model']).'_'.$model->primary_key).') VALUES '."\n";
 		$req .= '('.$this->_toDb($this->_data[$this->primary_key], $this->primary_key).', ';
@@ -187,19 +184,16 @@ class Gatuf_Model {
 			or strlen($model->$pk) == 0) {
 			return false;
 		}
-		$hay = array(strtolower($model->_a['model']), strtolower($this->_a['model']));
 		// Calcular la base de datos que contiene la relación M-N
 		if (isset($GLOBALS['_GATUF_models_related']['manytomany'][$model->_a['model']]) && in_array($this->_a['model'], $GLOBALS['_GATUF_models_related']['manytomany'][$model->_a['model']])) {
-			// La relación la tiene el $hay[1]
-			$dbname = $this->_con->dbname;
-			$dbpfx = $this->_con->pfx;
+			// La relación la tiene el $this
+			$table = Gatuf_ModelUtils::getAssocTable ($this, $model);
+			$pfxdbname = $this->getSqlTableNamepfx ();
 		} else {
-			$dbname = $model->_con->dbname;
-			$dbpfx = $model->_con->pfx;
+			$table = Gatuf_ModelUtils::getAssocTable ($model, $this);
+			$pfxdbname = $model->getSqlTableNamepfx ();
 		}
-		sort($hay);
-		$table = $dbpfx.$hay[0].'_'.$hay[1].'_assoc';
-		$req = 'DELETE FROM '.$dbname.'.'.$table.' WHERE'."\n";
+		$req = 'DELETE FROM '.$pfxdbname.'.'.$table.' WHERE'."\n";
 		$req .= $this->_con->qn(strtolower($this->_a['model']).'_'.$this->primary_key).' = '.$this->_toDb($this->_data[$this->primary_key], $this->primary_key);
 		$req .= ' AND '.$this->_con->qn(strtolower($model->_a['model']).'_'.$model->primary_key).' = '.$model->_toDb($model->$pk, $model->primary_key);
 		$this->_con->execute($req);
@@ -242,7 +236,18 @@ class Gatuf_Model {
 		return $this->_con;
 	}
 	
+	public function getSqlTableNamepfx () {
+		if (property_exists ($this->_con, 'search_path')) {
+			return $this->_con->dbname.'.'.$this->_con->search_path;
+		}
+		
+		return $this->_con->dbname;
+	}
+	
 	public function getSqlTable() {
+		if (property_exists ($this->_con, 'search_path')) {
+			return $this->_con->dbname.'.'.$this->_con->search_path.'.'.$this->_con->pfx.$this->_a['table'];
+		}
 		return $this->_con->dbname.'.'.$this->_con->pfx.$this->_a['table'];
 	}
 	
@@ -527,19 +532,15 @@ class Gatuf_Model {
 		} else {
 			// Many to many: We generate a special view that is making
 			// the join
-			$hay = array(strtolower($m->_a['model']),
-				strtolower($this->_a['model']));
 			// Calcular la base de datos que contiene la relación M-N
 			if (isset($GLOBALS['_GATUF_models_related']['manytomany'][$m->_a['model']]) && in_array($this->_a['model'], $GLOBALS['_GATUF_models_related']['manytomany'][$m->_a['model']])) {
-				// La relación la tiene el $hay[1]
-				$dbname = $this->_con->dbname;
-				$dbpfx = $this->_con->pfx;
+				// La relación la tiene el $this
+				$table = Gatuf_ModelUtils::getAssocTable ($this, $m);
+				$pfxdbname = $this->getSqlTableNamepfx ();
 			} else {
-				$dbname = $m->_con->dbname;
-				$dbpfx = $m->_con->pfx;
+				$table = Gatuf_ModelUtils::getAssocTable ($m, $this);
+				$pfxdbname = $model->getSqlTableNamepfx ();
 			}
-			sort($hay);
-			$table = $dbpfx.$hay[0].'_'.$hay[1].'_assoc';
 			if (isset($m->_a['views'][$p['view']])) {
 				$m->_a['views'][$p['view'].'__manytomany__'] = $m->_a['views'][$p['view']];
 				if (!isset($m->_a['views'][$p['view'].'__manytomany__']['join'])) {
@@ -554,7 +555,7 @@ class Gatuf_Model {
 				$p['view'] = '';
 			}
 			$m->_a['views'][$p['view'].'__manytomany__']['join'] .=
-				' LEFT JOIN '.$dbname.'.'.$table.' ON '
+				' LEFT JOIN '.$pfxdbname.'.'.$table.' ON '
 				.$this->_con->qn(strtolower($m->_a['model']).'_'.$m->primary_key).' = '.(isset($m->_a['views'][$p['view'].'__manytomany__']['from']) ? $m->_a['views'][$p['view'].'__manytomany__']['from'] : $m->getSqlTable()).'.'.$m->primary_key;
 
 			$m->_a['views'][$p['view'].'__manytomany__']['where'] = $this->_con->qn(strtolower($this->_a['model']).'_'.$this->primary_key).'='.$this->_con->esc($this->_data[$this->primary_key]);

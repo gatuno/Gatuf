@@ -167,7 +167,7 @@ function Gatuf_DB_PasswordToDb($val, $db) {
 		return 'NULL';
 	}
 	$exp = explode(':', $val);
-	if (in_array($exp[0], array('sha1', 'md5', 'crc32'))) {
+	if (in_array($exp[0], array('sha1', 'md5', 'crc32', 'sha256', 'sha512'))) {
 		return $db->esc($val);
 	}
 	// We need to hash the value.

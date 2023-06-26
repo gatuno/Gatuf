@@ -52,9 +52,9 @@ class Gatuf_Permission extends Gatuf_Model {
 				'col' => 'application',
 			),
 		);
-		$hay = array(strtolower(Gatuf::config('gatuf_custom_group', 'Gatuf_Group')), strtolower($this->_a['model']));
-		sort($hay);
-		$t_asso = $this->_con->dbname.'.'.$this->_con->pfx.$hay[0].'_'.$hay[1].'_assoc';
+		$omodel = Gatuf::factory (Gatuf::config('gatuf_custom_group', 'Gatuf_Group'));
+		$t_asso = $this->getSqlTableNamepfx ().'.'.Gatuf_ModelUtils::getAssocTable($this, $omodel);
+		
 		$t_perm = $this->getSqlTable();
 		$this->_a['views'] = array(
 			'join_group' =>
