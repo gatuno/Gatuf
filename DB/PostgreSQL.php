@@ -125,11 +125,13 @@ class Gatuf_DB_PostgreSQL {
 	 */
 	function debug($query) {
 		$this->lastquery = $query;
-		if (! $this->debug)
+		if (!$this->debug) {
 			return true;
-		if (! isset($GLOBALS['_PX_debug_data']['sql_queries']))
-			$GLOBALS['_PX_debug_data']['sql_queries'] = array();
-		$GLOBALS['_PX_debug_data']['sql_queries'][] = $query;
+		}
+		if (!isset($GLOBALS['_GATUF_debug_data']['sql_queries'])) {
+			$GLOBALS['_GATUF_debug_data']['sql_queries'] = array();
+		}
+		$GLOBALS['_GATUF_debug_data']['sql_queries'][] = $query;
 		return true;
 	}
 
