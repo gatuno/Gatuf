@@ -81,6 +81,10 @@ class Gatuf_DB_PostgreSQL {
 			'Gatuf_DB_PostgreSQL_CompressedFromDb',
 			'Gatuf_DB_PostgreSQL_CompressedToDb'
 		);
+		$this->type_cast['Gatuf_DB_Field_LOID'] = array (
+			'Gatuf_DB_IdentityFromDb',
+			'Gatuf_DB_IdentityToDb'
+		);
 
 		$this->debug('* POSTGRESQL CONNECT');
 		$cstring = '';
@@ -251,6 +255,21 @@ class Gatuf_DB_PostgreSQL {
 
 	function __toString() {
 		return '<Gatuf_DB_PostgreSQL(' . $this->con_id . ')>';
+	}
+	
+	function storeLOID ($val) {
+		if (is_null ($val)) {
+			return 'NULL';
+		}
+		return pg_lo_import ($this->con_id, $val);
+	}
+	
+	function recoverLOID ($val, $filename) {
+		if ($val === null) {
+			return null;
+		}
+		
+		return pg_lo_export ($this->con_id, $val, $filename);
 	}
 }
 

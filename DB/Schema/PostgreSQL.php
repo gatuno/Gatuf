@@ -30,6 +30,7 @@ class Gatuf_DB_Schema_PostgreSQL {
 		'blob' => 'bytea',
 		'char' => 'char(%s)',
 		'time' => 'time',
+		'longblob' => 'oid',
 	);
 
 	public $defaults = array(
@@ -51,6 +52,7 @@ class Gatuf_DB_Schema_PostgreSQL {
 		'blob' => "''",
 		'char' => "''",
 		'time' => "'00:00:00'",
+		'longblob' => null,
 	);
 
 	private $con = null;

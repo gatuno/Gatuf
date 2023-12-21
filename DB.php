@@ -70,6 +70,8 @@ function Gatuf_DB_defaultTypecast() {
 					 array('Gatuf_DB_TimeFromDb', 'Gatuf_DB_TimeToDb'),
 		'Gatuf_DB_Field_SerializedJSON' =>
 					 array('Gatuf_DB_JSONFromDb', 'Gatuf_DB_JSONToDb'),
+		'Gatuf_DB_Field_LOID' =>
+					 array('Gatuf_DB_UnsupportedFromDb', 'Gatuf_DB_UnsupportedToDb'),
 	);
 }
 
@@ -188,3 +190,12 @@ function Gatuf_DB_JSONToDb($val, $db) {
 	}
 	return $db->esc(json_encode($val));
 }
+
+function Gatuf_DB_UnsupportedToDb ($val, $db) {
+	throw new Gatuf_Exception ('Unsupported datatype');
+}
+
+function Gatuf_DB_UnsupportedFromDb ($val) {
+	throw new Gatuf_Exception ('Unsupported datatype');
+}
+

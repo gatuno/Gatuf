@@ -800,6 +800,7 @@ class Gatuf_Model {
 	
 	public function _fromDb($val, $col) {
 		$m = $this->_con->type_cast[$this->_a['cols'][$col]['type']][0];
+		if ($m == 'Gatuf_DB_PostgreSQL_LOIDFromDb') return $m($val, $this->_con);
 		return ($m == 'Gatuf_DB_IdentityFromDb') ? $val : $m($val);
 	}
 	
