@@ -269,7 +269,7 @@ class Gatuf_DB_PostgreSQL {
 			return null;
 		}
 		
-		return pg_lo_export ($this->con_id, $val, $filename);
+		return pg_lo_export ($this->con_id, ((integer) $val), $filename);
 	}
 }
 
