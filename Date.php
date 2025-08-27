@@ -173,22 +173,22 @@ function Gatuf_Date_Easy($date, $ref=null, $blocks=2, $notime='now', $show=true)
 			$res .= $diffs[$i].' ';
 			switch ($i) {
 			case 0:
-				$res .= ($diffs[$i] == 1 ? 'año' : 'años');
+				$res .= _n('year', 'years', $diffs[$i]);
 				break;
 			case 1:
-				$res .= ($diffs[$i] == 1 ? 'mes' : 'meses');
+				$res .= _n('month', 'months', $diffs[$i]);
 				break;
 			case 2:
-				$res .= ($diffs[$i] == 1 ? 'día' : 'días');
+				$res .= _n('day', 'days', $diffs[$i]);
 				break;
 			case 3:
-				$res .= ($diffs[$i] == 1 ? 'hora' : 'horas');
+				$res .= _n('hour', 'hours', $diffs[$i]);
 				break;
 			case 4:
-				$res .= ($diffs[$i] == 1 ? 'minuto' : 'minutos');
+				$res .= _n('minute', 'minutes', $diffs[$i]);
 				break;
 			case 5:
-				$res .= ($diffs[$i] == 1 ? 'segundo' : 'segundos');
+				$res .= _n('second', 'seconds', $diffs[$i]);
 				break;
 			}
 			$res .= ' ';
@@ -202,9 +202,9 @@ function Gatuf_Date_Easy($date, $ref=null, $blocks=2, $notime='now', $show=true)
 	}
 	if ($show) {
 		if ($past) {
-			$res = sprintf('hace %s', $res);
+			$res = sprintf(__('%s ago'), $res);
 		} else {
-			$res = sprintf('faltan %s', $res);
+			$res = sprintf(__('%s left'), $res);
 		}
 	}
 	return $res;

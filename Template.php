@@ -273,13 +273,13 @@ function Gatuf_Template_varExport($mixed) {
 function Gatuf_Template_dateAgo($date, $f='withal') {
 	Gatuf::loadFunction('Gatuf_Date_Easy');
 	if (is_null($date)) {
-		return 'nunca';
+		return __('never');
 	}
 	$date = Gatuf_Template_dateFormat($date, '%Y-%m-%d %H:%M:%S');
 	if ($f == 'withal') {
-		return Gatuf_Date_Easy($date, null, 2, 'ahora');
+		return Gatuf_Date_Easy($date, null, 2, __('now'));
 	} else {
-		return Gatuf_Date_Easy($date, null, 2, 'ahora', false);
+		return Gatuf_Date_Easy($date, null, 2, __('now'), false);
 	}
 }
 
@@ -290,9 +290,9 @@ function Gatuf_Template_timeAgo($date, $f="withal") {
 	Gatuf::loadFunction('Gatuf_Date_Easy');
 	$date = Gatuf_Template_timeFormat($date);
 	if ($f == 'withal') {
-		return Gatuf_Date_Easy($date, null, 2, 'ahora');
+		return Gatuf_Date_Easy($date, null, 2, __('now'));
 	} else {
-		return Gatuf_Date_Easy($date, null, 2, 'ahora', false);
+		return Gatuf_Date_Easy($date, null, 2, __('now'), false);
 	}
 }
 
