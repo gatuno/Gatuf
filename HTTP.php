@@ -31,7 +31,7 @@ class Gatuf_HTTP {
 	 * @credit Olivier Meunier
 	 */
 	public function removeTheMagic() {
-		if (get_magic_quotes_gpc()) {
+		if (false) {
 			if (!empty($_GET)) {
 				array_walk($_GET, 'Gatuf_HTTP_magicStrip');
 			}
