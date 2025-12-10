@@ -30,7 +30,7 @@ class Gatuf_HTTP_Response_ServerError extends Gatuf_HTTP_Response {
 			$subject = $exception->getMessage();
 			$subject = substr(strip_tags(nl2br($subject)), 0, 50).'...';
 			foreach ($admins as $admin) {
-				$email = new Gatuf_Mail($admin[1], $admin[1], $subject);
+				$email = new Gatuf_Mail(Gatuf::config ('from_email'), $admin[1], $subject);
 				$email->addTextMessage($stack);
 				$email->sendMail();
 			}
@@ -53,19 +53,27 @@ class Gatuf_HTTP_Response_ServerError extends Gatuf_HTTP_Response {
 }
 
 function Gatuf_HTTP_Response_ServerError_Pretty($e) {
-	$sub = create_function('$f', '$loc="";if(isset($f["class"])){
+	$sub = function ($f) {
+		$loc="";if(isset($f["class"])){
         $loc.=$f["class"].$f["type"];}
         if(isset($f["function"])){$loc.=$f["function"];}
-        return $loc;');
-	$parms = create_function('$f', '$params=array();if(isset($f["function"])){
+        return $loc;
+    };
+	$parms = function ($f) {
+		$params=array();if(isset($f["function"])){
         try{if(isset($f["class"])){
         $r=new ReflectionMethod($f["class"]."::".$f["function"]);}
         else{$r=new ReflectionFunction($f["function"]);}
         return $r->getParameters();}catch(Exception $e){}}
-        return $params;');
-	$src2lines = create_function('$file', '$src=nl2br(highlight_file($file,TRUE));
-        return explode("<br />",$src);');
-	$clean = create_function('$line', 'return html_entity_decode(str_replace("&nbsp;", " ", $line));');
+        return $params;
+    };
+	$src2lines = function ($file) {
+		$src=nl2br(highlight_file($file,TRUE));
+        return explode("<br />",$src);
+    };
+	$clean = function ($line) {
+		return html_entity_decode(str_replace("&nbsp;", " ", $line));
+	};
 	$desc = get_class($e)." making ".$_SERVER['REQUEST_METHOD']." request to ".$_SERVER['REQUEST_URI'];
 	$out = $desc."\n";
 	if ($e->getCode()) {
@@ -140,12 +148,12 @@ function Gatuf_HTTP_Response_ServerError_Pretty($e) {
 		}
 	}
 	$out .= "\n".'* Request (parsed) *'."\n\n";
-	$superglobals = array('$_GET','$_POST','$_COOKIE','$_SERVER','$_ENV');
+	$superglobals = array('_GET','_POST','_COOKIE','_SERVER','_ENV');
+	$sfn = function &($name) { return $GLOBALS["$name"]; };
 	foreach ($superglobals as $sglobal) {
-		$sfn = create_function('', 'return '.$sglobal.';');
 		$out .= $sglobal."\n";
-		if (count($sfn()) > 0) {
-			foreach ($sfn() as $k => $v) {
+		if (count($superglobals) > 0) {
+			foreach ($sfn ($sglobal) as $k => $v) {
 				$out .= 'Variable: '.$k."\n";
 				$out .= 'Value:    '.print_r($v, true)."\n";
 			}
